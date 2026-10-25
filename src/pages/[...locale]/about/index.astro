@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { localeParams, localePath, ui, type Lang } from '../../../i18n';
+import { Content as AboutZh } from '../../../about/zh.md';
+import { Content as AboutJa } from '../../../about/ja.md';
+
+export const getStaticPaths = localeParams;
+
+const { lang } = Astro.props as { lang: Lang };
+const t = ui[lang];
+const About = lang === 'zh' ? AboutZh : AboutJa;
+
+// Placeholder links: replace with the real SNS accounts.
+const LINKS = [
+  { label: 'GitHub', handle: 'Ramirez0291', href: 'https://github.com/Ramirez0291' },
+  { label: 'X', handle: '@nekotorune', href: 'https://x.com/nekotorune' },
+];
+---
+
+<BaseLayout lang={lang} title={t.nav.about} alternates={{ zh: localePath('zh', '/about/'), ja: localePath('ja', '/about/') }}>
+  <div class="cmd"><b>cat</b> about.md</div>
+  <h1>Who am I?</h1>
+  {
+    lang === 'ja' && (
+      <p class="notice">
+        <span class="lvl">[INFO]</span>
+        {t.machineTranslated} <a href={localePath('zh', '/about/')}>{t.readOriginal}</a>
+      </p>
+    )
+  }
+  <div class="prose">
+    <About />
+  </div>
+
+  <div class="cmd"><b>cat</b> contact.txt</div>
+  <ul class="ls">
+    {
+      LINKS.map((link) => (
+        <li>
+          <span class="perm">{link.label}</span>
+          <a class="title" href={link.href} rel="me">
+            {link.handle}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

@@ -1,0 +1,32 @@
+---
+import { postUrl, ui, type Lang, type Post } from '../i18n';
+
+interface Props {
+  posts: Post[];
+  lang: Lang;
+  showCategory?: boolean;
+}
+
+const { posts, lang, showCategory = true } = Astro.props;
+---
+
+{
+  posts.length === 0 ? (
+    <p class="dim">{ui[lang].noPosts}</p>
+  ) : (
+    <ul class="ls">
+      {posts.map((post) => (
+        <li>
+          <time datetime={post.data.date.toISOString()}>{post.data.date.toISOString().slice(0, 10)}</time>
+          <div>
+            <a class="title" href={postUrl(post)}>
+              {post.data.title}
+            </a>
+            {showCategory && <span class="tag">{post.data.category}/</span>}
+          </div>
+          <p>{post.data.description}</p>
+        </li>
+      ))}
+    </ul>
+  )
+}

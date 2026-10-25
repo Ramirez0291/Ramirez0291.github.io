@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts, localeParams, localePath, postUrl, SERIES, ui, type Lang } from '../../i18n';
+import { STATUS, TOOLS } from '../../tools';
+
+export const getStaticPaths = localeParams;
+
+const { lang } = Astro.props as { lang: Lang };
+const t = ui[lang];
+const posts = await getPosts(lang);
+const featured = posts.filter((p) => p.data.featured);
+const latest = posts.slice(0, 5);
+const series = Object.entries(SERIES).filter(([key]) => posts.some((p) => p.data.series === key));
+---
+
+<BaseLayout lang={lang} alternates={{ zh: localePath('zh', '/'), ja: localePath('ja', '/') }}>
+  <div class="cmd"><b>whoami</b></div>
+  <div class="out">
+    <h1>Rami0291</h1>
+    <p class="dim" style="margin:0">{t.tagline}</p>
+    {t.whoami.map((line) => <p style="margin:0.2rem 0 0">{line}</p>)}
+    <p class="meta"><a href={localePath(lang, '/about/')}>cat about.md →</a></p>
+  </div>
+
+  {
+    featured.length > 0 && (
+      <>
+        <div class="cmd">
+          <b>ls</b> ./featured
+        </div>
+        <div class="boxes">
+          {featured.map((post) => (
+            <a class="box" href={postUrl(post)}>
+              <span class="label">{post.data.category}/</span>
+              <h3>{post.data.title}</h3>
+              <p>{post.data.description}</p>
+            </a>
+          ))}
+        </div>
+      </>
+    )
+  }
+
+  <div class="cmd"><b>ls -t</b> ./posts | head -5</div>
+  <PostList posts={latest} lang={lang} />
+
+  <div class="cmd"><b>ls</b> ./lab</div>
+  <div class="boxes">
+    {
+      TOOLS.map((tool) => (
+        <a class="box" href={tool.ready ? tool.href : localePath(lang, '/lab/')}>
+          <span class="label">[{tool.id}]</span>
+          <h3>
+            {tool.name[lang]} <span class="status">{STATUS[tool.ready ? 'ready' : 'building'][lang]}</span>
+          </h3>
+          <p>{tool.desc[lang]}</p>
+        </a>
+      ))
+    }
+  </div>
+
+  {
+    series.length > 0 && (
+      <>
+        <div class="cmd">
+          <b>ls</b> ./series
+        </div>
+        <ul class="ls">
+          {series.map(([key, names]) => (
+            <li>
+              <span class="perm">series/</span>
+              <a class="title" href={localePath(lang, `/series/${key}/`)}>
+                {names[lang]}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+
+  <div class="cmd"><span class="cursor" aria-hidden="true"></span></div>
+</BaseLayout>

@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout lang="zh" title="404">
+  <div class="cmd"><b>cd</b> <span id="missing-path">???</span></div>
+  <p class="notice warn"><span class="lvl">bash:</span>cd: No such file or directory (404)</p>
+  <h1>404</h1>
+  <p>欢迎来到未知的世界。 / ここ、どこ？。</p>
+  <p><a href="/">cd ~</a> · <a href="/ja/">cd ~/ja</a></p>
+</BaseLayout>
+
+<script>
+  const el = document.getElementById('missing-path');
+  if (el) el.textContent = decodeURIComponent(location.pathname);
+</script>

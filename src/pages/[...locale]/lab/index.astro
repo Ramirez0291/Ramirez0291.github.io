@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { localeParams, localePath, ui, type Lang } from '../../../i18n';
+import { STATUS, TOOLS } from '../../../tools';
+
+export const getStaticPaths = localeParams;
+
+const { lang } = Astro.props as { lang: Lang };
+const t = ui[lang];
+---
+
+<BaseLayout lang={lang} title={t.nav.lab} alternates={{ zh: localePath('zh', '/lab/'), ja: localePath('ja', '/lab/') }}>
+  <div class="cmd"><b>ls</b> ./lab</div>
+  <h1>{t.nav.lab}</h1>
+  <p class="dim">{t.labIntro}</p>
+  <div class="boxes" style="margin-top:1.8rem">
+    {
+      TOOLS.map((tool) => {
+        const Tag = tool.ready ? 'a' : 'div';
+        return (
+          <Tag class="box" href={tool.ready ? tool.href : undefined}>
+            <span class="label">[{tool.id}]</span>
+            <h3>
+              {tool.name[lang]} <span class="status">{STATUS[tool.ready ? 'ready' : 'building'][lang]}</span>
+            </h3>
+            <p>{tool.desc[lang]}</p>
+          </Tag>
+        );
+      })
+    }
+  </div>
+</BaseLayout>

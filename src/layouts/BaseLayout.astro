@@ -1,0 +1,87 @@
+---
+import '../styles/global.css';
+import { DEFAULT_LANG, HTML_LANG, LANGS, localePath, ui, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  // URL of this same page in each language; a missing entry means no counterpart exists.
+  alternates?: Partial<Record<Lang, string>>;
+}
+
+const { lang, title, description, alternates = {} } = Astro.props;
+const t = ui[lang];
+const pageTitle = title ? `${title} | ${t.siteName}` : `${t.siteName} — ${t.tagline}`;
+const pageDescription = description ?? t.tagline;
+
+const path = Astro.url.pathname;
+// The prompt's working directory mirrors the URL, minus the language prefix.
+const cwd = '~' + (lang === DEFAULT_LANG ? path : path.slice(lang.length + 1)).replace(/\/$/, '');
+
+const navItems = (['notes', 'analysis', 'lab', 'about'] as const).map((key) => ({
+  key,
+  href: localePath(lang, `/${key}/`),
+}));
+---
+
+<!doctype html>
+<html lang={HTML_LANG[lang]}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={new URL(path, Astro.site)} />
+    {
+      Object.entries(alternates).map(([l, href]) => (
+        <link rel="alternate" hreflang={HTML_LANG[l as Lang]} href={new URL(href, Astro.site)} />
+      ))
+    }
+    <meta property="og:title" content={title ?? t.siteName} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={new URL(path, Astro.site)} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#0c0e0d" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f4f1e8" media="(prefers-color-scheme: light)" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <header class="site">
+      <div class="wrap">
+        <span class="ps1"><a href={localePath(lang, '/')}>rami0291@tokyo</a>:<span class="cwd">{cwd}</span>$</span>
+        <nav aria-label={t.navLabel}>
+          {
+            navItems.map((item) => (
+              <a href={item.href} title={t.nav[item.key]} aria-current={path.startsWith(item.href) ? 'page' : undefined}>
+                {item.key === 'about' ? 'about' : `${item.key}/`}
+              </a>
+            ))
+          }
+        </nav>
+        <span class="lang-switch">
+          [{
+            LANGS.map((l, i) => (
+              <>
+                {i > 0 && '|'}
+                {l === lang ? (
+                  <span class="on">{l}</span>
+                ) : (
+                  <a href={alternates[l] ?? localePath(l, '/')} hreflang={HTML_LANG[l]} lang={HTML_LANG[l]}>
+                    {l}
+                  </a>
+                )}
+              </>
+            ))
+          }]
+        </span>
+      </div>
+    </header>
+    <main class="wrap">
+      <slot />
+    </main>
+    <footer class="site">
+      <div class="wrap">{t.footer}</div>
+    </footer>
+  </body>
+</html>

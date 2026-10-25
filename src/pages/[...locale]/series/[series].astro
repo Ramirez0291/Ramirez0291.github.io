@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostList from '../../../components/PostList.astro';
+import { getPosts, localeParams, localePath, SERIES, ui, type Lang } from '../../../i18n';
+
+export function getStaticPaths() {
+  return localeParams().flatMap(({ params, props }) =>
+    Object.keys(SERIES).map((series) => ({ params: { ...params, series }, props: { ...props, series } })),
+  );
+}
+
+const { lang, series } = Astro.props as { lang: Lang; series: string };
+const name = SERIES[series][lang];
+// A series reads in order, so oldest first.
+const posts = (await getPosts(lang, (p) => p.data.series === series)).reverse();
+---
+
+<BaseLayout
+  lang={lang}
+  title={name}
+  alternates={{ zh: localePath('zh', `/series/${series}/`), ja: localePath('ja', `/series/${series}/`) }}
+>
+  <div class="cmd"><b>ls</b> ./series/{series} <span class="dim"># {ui[lang].series}</span></div>
+  <h1>{name}</h1>
+  <PostList posts={posts} lang={lang} />
+</BaseLayout>
