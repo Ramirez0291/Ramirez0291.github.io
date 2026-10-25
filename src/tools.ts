@@ -12,7 +12,7 @@ export const TOOLS: {
   {
     id: 'ainativebench',
     href: '/ainativebench/',
-    ready: false,
+    ready: true,
     name: { zh: 'AI 原生诊断', ja: 'AI ネイティブ診断' },
     desc: {
       zh: '你的公司是哪种 AI 物种？测完生成可分享的海报。',
