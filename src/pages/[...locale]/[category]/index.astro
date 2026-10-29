@@ -17,6 +17,7 @@ const posts = await getPosts(lang, (p) => p.data.category === category);
 <BaseLayout
   lang={lang}
   title={t.nav[category]}
+  description={t.navDesc[category]}
   alternates={{ zh: localePath('zh', `/${category}/`), ja: localePath('ja', `/${category}/`) }}
 >
   <div class="cmd"><b>ls -t</b> ./{category}</div>
