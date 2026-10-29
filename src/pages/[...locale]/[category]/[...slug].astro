@@ -1,12 +1,16 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Comments from '../../../components/Comments.astro';
 import {
-  DEFAULT_LANG,
+  findCounterpart,
   formatDate,
+  getAllPosts,
   localePath,
   postLang,
+  postMarkdownUrl,
+  postModified,
+  postParams,
   postSlug,
   postUrl,
   SERIES,
@@ -14,34 +18,34 @@ import {
   type Lang,
   type Post,
 } from '../../../i18n';
+import { postSchema } from '../../../seo';
 
 export async function getStaticPaths() {
-  const posts: Post[] = await getCollection('posts', (p: Post) => !p.data.draft);
-  return posts.map((post) => {
-    const lang = postLang(post);
-    const slug = postSlug(post);
-    const counterpart = posts.find((p) => postSlug(p) === slug && postLang(p) !== lang);
-    return {
-      params: {
-        locale: lang === DEFAULT_LANG ? undefined : lang,
-        category: post.data.category,
-        slug,
-      },
-      props: { post, lang, counterpart },
-    };
-  });
+  const posts = await getAllPosts();
+  return posts.map((post) => ({
+    params: postParams(post),
+    props: { post, lang: postLang(post), counterpart: findCounterpart(post, posts) },
+  }));
 }
 
 const { post, lang, counterpart } = Astro.props as { post: Post; lang: Lang; counterpart?: Post };
 const t = ui[lang];
 const { Content } = await render(post);
-const { title, description, date, updated, lastVerified, machineTranslated, series, category } = post.data;
+const { title, description, date, updated, lastVerified, machineTranslated, series, category, tags } = post.data;
 
 const alternates: Partial<Record<Lang, string>> = { [lang]: postUrl(post) };
 if (counterpart) alternates[postLang(counterpart)] = postUrl(counterpart);
 ---
 
-<BaseLayout lang={lang} title={title} description={description} alternates={alternates}>
+<BaseLayout
+  lang={lang}
+  title={title}
+  description={description}
+  alternates={alternates}
+  article={{ published: date, modified: postModified(post), section: t.nav[category], tags }}
+  schema={postSchema(post, counterpart)}
+  markdown={postMarkdownUrl(post)}
+>
   <article>
     <div class="cmd"><b>cat</b> {category}/{postSlug(post)}.md</div>
     <h1>{title}</h1>

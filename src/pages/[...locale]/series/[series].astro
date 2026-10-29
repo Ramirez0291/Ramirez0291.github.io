@@ -13,11 +13,14 @@ const { lang, series } = Astro.props as { lang: Lang; series: string };
 const name = SERIES[series][lang];
 // A series reads in order, so oldest first.
 const posts = (await getPosts(lang, (p) => p.data.series === series)).reverse();
+// An empty series page stays out of search indexes until its first post lands.
+const noindex = posts.length === 0;
 ---
 
 <BaseLayout
   lang={lang}
   title={name}
+  noindex={noindex}
   alternates={{ zh: localePath('zh', `/series/${series}/`), ja: localePath('ja', `/series/${series}/`) }}
 >
   <div class="cmd"><b>ls</b> ./series/{series} <span class="dim"># {ui[lang].series}</span></div>

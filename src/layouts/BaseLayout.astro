@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
-import { DEFAULT_LANG, HTML_LANG, LANGS, localePath, ui, type Lang } from '../i18n';
+import { DEFAULT_LANG, HTML_LANG, LANGS, OG_LOCALE, SECTIONS, localePath, ui, type Lang } from '../i18n';
+import { AUTHOR, OG_IMAGE, siteSchema } from '../seo';
 
 interface Props {
   lang: Lang;
@@ -8,18 +9,35 @@ interface Props {
   description?: string;
   // URL of this same page in each language; a missing entry means no counterpart exists.
   alternates?: Partial<Record<Lang, string>>;
+  // Post pages only: marks the page as an article and dates it for search engines.
+  article?: { published: Date; modified: Date; section: string; tags: string[] };
+  // schema.org nodes describing this page, added to the site-wide WebSite and Person.
+  schema?: object[];
+  // Plain Markdown copy of this page for agents.
+  markdown?: string;
+  // Keeps the page out of search indexes, e.g. the 404 page.
+  noindex?: boolean;
 }
 
-const { lang, title, description, alternates = {} } = Astro.props;
+const { lang, title, description, alternates = {}, article, schema = [], markdown, noindex = false } = Astro.props;
 const t = ui[lang];
 const pageTitle = title ? `${title} | ${t.siteName}` : `${t.siteName} — ${t.tagline}`;
 const pageDescription = description ?? t.tagline;
 
 const path = Astro.url.pathname;
+const canonical = new URL(path, Astro.site);
+const translations = Object.entries(alternates) as [Lang, string][];
+// Readers whose language matches neither version get the Chinese original.
+const xDefault = translations.length > 1 ? alternates[DEFAULT_LANG] : undefined;
+// Escape "<" so text inside the data can never close the script element early.
+const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': [...siteSchema(lang), ...schema] }).replace(
+  /</g,
+  '\\u003c',
+);
 // The prompt's working directory mirrors the URL, minus the language prefix.
 const cwd = '~' + (lang === DEFAULT_LANG ? path : path.slice(lang.length + 1)).replace(/\/$/, '');
 
-const navItems = (['notes', 'analysis', 'lab', 'about'] as const).map((key) => ({
+const navItems = SECTIONS.map((key) => ({
   key,
   href: localePath(lang, `/${key}/`),
 }));
@@ -32,16 +50,54 @@ const navItems = (['notes', 'analysis', 'lab', 'about'] as const).map((key) => (
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
-    <link rel="canonical" href={new URL(path, Astro.site)} />
+    <meta name="author" content={AUTHOR.name} />
     {
-      Object.entries(alternates).map(([l, href]) => (
-        <link rel="alternate" hreflang={HTML_LANG[l as Lang]} href={new URL(href, Astro.site)} />
-      ))
+      noindex ? (
+        <meta name="robots" content="noindex" />
+      ) : (
+        <>
+          <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+          <link rel="canonical" href={canonical} />
+          <meta property="og:url" content={canonical} />
+          {translations.map(([l, href]) => (
+            <link rel="alternate" hreflang={HTML_LANG[l]} href={new URL(href, Astro.site)} />
+          ))}
+          {xDefault && <link rel="alternate" hreflang="x-default" href={new URL(xDefault, Astro.site)} />}
+        </>
+      )
     }
+    {markdown && <link rel="alternate" type="text/markdown" title={title} href={markdown} />}
+    <link rel="alternate" type="application/rss+xml" title={t.siteName} href={localePath(lang, '/rss.xml')} />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <meta property="og:site_name" content={t.siteName} />
     <meta property="og:title" content={title ?? t.siteName} />
     <meta property="og:description" content={pageDescription} />
-    <meta property="og:url" content={new URL(path, Astro.site)} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:locale" content={OG_LOCALE[lang]} />
+    {
+      translations
+        .filter(([l]) => l !== lang)
+        .map(([l]) => <meta property="og:locale:alternate" content={OG_LOCALE[l]} />)
+    }
+    <meta property="og:image" content={new URL(OG_IMAGE.path, Astro.site)} />
+    <meta property="og:image:width" content={String(OG_IMAGE.width)} />
+    <meta property="og:image:height" content={String(OG_IMAGE.height)} />
+    <meta property="og:image:alt" content={OG_IMAGE.alt} />
+    {
+      article && (
+        <>
+          <meta property="article:published_time" content={article.published.toISOString()} />
+          <meta property="article:modified_time" content={article.modified.toISOString()} />
+          <meta property="article:author" content={new URL(localePath(lang, '/about/'), Astro.site)} />
+          <meta property="article:section" content={article.section} />
+          {article.tags.map((tag) => <meta property="article:tag" content={tag} />)}
+        </>
+      )
+    }
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={AUTHOR.twitter} />
+    <meta name="twitter:creator" content={AUTHOR.twitter} />
+    <script is:inline type="application/ld+json" set:html={jsonLd} />
     <meta name="theme-color" content="#0c0e0d" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#f4f1e8" media="(prefers-color-scheme: light)" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
