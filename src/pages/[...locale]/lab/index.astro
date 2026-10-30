@@ -9,10 +9,15 @@ const { lang } = Astro.props as { lang: Lang };
 const t = ui[lang];
 ---
 
-<BaseLayout lang={lang} title={t.nav.lab} alternates={{ zh: localePath('zh', '/lab/'), ja: localePath('ja', '/lab/') }}>
+<BaseLayout
+  lang={lang}
+  title={t.nav.lab}
+  description={t.navDesc.lab}
+  alternates={{ zh: localePath('zh', '/lab/'), ja: localePath('ja', '/lab/') }}
+>
   <div class="cmd"><b>ls</b> ./lab</div>
   <h1>{t.nav.lab}</h1>
-  <p class="dim">{t.labIntro}</p>
+  <p class="dim">{t.navDesc.lab}</p>
   <div class="boxes" style="margin-top:1.8rem">
     {
       TOOLS.map((tool) => {

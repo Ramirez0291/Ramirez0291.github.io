@@ -38,3 +38,27 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # Tells Bing, Yandex and the other IndexNow engines to recrawl every page now rather than in days.
+  # Bing's index is what ChatGPT search and Copilot read, so this is how new posts reach those answers.
+  indexnow:
+    needs: deploy
+    runs-on: ubuntu-latest
+    # A failed ping only delays indexing; it never fails the deploy.
+    continue-on-error: true
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+      - name: Submit sitemap URLs
+        env:
+          HOST: rami0291.com
+          # Public by design: public/<key>.txt holds the same value to prove the site owns it.
+          KEY: 6d248d500842fd357241bfedb57eb8f2
+        run: |
+          tar -xOf artifact.tar ./sitemap.xml \
+            | grep -o '<loc>[^<]*</loc>' | sed -E 's#</?loc>##g' \
+            | jq -R . | jq -s --arg host "$HOST" --arg key "$KEY" \
+                '{host: $host, key: $key, keyLocation: "https://\($host)/\($key).txt", urlList: .}' \
+            | curl -fsS -X POST https://api.indexnow.org/indexnow \
+                -H 'Content-Type: application/json; charset=utf-8' --data-binary @- -w 'IndexNow: HTTP %{http_code}\n'

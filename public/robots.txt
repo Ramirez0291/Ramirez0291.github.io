@@ -1,0 +1,6 @@
+# Every crawler is welcome, search engines and AI agents alike:
+# this site wants to be read, cited and linked.
+User-agent: *
+Allow: /
+
+Sitemap: https://rami0291.com/sitemap.xml
