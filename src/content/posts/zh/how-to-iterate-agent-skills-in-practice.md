@@ -94,12 +94,12 @@ flowchart LR
 
 在 Skill 里写明「去哪查、怎么查」，能减少 Agent 盲目搜索浪费的 token，也能提高准确性。具体可以参考[让你的 Agent 学会去搜索](https://rami0291.com/notes/let-your-agent-know-how-to-research/)。
 
-```
+
 | 需要什么 | 首选来源 | 检索方法 | 最近核对 |
 |---|---|---|---|
 | Amazon 类目规则 | Seller Central 帮助页 | site:sellercentral.amazon.co.jp + 关键词 | 2026-10 |
 | 开源实现参考 | GitHub，只看近 6 个月有提交的项目 | 先按 stars 排序，再看最近 commit | 2026-10 |
-```
+
 
 > 通过 API 调用等环境可能没有网络，这时需要准备降级方案。
 
@@ -115,6 +115,7 @@ flowchart LR
 4. 把这次失败写成一个测试用例。
 
 Anthropic 官方给出的四个观察信号：
+
 
 | 信号 | 说明 | 动作 |
 |---|---|---|
