@@ -161,6 +161,8 @@ a.box:hover { border-color: var(--amber); text-decoration: none; }
 .prose pre { font-size: 0.86rem; padding: 1rem; overflow-x: auto; border: 1px solid var(--line); }
 .prose pre code { background: none; padding: 0; }
 .prose img { max-width: 100%; height: auto; }
+.prose .diagram { margin: 1.5rem 0; padding: 1rem; overflow-x: auto; border: 1px solid var(--line); background: var(--panel); text-align: center; }
+.prose .diagram svg { max-width: 100%; height: auto; }
 .prose table { border-collapse: collapse; display: block; overflow-x: auto; font-size: 0.92rem; }
 .prose th, .prose td { border: 1px solid var(--line); padding: 0.4rem 0.7rem; }
 

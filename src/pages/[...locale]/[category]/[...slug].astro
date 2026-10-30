@@ -120,4 +120,61 @@ if (counterpart) alternates[postLang(counterpart)] = postUrl(counterpart);
     const ageDays = (Date.now() - verified) / 86_400_000;
     if (ageDays > STALE_AFTER_DAYS) el.hidden = false;
   });
+
+  // ```mermaid blocks arrive as plain code; draw them in the browser.
+  // The library is only fetched on pages that actually contain a diagram.
+  const blocks = [...document.querySelectorAll<HTMLElement>('pre > code.language-mermaid')];
+  if (blocks.length) {
+    const scheme = window.matchMedia('(prefers-color-scheme: dark)');
+    const css = getComputedStyle(document.documentElement);
+    const color = (name: string) => css.getPropertyValue(name).trim();
+
+    const diagrams = blocks.map((code) => {
+      const figure = document.createElement('figure');
+      figure.className = 'diagram';
+      code.parentElement!.replaceWith(figure);
+      return { figure, source: code.textContent ?? '' };
+    });
+
+    import('mermaid').then(async ({ default: mermaid }) => {
+      const draw = async () => {
+        // Colors come from the site's CSS variables so the diagrams follow light/dark.
+        mermaid.initialize({
+          startOnLoad: false,
+          securityLevel: 'strict',
+          theme: 'base',
+          flowchart: { wrappingWidth: 360 },
+          themeVariables: {
+            darkMode: scheme.matches,
+            background: color('--panel'),
+            fontFamily: css.getPropertyValue('--sans').trim(),
+            primaryColor: color('--panel'),
+            primaryTextColor: color('--bright'),
+            primaryBorderColor: color('--amber'),
+            lineColor: color('--muted'),
+            secondaryColor: color('--panel'),
+            tertiaryColor: color('--panel'),
+            textColor: color('--fg'),
+            edgeLabelBackground: color('--panel'),
+            clusterBkg: color('--panel'),
+            clusterBorder: color('--line'),
+          },
+        });
+        for (const [i, { figure, source }] of diagrams.entries()) {
+          try {
+            const { svg } = await mermaid.render(`mermaid-${i}`, source);
+            figure.innerHTML = svg;
+          } catch (err) {
+            // Keep the source readable if the syntax is wrong.
+            console.error(err);
+            const pre = document.createElement('pre');
+            pre.textContent = source;
+            figure.replaceChildren(pre);
+          }
+        }
+      };
+      await draw();
+      scheme.addEventListener('change', draw);
+    });
+  }
 </script>
