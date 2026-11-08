@@ -144,9 +144,13 @@ a.box:hover { border-color: var(--amber); text-decoration: none; }
 .prose h2, .prose h3 { color: var(--bright); line-height: 1.45; }
 .prose h2 { font-size: 1.35rem; margin: 3rem 0 1rem; }
 .prose h3 { font-size: 1.12rem; margin: 2.2rem 0 0.6rem; }
-.prose h2::before, .prose h3::before { font-family: var(--mono); color: var(--amber); font-weight: 400; }
-.prose h2::before { content: '## '; }
-.prose h3::before { content: '### '; }
+/* The ## / ### prefix is a link to the section (src/markdown/heading-anchors.mjs). */
+.prose h2, .prose h3 { scroll-margin-top: 1.5rem; }
+.prose .heading-anchor { font-family: var(--mono); color: var(--amber); font-weight: 400; text-decoration: none; }
+.prose .heading-anchor:hover { text-decoration: underline; }
+.prose h2 > .heading-anchor::before { content: '## '; }
+.prose h3 > .heading-anchor::before { content: '### '; }
+.prose :target > .heading-anchor { background: var(--sel); }
 .prose strong { color: var(--bright); }
 .prose a { text-decoration: underline; text-underline-offset: 0.2em; }
 .prose ul { padding-left: 1.3rem; }
@@ -177,6 +181,22 @@ a.box:hover { border-color: var(--amber); text-decoration: none; }
 .prose .math-display { position: relative; overflow-x: auto; overflow-y: hidden; margin: 1.4rem 0; padding: 0.2rem 0; }
 .prose .math-display .katex-display { margin: 0; }
 .prose .katex { font-size: 1.08em; }
+
+/* ── table of contents (src/components/Toc.astro) ─── */
+.toc { margin: 1.6rem 0 0; font-size: 0.88rem; }
+.toc summary { cursor: pointer; color: var(--muted); list-style: none; overflow-wrap: anywhere; }
+.toc summary::-webkit-details-marker { display: none; }
+.toc summary::before { content: '▸ '; color: var(--amber); }
+.toc details[open] > summary::before { content: '▾ '; }
+.toc .cmd-inline::before { content: '$ '; color: var(--green); }
+.toc .cmd-inline b { color: var(--bright); font-weight: 500; }
+.toc ol { list-style: none; margin: 0; padding: 0; }
+.toc details > ol { margin-top: 0.5rem; padding: 0.4rem 0 0.4rem 1.1rem; border-left: 1px solid var(--line); }
+.toc li { margin: 0.15rem 0; line-height: 1.55; }
+.toc li ol { padding-left: 1.2rem; }
+.toc a { color: var(--fg); font-family: var(--sans); }
+.toc a:hover { color: var(--amber); }
+.toc details > ol > li > a { color: var(--bright); }
 
 /* ── comments (giscus) ──────────────────────────────── */
 .comments { margin-top: 3rem; padding-top: 1.2rem; border-top: 1px dashed var(--line); }
