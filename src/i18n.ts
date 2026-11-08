@@ -42,6 +42,7 @@ export const ui = {
     staleWarning: '本文信息已超过半年未核实，行业变化很快，请谨慎参考。',
     updated: '更新于',
     series: '系列',
+    toc: '目录',
     footer: '[exit 0] © Rami0291 · static site on GitHub Pages',
   },
   ja: {
@@ -68,6 +69,7 @@ export const ui = {
     staleWarning: 'この記事の情報は半年以上確認されていません。参考にする際はご注意ください。',
     updated: '更新',
     series: 'シリーズ',
+    toc: '目次',
     footer: '[exit 0] © Rami0291 · static site on GitHub Pages',
   },
 } as const;

@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import { satteri } from '@astrojs/markdown-satteri';
 import { katexPlugin } from './src/markdown/katex.mjs';
+import { headingAnchorsPlugin } from './src/markdown/heading-anchors.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -17,6 +18,7 @@ export default defineConfig({
       // $…$ is inline math, so a literal dollar sign in prose must be written \$ (e.g. \$132 Billion).
       features: { math: true },
       mdastPlugins: [katexPlugin],
+      hastPlugins: [headingAnchorsPlugin],
     }),
   },
 });

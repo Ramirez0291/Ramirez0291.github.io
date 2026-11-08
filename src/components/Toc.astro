@@ -1,0 +1,68 @@
+---
+import type { MarkdownHeading } from 'astro';
+import { ui, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  headings: MarkdownHeading[];
+  // The post's file name, shown in the terminal-style summary line.
+  file: string;
+}
+
+// Short posts read fine without one; below this many sections the list is just noise.
+const MIN_ENTRIES = 4;
+
+const { lang, headings, file } = Astro.props;
+const t = ui[lang];
+
+// h2 sections with their h3 subsections nested under them.
+type Entry = MarkdownHeading & { children: MarkdownHeading[] };
+const entries: Entry[] = [];
+for (const h of headings) {
+  if (h.depth === 2) entries.push({ ...h, children: [] });
+  else if (h.depth === 3) {
+    const parent = entries.at(-1);
+    if (parent) parent.children.push(h);
+    else entries.push({ ...h, children: [] });
+  }
+}
+const count = headings.filter((h) => h.depth === 2 || h.depth === 3).length;
+---
+
+{
+  count >= MIN_ENTRIES && (
+    <nav class="toc" aria-label={t.toc}>
+      <details open id="toc">
+        <summary>
+          <span class="cmd-inline">
+            <b>grep</b> '^##' {file}
+          </span>{' '}
+          <span class="dim">
+            # {t.toc} ({count})
+          </span>
+        </summary>
+        <ol>
+          {entries.map((e) => (
+            <li>
+              <a href={`#${e.slug}`}>{e.text}</a>
+              {e.children.length > 0 && (
+                <ol>
+                  {e.children.map((c) => (
+                    <li>
+                      <a href={`#${c.slug}`}>{c.text}</a>
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </li>
+          ))}
+        </ol>
+      </details>
+      {/* On phones the full list would push the article a screen down, so it starts folded there.
+          Inline and right after the element, so it runs before the first paint. */}
+      <script is:inline>
+        if (matchMedia('(max-width: 40rem)').matches) document.getElementById('toc').open = false;
+      </script>
+    </nav>
+  )
+}
