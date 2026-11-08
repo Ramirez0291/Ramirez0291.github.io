@@ -1,5 +1,6 @@
 ---
 import { render } from 'astro:content';
+import katexCss from 'katex/dist/katex.min.css?url';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Comments from '../../../components/Comments.astro';
 import {
@@ -30,7 +31,7 @@ export async function getStaticPaths() {
 
 const { post, lang, counterpart } = Astro.props as { post: Post; lang: Lang; counterpart?: Post };
 const t = ui[lang];
-const { Content } = await render(post);
+const { Content, remarkPluginFrontmatter } = await render(post);
 const { title, description, date, updated, lastVerified, machineTranslated, series, category, tags } = post.data;
 
 const alternates: Partial<Record<Lang, string>> = { [lang]: postUrl(post) };
@@ -46,6 +47,7 @@ if (counterpart) alternates[postLang(counterpart)] = postUrl(counterpart);
   schema={postSchema(post, counterpart)}
   markdown={postMarkdownUrl(post)}
 >
+  {remarkPluginFrontmatter.hasMath && <link slot="head" rel="stylesheet" href={katexCss} />}
   <article>
     <div class="cmd"><b>cat</b> {category}/{postSlug(post)}.md</div>
     <h1>{title}</h1>
@@ -110,6 +112,10 @@ if (counterpart) alternates[postLang(counterpart)] = postUrl(counterpart);
   </article>
   <Comments lang={lang} />
 </BaseLayout>
+
+<script>
+  import '../../../scripts/mermaid';
+</script>
 
 <script>
   // Staleness is judged against the reader's clock, not the build date,
