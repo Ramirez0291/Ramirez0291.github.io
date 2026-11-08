@@ -1,9 +1,9 @@
 ---
 title: 大语言模型与 AI 绘画“破甲（Jailbreak）”生态、底层机理与攻防博弈
 description: 为什么写代码的早就扔了提示词雕花，搞瑟瑟的却把它练成了满级手艺
-date: 2026-10-26
+date: 2026-11-09
 category: analysis
-lastVerified: 2026-10-26
+lastVerified: 2026-11-09
 ---
 
 ## 1. 为什么写代码的早就扔了提示词雕花，搞瑟瑟的却把它练成了满级手艺
