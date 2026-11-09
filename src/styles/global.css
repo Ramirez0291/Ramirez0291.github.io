@@ -83,7 +83,8 @@ main { padding: 2rem 0 4rem; }
 footer.site { border-top: 1px dashed var(--line); color: var(--muted); font-size: 0.82rem; padding: 1.2rem 0 2.5rem; }
 
 /* ── terminal blocks ────────────────────────────────── */
-.cmd { color: var(--muted); margin: 2.2rem 0 0.7rem; }
+/* Long slugs (cat analysis/some_very_long_name.md) must wrap, or they widen the whole page on phones. */
+.cmd { color: var(--muted); margin: 2.2rem 0 0.7rem; overflow-wrap: anywhere; }
 .cmd:first-child { margin-top: 0; }
 .cmd::before { content: '$ '; color: var(--green); }
 .cmd b { color: var(--bright); font-weight: 500; }
@@ -163,6 +164,8 @@ a.box:hover { border-color: var(--amber); text-decoration: none; }
 .prose img { max-width: 100%; height: auto; }
 .prose table { border-collapse: collapse; display: block; overflow-x: auto; font-size: 0.92rem; }
 .prose th, .prose td { border: 1px solid var(--line); padding: 0.4rem 0.7rem; }
+/* On phones, keep columns readable and let the table scroll sideways instead of one character per line. */
+@media (max-width: 40rem) { .prose th, .prose td { min-width: 8.5rem; } }
 
 /* ── comments (giscus) ──────────────────────────────── */
 .comments { margin-top: 3rem; padding-top: 1.2rem; border-top: 1px dashed var(--line); }

@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Comments from '../../../components/Comments.astro';
+import Toc from '../../../components/Toc.astro';
 import {
   findCounterpart,
   formatDate,
@@ -30,7 +31,7 @@ export async function getStaticPaths() {
 
 const { post, lang, counterpart } = Astro.props as { post: Post; lang: Lang; counterpart?: Post };
 const t = ui[lang];
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 const { title, description, date, updated, lastVerified, machineTranslated, series, category, tags } = post.data;
 
 const alternates: Partial<Record<Lang, string>> = { [lang]: postUrl(post) };
@@ -108,6 +109,7 @@ if (counterpart) alternates[postLang(counterpart)] = postUrl(counterpart);
       <Content />
     </div>
   </article>
+  <Toc lang={lang} headings={headings} />
   <Comments lang={lang} />
 </BaseLayout>
 

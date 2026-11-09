@@ -1,0 +1,278 @@
+---
+// Reading rail for long posts, in the same visual language as the homepage intro's timeline:
+// a thin line that fills as you read, the section you are in marked in amber.
+// Wide screens get it in the right margin; narrow screens get a top progress bar and a
+// small "03/12" button that opens the list.
+import type { MarkdownHeading } from 'astro';
+import type { Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  headings: MarkdownHeading[];
+}
+
+const { lang, headings } = Astro.props;
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const label = lang === 'ja' ? '目次' : '目录';
+const total = String(items.length).padStart(2, '0');
+---
+
+{
+  items.length >= 3 && (
+    <>
+      <div class="toc-progress" aria-hidden="true">
+        <i />
+      </div>
+      <nav class="toc" aria-label={label} data-toc>
+        <i class="toc-fill" aria-hidden="true" />
+        <ol>
+          {items.map((h) => (
+            <li class={`d${h.depth}`}>
+              <a href={`#${h.slug}`} title={h.text}>
+                {h.text}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+      <button type="button" class="toc-toggle" aria-label={label} aria-expanded="false" data-toc-toggle>
+        <span class="toc-count">
+          <b>01</b>/{total}
+        </span>
+      </button>
+    </>
+  )
+}
+
+<style is:global>
+  .prose h2,
+  .prose h3 {
+    scroll-margin-top: 1.5rem;
+  }
+
+  .toc {
+    --toc-w: min(15rem, calc(50vw - var(--max) / 2 - 3rem));
+    position: fixed;
+    top: 50%;
+    left: calc(50% + var(--max) / 2 + 2rem);
+    transform: translateY(-50%);
+    width: var(--toc-w);
+    max-height: 78vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    padding-left: 14px;
+    font-size: 0.74rem;
+    line-height: 1.5;
+    z-index: 5;
+  }
+  .toc::-webkit-scrollbar {
+    display: none;
+  }
+  .toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .toc li {
+    padding: 0.28rem 0;
+  }
+  .toc li.d3 {
+    padding-left: 0.9rem;
+    font-size: 0.95em;
+  }
+  .toc a {
+    display: block;
+    color: var(--muted);
+    opacity: 0.75;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.25s, opacity 0.25s;
+  }
+  .toc li.d3 a {
+    opacity: 0.6;
+  }
+  .toc a:hover {
+    color: var(--fg);
+    opacity: 1;
+    text-decoration: none;
+  }
+  .toc li.read a {
+    opacity: 1;
+  }
+  .toc li.on a {
+    color: var(--amber);
+    opacity: 1;
+  }
+  .toc li.on a::before {
+    content: '▸ ';
+  }
+  /* The rail: a faint line, filled in amber as far as you have read. */
+  .toc::before,
+  .toc-fill {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.4rem;
+    width: 1px;
+    height: var(--toc-h, calc(100% - 0.8rem));
+    background: var(--line);
+  }
+  .toc-fill {
+    background: var(--amber);
+    transform-origin: top;
+    transform: scaleY(0);
+  }
+
+  .toc-progress {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 2px;
+    z-index: 20;
+    pointer-events: none;
+    display: none;
+  }
+  .toc-progress i {
+    display: block;
+    height: 100%;
+    background: var(--amber);
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+  .toc-toggle {
+    display: none;
+  }
+
+  /* Not enough margin for the rail: top bar + floating counter that opens the list. */
+  @media (max-width: 1180px) {
+    .toc-progress {
+      display: block;
+    }
+    .toc {
+      --toc-w: min(22rem, calc(100vw - 32px));
+      left: auto;
+      right: 16px;
+      top: auto;
+      bottom: 4.2rem;
+      transform: none;
+      max-height: 60vh;
+      padding: 0.8rem 1rem 0.8rem calc(1rem + 14px);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      font-size: 0.82rem;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.2s, visibility 0.2s;
+    }
+    .toc.open {
+      visibility: visible;
+      opacity: 1;
+    }
+    .toc::before,
+    .toc-fill {
+      left: 1rem;
+      top: 1.2rem;
+    }
+    .toc a {
+      white-space: normal;
+    }
+    .toc-toggle {
+      display: block;
+      position: fixed;
+      right: 16px;
+      bottom: 1rem;
+      z-index: 21;
+      font: inherit;
+      font-size: 0.78rem;
+      color: var(--muted);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 0.35rem 0.7rem;
+      cursor: pointer;
+    }
+    .toc-toggle b {
+      color: var(--amber);
+      font-weight: 500;
+    }
+    .toc-toggle[aria-expanded='true'] {
+      border-color: var(--amber);
+    }
+  }
+</style>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('[data-toc]');
+  const prose = document.querySelector<HTMLElement>('.prose');
+  if (nav && prose) {
+    const links = [...nav.querySelectorAll<HTMLAnchorElement>('a')];
+    const items = links.map((a) => a.parentElement as HTMLElement);
+    const targets = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))));
+    const fill = nav.querySelector<HTMLElement>('.toc-fill');
+    const bar = document.querySelector<HTMLElement>('.toc-progress i');
+    const toggle = document.querySelector<HTMLButtonElement>('[data-toc-toggle]');
+    const count = toggle?.querySelector('b');
+    let active = -1;
+    let queued = false;
+
+    const update = () => {
+      queued = false;
+      const vh = window.innerHeight;
+      // "Where am I" = the last heading that has passed 30% down the screen.
+      const line = vh * 0.3;
+      let idx = -1;
+      targets.forEach((el, i) => {
+        if (el && el.getBoundingClientRect().top <= line) idx = i;
+      });
+      const r = prose.getBoundingClientRect();
+      const progress = Math.min(1, Math.max(0, (line - r.top) / Math.max(1, r.height - vh * 0.4)));
+      if (fill) fill.style.transform = `scaleY(${progress.toFixed(4)})`;
+      if (bar) bar.style.transform = `scaleX(${progress.toFixed(4)})`;
+      if (idx !== active) {
+        active = idx;
+        items.forEach((li, i) => {
+          li.classList.toggle('on', i === idx);
+          li.classList.toggle('read', i < idx);
+        });
+        if (count) count.textContent = String(Math.max(1, idx + 1)).padStart(2, '0');
+        // Keep the active entry visible when the list itself scrolls.
+        const li = items[idx];
+        if (li && nav.scrollHeight > nav.clientHeight) {
+          const top = li.offsetTop - nav.clientHeight / 2;
+          nav.scrollTo({ top, behavior: 'smooth' });
+        }
+      }
+    };
+    const queue = () => {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    };
+    // The fill line should span the list, not the scroll box.
+    const sizeRail = () => nav.style.setProperty('--toc-h', `${nav.querySelector('ol')!.offsetHeight - 12}px`);
+    window.addEventListener('scroll', queue, { passive: true });
+    window.addEventListener('resize', () => {
+      sizeRail();
+      queue();
+    });
+    sizeRail();
+    update();
+
+    const close = () => {
+      nav.classList.remove('open');
+      toggle?.setAttribute('aria-expanded', 'false');
+    };
+    toggle?.addEventListener('click', () => {
+      const open = !nav.classList.contains('open');
+      nav.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+    links.forEach((a) => a.addEventListener('click', close));
+    document.addEventListener('keydown', (e) => e.key === 'Escape' && close());
+    document.addEventListener('click', (e) => {
+      if (nav.classList.contains('open') && !nav.contains(e.target as Node) && !toggle?.contains(e.target as Node)) close();
+    });
+  }
+</script>

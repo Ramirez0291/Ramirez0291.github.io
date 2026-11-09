@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostList from '../../components/PostList.astro';
+import Genesis from '../../components/Genesis.astro';
 import { getPosts, localeParams, localePath, postUrl, SERIES, ui, type Lang } from '../../i18n';
 import { STATUS, TOOLS } from '../../tools';
 
@@ -15,6 +16,26 @@ const series = Object.entries(SERIES).filter(([key]) => posts.some((p) => p.data
 ---
 
 <BaseLayout lang={lang} alternates={{ zh: localePath('zh', '/'), ja: localePath('ja', '/') }}>
+  <Fragment slot="head">
+    {/* Decide before first paint whether the intro plays, so the homepage never flashes underneath. */}
+    <script is:inline>
+      (function () {
+        try {
+          var force = new URLSearchParams(location.search).has('intro');
+          var seen = false;
+          try { seen = localStorage.getItem('genesis-seen') === '1'; } catch (e) {}
+          var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if ((force || !seen) && !calm && window.WebGL2RenderingContext) {
+            var html = document.documentElement;
+            html.classList.add('genesis-pending');
+            // Safety net: if the intro script never starts, show the page anyway.
+            setTimeout(function () { if (!window.__genesis) html.classList.remove('genesis-pending'); }, 6000);
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </Fragment>
+  <Genesis lang={lang} />
   <div class="cmd"><b>whoami</b></div>
   <div class="out">
     <h1>Rami0291</h1>
@@ -79,6 +100,8 @@ const series = Object.entries(SERIES).filter(([key]) => posts.some((p) => p.data
       </>
     )
   }
+
+  <div class="cmd"><a href={localePath(lang, '/') + '?intro'}><b>./genesis.sh</b> --replay</a></div>
 
   <div class="cmd"><span class="cursor" aria-hidden="true"></span></div>
 </BaseLayout>
