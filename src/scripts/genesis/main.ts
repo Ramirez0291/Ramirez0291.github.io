@@ -2,10 +2,12 @@
 // the >_ cursor, captions, and the hand-off back to the terminal homepage.
 
 import { Engine, type DrawParams } from './engine';
-import { FX, KIND, OUTRO, SCENES, SCENE_START, SEGMENTS, TOTAL, locate, smooth, type Lang, type SceneState } from './timeline';
+import { CARD, FX, HINT_TOUCH, KIND, OUTRO, SCENES, SCENE_START, SEGMENTS, TOTAL, isTall, locate, promptGrid, smooth, type Lang, type SceneState } from './timeline';
 
 const SEEN_KEY = 'genesis-seen';
 const FONT = "'JetBrains Mono Variable', ui-monospace, Menlo, Consolas, monospace";
+// The closing line is drawn in the heaviest system sans there is: the glyph grid is coarse.
+const CARD_FONT = "system-ui, -apple-system, 'PingFang SC', 'Hiragino Sans', 'Noto Sans CJK SC', 'Noto Sans JP', 'Microsoft YaHei', 'Yu Gothic', sans-serif";
 
 type V4 = [number, number, number, number];
 type V2 = [number, number];
@@ -51,16 +53,22 @@ export function boot() {
   const typeEl = root.querySelector<HTMLElement>('.g-type')!;
   const titleEl = root.querySelector<HTMLElement>('.g-title')!;
   const lineEl = root.querySelector<HTMLElement>('.g-l2')!;
+  const headEl = root.querySelector<HTMLElement>('.g-l1')!;
   const statusEl = root.querySelector<HTMLElement>('.g-status')!;
-  const capEl = root.querySelector<HTMLElement>('.g-cap')!;
   const railItems = [...root.querySelectorAll<HTMLElement>('.g-rail li')];
   const railFill = root.querySelector<HTMLElement>('.g-rail-fill');
   const progEl = root.querySelector<HTMLElement>('.g-progress i');
   const hintEl = root.querySelector<HTMLElement>('.g-hint')!;
   const skipEl = root.querySelector<HTMLButtonElement>('.g-skip')!;
+  if (matchMedia('(pointer: coarse)').matches) hintEl.textContent = HINT_TOUCH[lang];
+  const tall = () => isTall(window.innerWidth, window.innerHeight);
+  // The rail was rendered at build time; the last entry is "this year" for whoever is watching.
+  railItems.forEach((li, i) => SCENES[i] && (li.textContent = SCENES[i].year));
 
   // Debug: ?intro&gt=12.5 opens the film paused at 12.5 s; window.__genesisSeek(t) jumps anywhere.
+  // ?gc=150 forces 150 glyph columns, to compare cell sizes.
   const debugT = Number(new URLSearchParams(location.search).get('gt') ?? NaN);
+  const debugCols = Number(new URLSearchParams(location.search).get('gc')) || 0;
   if (new URLSearchParams(location.search).has('intro')) {
     history.replaceState(null, '', location.pathname + location.hash);
   }
@@ -113,6 +121,55 @@ export function boot() {
     };
   }
 
+  // ── the closing card: the last line as a picture, laid out for the current screen ──
+  let cardShape = '';
+  function makeCard(): Painting {
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    const lines = OUTRO[lang][tall() ? 'tall' : 'wide'];
+    const c = document.createElement('canvas');
+    c.width = tall() ? 1000 : 1600;
+    c.height = Math.round((c.width * H) / W);
+    const ctx = c.getContext('2d', { willReadFrequently: true })!;
+    // Every character is one em wide, except that punctuation closing a line takes half: its ink
+    // sits in the left half of its box, and the other half would only push the line off-centre.
+    const ems = (l: string) => [...l].length - (/[，。、]$/.test(l) ? 0.5 : 0);
+    const longest = Math.max(...lines.map(ems));
+    const gap = tall() ? 1.06 : 1.2;
+    const size = Math.min((c.width * (tall() ? 0.86 : 0.8)) / longest, (c.height * (tall() ? 0.68 : 0.6)) / (lines.length * gap));
+    const lh = size * gap;
+    // The glyph grid is coarse. Where a character gets under ~20 rows of it, heavy strokes would
+    // close up into blobs, so the weight drops and the extra outline goes.
+    const fine = size / (c.height / engine!.rows) < 20;
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, c.width, c.height);
+    ctx.font = `${fine ? 600 : 900} ${size}px ${CARD_FONT}`;
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'left';
+    const x0 = (c.width - longest * size) / 2;
+    // A little above the middle: the caption sits bottom-left.
+    const y0 = c.height * 0.46 - ((lines.length - 1) * lh) / 2;
+    ctx.fillStyle = ctx.strokeStyle = '#ffc45a';
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = size * 0.035;
+    lines.forEach((l, i) =>
+      [...l].forEach((ch, k) => {
+        ctx.fillText(ch, x0 + k * size, y0 + i * lh);
+        if (!fine) ctx.strokeText(ch, x0 + k * size, y0 + i * lh);
+      }),
+    );
+    // The cursor rests where the line ends, as if it had just typed it.
+    const end = x0 + ems(lines[lines.length - 1]) * size;
+    SCENES[CARD].focus = [clamp((end + size * 0.16) / c.width, 0.05, 0.93), (y0 + (lines.length - 1) * lh + size * 0.18) / c.height];
+    cardShape = `${tall()}:${(W / H).toFixed(1)}`;
+    const t = document.createElement('canvas');
+    t.width = 200;
+    t.height = Math.round((200 * c.height) / c.width);
+    const tctx = t.getContext('2d', { willReadFrequently: true })!;
+    tctx.drawImage(c, 0, 0, t.width, t.height);
+    return { tex: engine!.texture(c), size: [c.width, c.height], aspect: c.width / c.height, thumb: tctx.getImageData(0, 0, t.width, t.height) };
+  }
+
   // ── brightness-matched destinations for the "flow" and "swirl" transitions ──
   const destCache = new Map<string, Float32Array>();
   function lumGrid(i: number, v: View, e: Engine): Float32Array {
@@ -154,11 +211,15 @@ export function boot() {
     // Line 1: title. Line 2: artist · year. Typed out over the first part of the scene.
     const sc = SCENES[i];
     const title = sc.title[lang];
-    const byline = `${sc.artist[lang]} · ${sc.year}`;
+    const byline = `${sc.artist[lang]} · ${sc.year}${sc.source ? ` · ${sc.source[lang]}` : ''}`;
     const n = Math.floor(clamp(p / 0.4) * (title.length + byline.length));
     setText(titleEl, title.slice(0, n));
     setText(lineEl, byline.slice(0, Math.max(0, n - title.length)));
-    capEl.style.opacity = String(fade);
+    fadeCaption(fade);
+  }
+  // Only the title and byline fade; the status line under them has to stay readable in transitions.
+  function fadeCaption(fade: number) {
+    headEl.style.opacity = lineEl.style.opacity = String(fade);
   }
 
   function rail(t: number, active: number) {
@@ -166,6 +227,10 @@ export function boot() {
     if (railFill) railFill.style.transform = `scaleY(${(t / TOTAL).toFixed(4)})`;
     if (progEl) progEl.style.transform = `scaleX(${(t / TOTAL).toFixed(4)})`;
   }
+
+  // The closing line is made of two thin glyphs, > and _, so it gets a stronger cell fill than a
+  // painting does; otherwise the film would end on its dimmest picture.
+  const fillOf = (i: number) => (i === CARD ? 0.5 : undefined);
 
   // ── one frame of the film at time t ──
   function render(t: number, now: number) {
@@ -191,19 +256,20 @@ export function boot() {
       aux: [0, 0],
     };
     let status = '';
+    let pulse = 0;
     if (seg.type === 'scene') {
-      const v = view(seg.i, SCENES[seg.i].state(p));
+      const v = view(seg.i, SCENES[seg.i].state(p, tall()));
       const P = paintings[seg.i];
       e.setDest('id', null);
-      e.draw({ ...base, texA: P.tex, sizeA: P.size, camA: v.cam, fxA: v.fx, gainA: v.gain, focA: v.focus });
+      e.draw({ ...base, texA: P.tex, sizeA: P.size, camA: v.cam, fxA: v.fx, gainA: v.gain, focA: v.focus, textA: seg.i, fill: fillOf(seg.i) });
       placeCursor(...v.focus);
       caption(seg.i, p, 1);
       setText(typeEl, '');
       rail(t, seg.i);
     } else if (seg.type === 'trans') {
-      const A = seg.a >= 0 ? view(seg.a, SCENES[seg.a].state(1)) : null;
-      const B = seg.b >= 0 ? view(seg.b, SCENES[seg.b].state(0)) : null;
-      const focA = A ? A.focus : bootPoint();
+      const A = seg.a >= 0 ? view(seg.a, SCENES[seg.a].state(1, tall())) : null;
+      const B = seg.b >= 0 ? view(seg.b, SCENES[seg.b].state(0, tall())) : null;
+      const focA = A ? A.focus : seg.from != null ? view(seg.from, SCENES[seg.from].state(1, tall())).focus : bootPoint();
       const focB = B ? B.focus : focA;
       const mapped = seg.kind === KIND.flow || seg.kind === KIND.swirl;
       e.setDest(mapped ? `d${index}` : 'id', mapped && A && B ? destFor(index, seg.a, seg.b, A, B, e) : null);
@@ -226,31 +292,48 @@ export function boot() {
         focA,
         focB,
         aux: B?.aux ?? focB,
+        grid: seg.kind === KIND.prompt ? promptGrid(p) : undefined,
+        textA: seg.a,
+        textB: seg.b,
+        fill: fillOf(seg.a === CARD || seg.b === CARD ? CARD : -1),
       });
-      const m = smooth(clamp(seg.kind === KIND.warp ? (p - 0.35) / 0.4 : p));
-      placeCursor(focA[0] + (focB[0] - focA[0]) * m, focA[1] + (focB[1] - focA[1]) * m);
+      if (seg.kind === KIND.prompt) {
+        // The cursor walks to its pick (the bottom-right candidate), then rides the upscale, so it
+        // ends exactly on the next scene's focus.
+        const [gx, gy, gz] = promptGrid(p);
+        const W = window.innerWidth;
+        const H = window.innerHeight;
+        const pick: V2 = [(0.5 + (0.5 + focB[0] / W / 2 - gx) * gz) * W, (0.5 + (0.5 + focB[1] / H / 2 - gy) * gz) * H];
+        const m = smooth(clamp(p / 0.55));
+        placeCursor(focA[0] + (pick[0] - focA[0]) * m, focA[1] + (pick[1] - focA[1]) * m);
+      } else {
+        // Writing the last line, the cursor stays put while the glyphs pour out of it, then goes
+        // to the end of what it wrote.
+        const m = smooth(clamp(seg.kind === KIND.warp ? (p - 0.35) / 0.4 : seg.from != null ? (p - 0.45) / 0.55 : p));
+        placeCursor(focA[0] + (focB[0] - focA[0]) * m, focA[1] + (focB[1] - focA[1]) * m);
+      }
+      // The cursor swells as history arrives in it and gives that back as it writes.
+      if (seg.kind === KIND.inhale) pulse = 0.7 * smooth(clamp((p - 0.3) / 0.55));
+      else if (seg.from != null) pulse = 0.7 * (1 - smooth(clamp(p / 0.6)));
       if (seg.a >= 0) caption(seg.a, 1, clamp(1 - p * 3));
-      else capEl.style.opacity = '0';
+      else fadeCaption(0);
       if (seg.kind === KIND.diffuse) {
         status = p < 0.5 ? `> add_noise  σ = ${(smooth(clamp(p / 0.5))).toFixed(2)}` : `> denoise  step ${String(Math.min(24, Math.floor(((p - 0.5) / 0.5) * 24) + 1)).padStart(2, '0')}/24`;
       } else if (seg.kind === KIND.latent) {
         status = `> z = slerp(z₀, z₁, ${p.toFixed(2)})`;
+      } else if (seg.kind === KIND.prompt) {
+        // The prompt behind this picture was never published, so it is typed as redacted blocks.
+        const typed = '█'.repeat(Math.round(clamp(p / 0.15) * 14));
+        const step = Math.floor(clamp((p - 0.16) / 0.44) * 6 + 1e-4);
+        if (p < 0.16) status = `> /imagine ${typed}`;
+        else if (p < 0.62) status = `> /imagine ${typed}  (${Math.round((step / 6) * 100)}%)`;
+        else status = p < 0.7 ? '> U4' : '> U4  upscaling';
       }
       setText(typeEl, '');
       rail(t, seg.b >= 0 ? (p < 0.5 ? seg.a : seg.b) : seg.a);
-    } else {
-      // Outro: only the cursor is left, and it speaks.
-      e.clear();
-      const last = view(SCENES.length - 1, SCENES[SCENES.length - 1].state(1)).focus;
-      const text = OUTRO[lang];
-      const target: V2 = [window.innerWidth / 2 - text.length * 9, window.innerHeight / 2];
-      const m = smooth(clamp(p / 0.3));
-      placeCursor(last[0] + (target[0] - last[0]) * m, last[1] + (target[1] - last[1]) * m);
-      setText(typeEl, ' ' + text.slice(0, Math.floor(clamp((p - 0.25) / 0.45) * text.length)));
-      capEl.style.opacity = '0';
-      rail(t, -1);
     }
-    setText(statusEl, paused && seg.type !== 'outro' ? '‖ paused' : status);
+    cursorEl.style.setProperty('--g-s', (1 + pulse).toFixed(3));
+    setText(statusEl, paused ? '‖ paused' : status);
   }
 
   // ── clock ──
@@ -326,6 +409,11 @@ export function boot() {
   };
   const onResize = () => {
     if (engine?.resize()) destCache.clear();
+    // The closing line is laid out for the screen's shape; redo it when that changes.
+    if (engine && paintings[CARD] && cardShape !== `${tall()}:${(window.innerWidth / window.innerHeight).toFixed(1)}`) {
+      engine.gl.deleteTexture(paintings[CARD].tex);
+      paintings[CARD] = makeCard();
+    }
   };
   root.addEventListener('wheel', onWheel, { passive: false });
   root.addEventListener('touchstart', onTouchStart, { passive: true });
@@ -420,18 +508,24 @@ export function boot() {
     try {
       await Promise.race([document.fonts.load(`500 40px ${FONT}`), sleep(1500)]);
     } catch {}
-    engine = Engine.create(canvas, FONT);
+    engine = Engine.create(
+      canvas,
+      FONT,
+      SCENES.map((sc) => sc.text ?? ''),
+    );
     if (!engine) throw new Error('WebGL2 unavailable');
+    engine.colsHint = debugCols;
     engine.resize();
     engine.clear();
     real = 0.08;
 
     let done = 0;
+    const pictures = SCENES.filter((s) => s.src);
     const imgs = await Promise.all(
-      SCENES.map((s) =>
+      pictures.map((s) =>
         loadImage(s.src).then((img) => {
           done++;
-          real = 0.08 + 0.92 * (done / SCENES.length);
+          real = 0.08 + 0.92 * (done / pictures.length);
           return img;
         }),
       ),
@@ -451,6 +545,7 @@ export function boot() {
         thumb: ctx.getImageData(0, 0, w, h),
       });
     }
+    paintings[CARD] = makeCard();
     real = 1;
     while (shown < 1) await sleep(30);
     barDone = true;
