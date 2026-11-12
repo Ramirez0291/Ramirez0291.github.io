@@ -8,6 +8,7 @@ const CATEGORY_NAMES = { notes: '实战笔记 · Field notes', analysis: '行业
 
 export const GET: APIRoute = async () => {
   const zh = await getPosts('zh');
+  const en = await getPosts('en');
   const ja = await getPosts('ja');
 
   const sections = [
@@ -17,12 +18,13 @@ export const GET: APIRoute = async () => {
         '\n',
       ),
     ),
+    ['## English (machine translated)', '', ...en.map(postIndexLine)].join('\n'),
     ['## 日本語 · Japanese (machine translated)', '', ...ja.map(postIndexLine)].join('\n'),
     [
       '## Tools',
       '',
       ...TOOLS.filter((tool) => tool.ready).map(
-        (tool) => `- [${tool.name.zh} · ${tool.name.ja}](${absoluteUrl(tool.href)}): ${tool.desc.zh}`,
+        (tool) => `- [${tool.name.zh} · ${tool.name.en}](${absoluteUrl(tool.href)}): ${tool.desc.en}`,
       ),
     ].join('\n'),
     [

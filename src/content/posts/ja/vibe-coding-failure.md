@@ -1,10 +1,11 @@
 ---
-title: なぜ Vibe Coding は失敗するのか
-description: 動く Demo と本番で使えるシステムの間には、ソフトウェアエンジニアリングという大きな山がある。入力検証、権限の分離、アーキテクチャの境界を理解する人がチームにいなければ、Vibe Coding は誰も保守できない「クソコードの山」を光速で積み上げるだけだ。
+title: "なぜ Vibe Coding は失敗するのか"
+description: "動く Demo と本番で使えるシステムの間には、ソフトウェアエンジニアリングという大きな山がある。入力検証、権限の分離、アーキテクチャの境界を理解する人がチームにいなければ、Vibe Coding は誰も保守できない「クソコードの山」を光速で積み上げるだけだ。"
 date: 2026-10-25
 category: analysis
 lastVerified: 2026-10-25
 machineTranslated: true
+sourceHash: 8371efd525fa
 ---
 
 ## 序文：目を背けられない 3 つの幻想

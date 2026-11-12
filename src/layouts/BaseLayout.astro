@@ -124,7 +124,7 @@ const navItems = SECTIONS.map((key) => ({
                 {l === lang ? (
                   <span class="on">{l}</span>
                 ) : (
-                  <a href={alternates[l] ?? localePath(l, '/')} hreflang={HTML_LANG[l]} lang={HTML_LANG[l]}>
+                  <a href={alternates[l] ?? localePath(l, '/')} hreflang={HTML_LANG[l]} lang={HTML_LANG[l]} data-pick-lang={l}>
                     {l}
                   </a>
                 )}
@@ -140,5 +140,13 @@ const navItems = SECTIONS.map((key) => ({
     <footer class="site">
       <div class="wrap">{t.footer}</div>
     </footer>
+    {/* A language the reader picks by hand wins over the browser setting from then on (see PREFERRED_LANG_JS). */}
+    <script is:inline>
+      document.addEventListener('click', function (e) {
+        var link = e.target && e.target.closest && e.target.closest('[data-pick-lang]');
+        if (!link) return;
+        try { localStorage.setItem('lang', link.getAttribute('data-pick-lang')); } catch (err) {}
+      });
+    </script>
   </body>
 </html>

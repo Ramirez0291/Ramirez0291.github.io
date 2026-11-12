@@ -1,10 +1,11 @@
 ---
-title: Agent に「まず調べる」ことを覚えさせよう
-description: Agent の問題は、書いたコードの質の悪さではなく、最初の一行を書き始めるのが早すぎることにある場合がある。
+title: "Agent に「まず調べる」ことを覚えさせよう"
+description: "Agent の問題は、書いたコードの質の悪さではなく、最初の一行を書き始めるのが早すぎることにある場合がある。"
 date: 2026-10-26
 category: notes
 lastVerified: 2026-10-26
 machineTranslated: true
+sourceHash: 75f004d25ee6
 ---
 
 ## 1. いくつかのシンプルな Skill で、Agent の研究パフォーマンスを高める

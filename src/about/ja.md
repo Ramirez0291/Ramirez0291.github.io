@@ -1,3 +1,4 @@
+<!-- machine translation of zh.md, sourceHash: ea04d9cf18ba. Delete this line to keep hand edits. -->
 
 ## 何者か
 

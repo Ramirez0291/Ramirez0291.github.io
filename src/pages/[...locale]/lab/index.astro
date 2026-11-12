@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { localeParams, localePath, ui, type Lang } from '../../../i18n';
+import { localeAlternates, localeParams, ui, type Lang } from '../../../i18n';
 import { STATUS, TOOLS } from '../../../tools';
 
 export const getStaticPaths = localeParams;
@@ -13,7 +13,7 @@ const t = ui[lang];
   lang={lang}
   title={t.nav.lab}
   description={t.navDesc.lab}
-  alternates={{ zh: localePath('zh', '/lab/'), ja: localePath('ja', '/lab/') }}
+  alternates={localeAlternates('/lab/')}
 >
   <div class="cmd"><b>ls</b> ./lab</div>
   <h1>{t.nav.lab}</h1>

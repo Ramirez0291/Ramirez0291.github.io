@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { localeParams, localePath, ui, type Lang } from '../../../i18n';
+import { DEFAULT_LANG, localeAlternates, localeParams, localePath, ui, type Lang } from '../../../i18n';
 import { Content as AboutZh } from '../../../about/zh.md';
+import { Content as AboutEn } from '../../../about/en.md';
 import { Content as AboutJa } from '../../../about/ja.md';
 import { AUTHOR, profileSchema } from '../../../seo';
 
@@ -9,20 +10,20 @@ export const getStaticPaths = localeParams;
 
 const { lang } = Astro.props as { lang: Lang };
 const t = ui[lang];
-const About = lang === 'zh' ? AboutZh : AboutJa;
+const About = { zh: AboutZh, en: AboutEn, ja: AboutJa }[lang];
 ---
 
 <BaseLayout
   lang={lang}
   title={t.nav.about}
   description={t.navDesc.about}
-  alternates={{ zh: localePath('zh', '/about/'), ja: localePath('ja', '/about/') }}
+  alternates={localeAlternates('/about/')}
   schema={profileSchema(lang)}
 >
   <div class="cmd"><b>cat</b> about.md</div>
   <h1>Who am I?</h1>
   {
-    lang === 'ja' && (
+    lang !== DEFAULT_LANG && (
       <p class="notice">
         <span class="lvl">[INFO]</span>
         {t.machineTranslated} <a href={localePath('zh', '/about/')}>{t.readOriginal}</a>

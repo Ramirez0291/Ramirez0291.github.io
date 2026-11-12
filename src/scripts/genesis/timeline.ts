@@ -1,7 +1,7 @@
 // Scenes and transitions of the homepage intro ("genesis").
 // Everything here is a pure function of progress, so the wheel can scrub forwards and backwards.
 
-export type Lang = 'zh' | 'ja';
+export type Lang = 'zh' | 'en' | 'ja';
 export type Vec2 = [number, number];
 export type Fx = [id: number, a: number, b: number, c: number];
 
@@ -98,8 +98,8 @@ export const SCENES: Scene[] = [
     year: '1512',
     focus: [0.3825, 0.444],
     dur: 6.5,
-    title: { zh: '《创造亚当》', ja: '《アダムの創造》' },
-    artist: { zh: '米开朗基罗', ja: 'ミケランジェロ' },
+    title: { zh: '《创造亚当》', ja: '《アダムの創造》', en: 'The Creation of Adam' },
+    artist: { zh: '米开朗基罗', ja: 'ミケランジェロ', en: 'Michelangelo' },
     // Vulgate, Genesis: the opening of 1:26, all of 1:27, the opening of 2:7. Only wording that two
     // online editions agree on is used (Bible Gateway's Vulgate and vulgate.org, checked 2026-11-10).
     text: inscribe(
@@ -107,7 +107,7 @@ export const SCENES: Scene[] = [
         'Et creavit Deus hominem ad imaginem suam: ad imaginem Dei creavit illum, masculum et feminam creavit eos. ' +
         'Formavit igitur Dominus Deus hominem de limo terrae.',
     ),
-    source: { zh: '字：《创世记》1:26–27、2:7', ja: '文字：創世記 1:26–27, 2:7' },
+    source: { zh: '字：《创世记》1:26–27、2:7', ja: '文字：創世記 1:26–27, 2:7', en: 'Text: Genesis 1:26–27, 2:7' },
     state: (p, tall) => {
       // Wide: end slightly left of centre so narrow windows still frame both hands.
       // Tall: never leave the two hands; the whole fresco would be a strip of plaster.
@@ -125,14 +125,14 @@ export const SCENES: Scene[] = [
     year: '1632',
     focus: [0.528, 0.655],
     dur: 4.5,
-    title: { zh: '《杜尔普医生的解剖学课》', ja: '《テュルプ博士の解剖学講義》' },
-    artist: { zh: '伦勃朗', ja: 'レンブラント' },
+    title: { zh: '《杜尔普医生的解剖学课》', ja: '《テュルプ博士の解剖学講義》', en: 'The Anatomy Lesson of Dr. Nicolaes Tulp' },
+    artist: { zh: '伦勃朗', ja: 'レンブラント', en: 'Rembrandt' },
     // Descartes, Discours de la méthode (1637), part V: the body as a machine. Checked against
     // French Wikisource and Project Gutenberg #13846 (both the Cousin edition), 2026-11-10.
     text: inscribe(
       "ce corps comme une machine, qui, ayant été faite des mains de Dieu, est incomparablement mieux ordonnée et a en soi des mouvements plus admirables qu'aucune de celles qui peuvent être inventées par les hommes.",
     ),
-    source: { zh: '字：笛卡尔《谈谈方法》第五部分', ja: '文字：デカルト『方法序説』第五部' },
+    source: { zh: '字：笛卡尔《谈谈方法》第五部分', ja: '文字：デカルト『方法序説』第五部', en: 'Text: Descartes, Discourse on the Method, Part V' },
     state: (p, tall) => ({
       // Tall: travel from the watching faces to the surgeon's hand.
       ...keys(tall ? [[0, 0.38, 0.5, -2.2], [1, 0.55, 0.56, -2.9]] : [[0, 0.5, 0.5, 1], [1, 0.53, 0.6, 1.9]], p),
@@ -146,15 +146,15 @@ export const SCENES: Scene[] = [
     year: '1668',
     focus: [0.392, 0.447],
     dur: 4.5,
-    title: { zh: '《天文学家》', ja: '《天文学者》' },
-    artist: { zh: '维米尔', ja: 'フェルメール' },
+    title: { zh: '《天文学家》', ja: '《天文学者》', en: 'The Astronomer' },
+    artist: { zh: '维米尔', ja: 'フェルメール', en: 'Vermeer' },
     // Pascal, Pensées (published 1670), fragments 206 and 347 in Brunschvicg's numbering.
     // Checked against French Wikisource (éd. Brunschvicg), 2026-11-10.
     text: inscribe(
       "Le silence éternel de ces espaces infinis m'effraie. " +
         "L'homme n'est qu'un roseau, le plus faible de la nature ; mais c'est un roseau pensant.",
     ),
-    source: { zh: '字：帕斯卡《思想录》206、347', ja: '文字：パスカル『パンセ』206・347' },
+    source: { zh: '字：帕斯卡《思想录》206、347', ja: '文字：パスカル『パンセ』206・347', en: 'Text: Pascal, Pensées 206, 347' },
     state: (p, tall) => ({
       // Tall: pull back only as far as the globe and the astronomer.
       ...keys(tall ? [[0, 0.392, 0.447, -5], [1, 0.47, 0.5, -1.95]] : [[0, 0.392, 0.447, 2.6], [1, 0.5, 0.45, 1]], p),
@@ -169,8 +169,8 @@ export const SCENES: Scene[] = [
     focus: [0.517, 0.268],
     aux: [0.497, 0.68],
     dur: 4.5,
-    title: { zh: '《空气泵里的鸟实验》', ja: '《空気ポンプの中の鳥の実験》' },
-    artist: { zh: '约瑟夫·赖特', ja: 'ジョセフ・ライト' },
+    title: { zh: '《空气泵里的鸟实验》', ja: '《空気ポンプの中の鳥の実験》', en: 'An Experiment on a Bird in the Air Pump' },
+    artist: { zh: '约瑟夫·赖特', ja: 'ジョセフ・ライト', en: 'Joseph Wright of Derby' },
     // Kant, Beantwortung der Frage: Was ist Aufklärung? (1784), in the spelling of the first
     // printing (Berlinische Monatsschrift) as transcribed on German Wikisource; the wording was
     // also checked against Project Gutenberg #30821 (which modernises "Muth"), 2026-11-10.
@@ -179,7 +179,7 @@ export const SCENES: Scene[] = [
         'Sapere aude! Habe Muth dich deines eigenen Verstandes zu bedienen! ist also der Wahlspruch der Aufklärung.',
       true,
     ),
-    source: { zh: '字：康德《什么是启蒙？》', ja: '文字：カント『啓蒙とは何か』' },
+    source: { zh: '字：康德《什么是启蒙？》', ja: '文字：カント『啓蒙とは何か』', en: 'Text: Kant, "What Is Enlightenment?"' },
     state: (p, tall) => ({
       // Tall: bird, lecturer and candle share one vertical axis; start letterboxed and push in on it.
       ...keys(tall ? [[0, 0.5, 0.5, -1.9], [1, 0.49, 0.5, -2.9]] : [[0, 0.5, 0.56, 1], [1, 0.5, 0.42, 1.45]], p),
@@ -193,14 +193,14 @@ export const SCENES: Scene[] = [
     year: '1844',
     focus: [0.655, 0.61],
     dur: 4,
-    title: { zh: '《雨、蒸汽和速度——西部大铁路》', ja: '《雨、蒸気、速度―グレート・ウェスタン鉄道》' },
-    artist: { zh: '透纳', ja: 'ターナー' },
+    title: { zh: '《雨、蒸汽和速度——西部大铁路》', ja: '《雨、蒸気、速度―グレート・ウェスタン鉄道》', en: 'Rain, Steam and Speed – The Great Western Railway' },
+    artist: { zh: '透纳', ja: 'ターナー', en: 'Turner' },
     // Dickens, Dombey and Son (1846-48), chapter 20, the railway journey.
     // Checked against Project Gutenberg #821, 2026-11-10.
     text: inscribe(
       'Away, with a shriek, and a roar, and a rattle, from the town, burrowing among the dwellings of men and making the streets hum, flashing out into the meadows for a moment, mining in through the damp earth, booming on in darkness and heavy air, bursting out again into the sunny day so bright and wide;',
     ),
-    source: { zh: '字：狄更斯《董贝父子》第 20 章', ja: '文字：ディケンズ『ドンビー父子』第20章' },
+    source: { zh: '字：狄更斯《董贝父子》第 20 章', ja: '文字：ディケンズ『ドンビー父子』第20章', en: 'Text: Dickens, Dombey and Son, ch. 20' },
     state: (p, tall) => ({
       ...keys(tall ? [[0, 0.56, 0.5, -1.8], [1, 0.655, 0.6, -6.5, 'in']] : [[0, 0.5, 0.5, 1], [1, 0.655, 0.6, 3.4, 'in']], p),
       fx: NOFX,
@@ -213,15 +213,15 @@ export const SCENES: Scene[] = [
     year: '1910',
     focus: [0.74, 0.34],
     dur: 4,
-    title: { zh: '《城市的兴起》', ja: '《立ち上がる都市》' },
-    artist: { zh: '波丘尼', ja: 'ボッチョーニ' },
+    title: { zh: '《城市的兴起》', ja: '《立ち上がる都市》', en: 'The City Rises' },
+    artist: { zh: '波丘尼', ja: 'ボッチョーニ', en: 'Boccioni' },
     // Marinetti, Fondazione e Manifesto del Futurismo (1909), from point 4. Checked against the
     // text quoted on Italian Wikipedia (after I Manifesti del futurismo, 1914), 2026-11-10.
     text: inscribe(
       'Noi affermiamo che la magnificenza del mondo si è arricchita di una bellezza nuova: la bellezza della velocità. ' +
         'Un automobile ruggente, che sembra correre sulla mitraglia, è più bello della Vittoria di Samotracia.',
     ),
-    source: { zh: '字：马里内蒂《未来主义宣言》', ja: '文字：マリネッティ「未来派宣言」' },
+    source: { zh: '字：马里内蒂《未来主义宣言》', ja: '文字：マリネッティ「未来派宣言」', en: 'Text: Marinetti, The Futurist Manifesto' },
     state: (p, tall) => ({
       // Tall: from the horse's head and blue collar out to the whole animal.
       ...keys(tall ? [[0, 0.64, 0.4, -3.4], [1, 0.56, 0.5, -2.0]] : [[0, 0.5, 0.48, 1.6], [1, 0.5, 0.5, 1]], p),
@@ -235,15 +235,15 @@ export const SCENES: Scene[] = [
     year: '1976',
     focus: [0.346, 0.797],
     dur: 6,
-    title: { zh: '《林肯在达利视觉中》', ja: '《ダリビジョンのリンカーン》' },
-    artist: { zh: '达利', ja: 'ダリ' },
+    title: { zh: '《林肯在达利视觉中》', ja: '《ダリビジョンのリンカーン》', en: 'Lincoln in Dalivision' },
+    artist: { zh: '达利', ja: 'ダリ', en: 'Dalí' },
     // Lincoln, Gettysburg Address (1863), Bliss copy: its first sentence and its last clause.
     // Checked against Abraham Lincoln Online and English Wikisource, 2026-11-10.
     text: inscribe(
       'Four score and seven years ago our fathers brought forth, on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal. ' +
         'that government of the people, by the people, for the people, shall not perish from the earth.',
     ),
-    source: { zh: '字：林肯《葛底斯堡演说》', ja: '文字：リンカーン「ゲティスバーグ演説」' },
+    source: { zh: '字：林肯《葛底斯堡演说》', ja: '文字：リンカーン「ゲティスバーグ演説」', en: 'Text: Lincoln, the Gettysburg Address' },
     state: (p) => {
       const c = keys([[0, 0.5, 0.42, -1.9], [0.55, 0.5, 0.5, -1], [1, 0.5, 0.5, -0.92]], p);
       // Blocks grow until Lincoln's face shows through the mosaic.
@@ -257,12 +257,12 @@ export const SCENES: Scene[] = [
     year: '2018',
     focus: [0.771, 0.85],
     dur: 5,
-    title: { zh: '《埃德蒙·德·贝拉米肖像》', ja: '《エドモン・ド・ベラミーの肖像》' },
-    artist: { zh: 'Obvious', ja: 'Obvious' },
+    title: { zh: '《埃德蒙·德·贝拉米肖像》', ja: '《エドモン・ド・ベラミーの肖像》', en: 'Edmond de Belamy' },
+    artist: { zh: 'Obvious', ja: 'Obvious', en: 'Obvious' },
     // The GAN objective, which the collective signed the canvas with in place of a name
     // (transcribed from the painting; subscripts are written inline).
     text: verbatim('min G max D Ex[log(D(x))] + Ez[log(1-D(G(z)))]'),
-    source: { zh: '字：画上署名用的 GAN 目标函数', ja: '文字：署名代わりの GAN 目的関数' },
+    source: { zh: '字：画上署名用的 GAN 目标函数', ja: '文字：署名代わりの GAN 目的関数', en: 'Text: the GAN objective signed on the canvas' },
     state: (p) => ({
       ...keys([[0, 0.55, 0.6, -1.5], [0.6, 0.5, 0.5, -1], [1, 0.5, 0.5, -1]], p),
       fx: [FX.chroma, 0.0035, 0, 0],
@@ -276,12 +276,12 @@ export const SCENES: Scene[] = [
     focus: [0.527, 0.7],
     aux: [0.54, 0.43],
     dur: 5,
-    title: { zh: '《太空歌剧院》', ja: '《宇宙オペラ座》' },
-    artist: { zh: 'Jason M. Allen × Midjourney', ja: 'Jason M. Allen × Midjourney' },
+    title: { zh: '《太空歌剧院》', ja: '《宇宙オペラ座》', en: 'Théâtre D’opéra Spatial' },
+    artist: { zh: 'Jason M. Allen × Midjourney', ja: 'Jason M. Allen × Midjourney', en: 'Jason M. Allen × Midjourney' },
     // The command is known; the prompt was never published, so it stays redacted.
     // Runs of uneven length, so the redactions do not line up into a brick pattern.
     text: verbatim([13, 29, 19, 7, 23].map((n) => '/imagine' + '░'.repeat(n)).join('')),
-    source: { zh: '字：未公开的 prompt', ja: '文字：非公開のプロンプト' },
+    source: { zh: '字：未公开的 prompt', ja: '文字：非公開のプロンプト', en: 'Text: an unpublished prompt' },
     state: (p, tall) => ({
       // Tall: letterboxed so the portal keeps its three figures, then a slow push in.
       ...keys(tall ? [[0, 0.53, 0.5, -2.0], [1, 0.515, 0.52, -2.3]] : [[0, 0.5, 0.5, 1], [1, 0.535, 0.52, 1.5]], p),
@@ -298,10 +298,10 @@ export const SCENES: Scene[] = [
     year: String(new Date().getFullYear()),
     focus: [0.5, 0.5],
     dur: 4.4,
-    title: { zh: '《　　　　》', ja: '《　　　　》' },
-    artist: { zh: '我们', ja: '私たち' },
+    title: { zh: '《　　　　》', ja: '《　　　　》', en: '“　　　　”' },
+    artist: { zh: '我们', ja: '私たち', en: 'Us' },
     text: verbatim('>_'),
-    source: { zh: '字：>_', ja: '文字：>_' },
+    source: { zh: '字：>_', ja: '文字：>_', en: 'Text: >_' },
     state: (p) => ({ ...keys([[0, 0.5, 0.5, 1.05, 'out'], [1, 0.5, 0.5, 1]], p), fx: NOFX, gain: [1, 1] }),
   },
 ];
@@ -380,14 +380,17 @@ export function promptGrid(p: number): [number, number, number] {
 export const OUTRO: Record<Lang, { wide: string[]; tall: string[] }> = {
   zh: { wide: ['那么，', '轮到我们了。'], tall: ['那么，', '轮到', '我们', '了。'] },
   ja: { wide: ['さて、', '次は私たちの番だ。'], tall: ['さて、', '次は', '私たち', 'の番だ。'] },
+  en: { wide: ['So,', "it's our turn."], tall: ['So,', "it's", 'our', 'turn.'] },
 };
-export const BOOT: Record<Lang, string> = { zh: 'loading genesis', ja: 'loading genesis' };
+export const BOOT: Record<Lang, string> = { zh: 'loading genesis', ja: 'loading genesis', en: 'loading genesis' };
 export const HINT: Record<Lang, string> = {
   zh: '滚轮 / 拖动 控制时间 · 空格 暂停',
   ja: 'ホイール / スワイプで時間を操作 · Space で一時停止',
+  en: 'Wheel / drag to move through time · Space to pause',
 };
 /** Shown instead of HINT where there is no wheel or keyboard. */
 export const HINT_TOUCH: Record<Lang, string> = {
   zh: '上下滑动 控制时间',
   ja: '上下スワイプで時間を操作',
+  en: 'Swipe up / down to move through time',
 };

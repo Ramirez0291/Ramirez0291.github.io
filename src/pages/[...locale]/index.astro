@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostList from '../../components/PostList.astro';
 import Genesis from '../../components/Genesis.astro';
-import { getPosts, localeParams, localePath, postUrl, SERIES, ui, type Lang } from '../../i18n';
+import { DEFAULT_LANG, PREFERRED_LANG_JS, getPosts, localeAlternates, localeParams, localePath, postUrl, SERIES, ui, type Lang } from '../../i18n';
 import { STATUS, TOOLS } from '../../tools';
 
 export const getStaticPaths = localeParams;
@@ -15,8 +15,26 @@ const latest = posts.slice(0, 5);
 const series = Object.entries(SERIES).filter(([key]) => posts.some((p) => p.data.series === key));
 ---
 
-<BaseLayout lang={lang} alternates={{ zh: localePath('zh', '/'), ja: localePath('ja', '/') }}>
+<BaseLayout lang={lang} alternates={localeAlternates('/')}>
   <Fragment slot="head">
+    {
+      /* The root homepage sends readers on to /en/ or /ja/ when their browser asks for that language
+         (or they picked it before). Only here: other pages keep their URL so shared links and search
+         results open as they were, and offer a translation instead. Crawlers are left alone, so the
+         Chinese homepage stays indexed. Anything else, or nothing, stays on Chinese. */
+      lang === DEFAULT_LANG && (
+        <script
+          is:inline
+          set:html={`(function () {
+  if (/bot|crawl|spider|slurp|preview|lighthouse|headless/i.test(navigator.userAgent)) return;
+  var pref = (${PREFERRED_LANG_JS})();
+  if (!pref || pref.lang === ${JSON.stringify(DEFAULT_LANG)}) return;
+  var target = '/' + pref.lang + '/';
+  if (location.pathname === '/') location.replace(target + location.search + location.hash);
+})();`}
+        />
+      )
+    }
     {/* Decide before first paint whether the intro plays, so the homepage never flashes underneath. */}
     <script is:inline>
       (function () {

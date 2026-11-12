@@ -5,7 +5,7 @@
 // Wide screens get it in the right margin; narrow screens get a top progress bar and a
 // small "03/12" button that opens the list.
 import type { MarkdownHeading } from 'astro';
-import type { Lang } from '../i18n';
+import { ui, type Lang } from '../i18n';
 
 interface Props {
   lang: Lang;
@@ -14,7 +14,7 @@ interface Props {
 
 const { lang, headings } = Astro.props;
 const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
-const label = lang === 'ja' ? '目次' : '目录';
+const label = ui[lang].toc;
 const total = String(items.length).padStart(2, '0');
 ---
 

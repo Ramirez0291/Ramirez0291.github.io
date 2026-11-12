@@ -1,10 +1,11 @@
 ---
-title: 実践の中で Agent Skill を改善していくには
-description: Skill はソフトウェアとして育てるべきだ。ただし、ソフトウェアエンジニアリングの落とし穴にも気をつけたい。
+title: "実践の中で Agent Skill を改善していくには"
+description: "Skill はソフトウェアとして育てるべきだ。ただし、ソフトウェアエンジニアリングの落とし穴にも気をつけたい。"
 date: 2026-10-28
 category: notes
 lastVerified: 2026-10-28
 machineTranslated: true
+sourceHash: 1e140e732882
 ---
 
 ## TL;DR

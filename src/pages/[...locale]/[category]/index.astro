@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PostList from '../../../components/PostList.astro';
-import { CATEGORIES, getPosts, localeParams, localePath, ui, type Category, type Lang } from '../../../i18n';
+import { CATEGORIES, getPosts, localeAlternates, localeParams, ui, type Category, type Lang } from '../../../i18n';
 
 export function getStaticPaths() {
   return localeParams().flatMap(({ params, props }) =>
@@ -18,7 +18,7 @@ const posts = await getPosts(lang, (p) => p.data.category === category);
   lang={lang}
   title={t.nav[category]}
   description={t.navDesc[category]}
-  alternates={{ zh: localePath('zh', `/${category}/`), ja: localePath('ja', `/${category}/`) }}
+  alternates={localeAlternates(`/${category}/`)}
 >
   <div class="cmd"><b>ls -t</b> ./{category}</div>
   <h1>{t.nav[category]}</h1>

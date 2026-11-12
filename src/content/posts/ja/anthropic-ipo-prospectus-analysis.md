@@ -1,10 +1,11 @@
 ---
-title: 研究開発の強度、ガバナンス構造、そして今回の IPO から見えたこと
-description: Anthropic の IPO 目論見書（S-1）を読み解く：いずれ Claude に会社を経営させるのだろうか？
+title: "研究開発の強度、ガバナンス構造、そして今回の IPO から見えたこと"
+description: "Anthropic の IPO 目論見書（S-1）を読み解く：いずれ Claude に会社を経営させるのだろうか？"
 date: 2026-10-27
 category: analysis
 lastVerified: 2026-10-27
 machineTranslated: true
+sourceHash: 1a77dc5cb7ce
 ---
 
 ## TL;DR

@@ -1,4 +1,5 @@
 import {
+  findOriginal,
   HTML_LANG,
   LANGS,
   localePath,
@@ -69,7 +70,7 @@ export function siteSchema(lang: Lang) {
   ];
 }
 
-export function postSchema(post: Post, counterpart?: Post) {
+export function postSchema(post: Post, translations: Post[]) {
   const lang = postLang(post);
   const t = ui[lang];
   const url = absoluteUrl(postUrl(post));
@@ -93,8 +94,10 @@ export function postSchema(post: Post, counterpart?: Post) {
     ...(tags.length > 0 && { keywords: tags }),
   };
   // Machine translations point at their original, so answer engines cite the source.
-  if (counterpart && machineTranslated) article.translationOfWork = { '@id': articleId(counterpart) };
-  if (counterpart?.data.machineTranslated) article.workTranslation = { '@id': articleId(counterpart) };
+  const original = findOriginal(post, translations);
+  if (original) article.translationOfWork = { '@id': articleId(original) };
+  const machineVersions = machineTranslated ? [] : translations.filter((p) => p.data.machineTranslated);
+  if (machineVersions.length > 0) article.workTranslation = machineVersions.map((p) => ({ '@id': articleId(p) }));
 
   const breadcrumb = {
     '@type': 'BreadcrumbList',
@@ -120,10 +123,12 @@ export function profileSchema(lang: Lang) {
 }
 
 /** A post as standalone Markdown: the source text plus the metadata an agent needs to cite it. */
-export function postMarkdown(post: Post, counterpart?: Post): string {
+export function postMarkdown(post: Post, translations: Post[]): string {
   const lang = postLang(post);
   const t = ui[lang];
   const { title, description, date, updated, lastVerified, machineTranslated } = post.data;
+  const original = findOriginal(post, translations);
+  const others = translations.filter((p) => p !== original);
   const meta = [
     `- Author: ${AUTHOR.name}, ${AUTHOR.jobTitle} (${absoluteUrl(localePath(lang, '/about/'))})`,
     `- Published: ${date.toISOString().slice(0, 10)}`,
@@ -131,8 +136,8 @@ export function postMarkdown(post: Post, counterpart?: Post): string {
     lastVerified && `- Last verified: ${lastVerified.toISOString().slice(0, 10)}`,
     `- Language: ${HTML_LANG[lang]}`,
     `- Canonical URL: ${absoluteUrl(postUrl(post))}`,
-    machineTranslated && counterpart && `- Machine translation of: ${absoluteUrl(postMarkdownUrl(counterpart))}`,
-    !machineTranslated && counterpart && `- Translation: ${absoluteUrl(postMarkdownUrl(counterpart))}`,
+    original && `- Machine translation of: ${absoluteUrl(postMarkdownUrl(original))}`,
+    ...others.map((p) => `- Also in ${HTML_LANG[postLang(p)]}: ${absoluteUrl(postMarkdownUrl(p))}`),
   ].filter(Boolean);
   const notice = machineTranslated ? `\n\n> ${t.machineTranslated}` : '';
   return `# ${title}\n\n> ${description}\n\n${meta.join('\n')}${notice}\n\n${(post.body ?? '').trim()}\n`;
@@ -142,7 +147,7 @@ export function postMarkdown(post: Post, counterpart?: Post): string {
 export function llmsIntro(): string {
   return `# ${AUTHOR.name}
 
-> Personal site of ${AUTHOR.name}, a ${AUTHOR.jobTitle} living in Japan who puts AI agents to work inside real companies. Field notes and industry analysis on AI agents, written in Chinese; the Japanese versions are machine translations.
+> Personal site of ${AUTHOR.name}, a ${AUTHOR.jobTitle} living in Japan who puts AI agents to work inside real companies. Field notes and industry analysis on AI agents, written in Chinese; the English and Japanese versions are machine translations.
 
 ${ui.zh.tagline}
 
@@ -154,7 +159,7 @@ The author writes:
 The author offers AI training for decision makers, and hands-on help for managers and teams moving AI from demos into real workflows. Contact: ${AUTHOR.links.map((link) => `${link.label} ${link.href}`).join(' · ')}
 
 How this site is laid out:
-- Chinese (zh-CN) originals live at the site root; Japanese (ja) machine translations live under /ja/.
+- Chinese (zh-CN) originals live at the site root; English (en) and Japanese (ja) machine translations live under /en/ and /ja/.
 - Every article has a plain Markdown copy: replace the trailing "/" of its URL with ".md".
 - Analysis posts carry a "last verified" date. The field moves fast, so check that date before quoting figures.
 - Cite the canonical HTML URL, which each Markdown copy lists.`;

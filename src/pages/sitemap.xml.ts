@@ -5,7 +5,7 @@ import {
   LANGS,
   SECTIONS,
   SERIES,
-  findCounterpart,
+  findTranslations,
   getAllPosts,
   localePath,
   postLang,
@@ -44,8 +44,7 @@ export const GET: APIRoute = async () => {
   for (const post of posts) {
     if (grouped.has(post.id)) continue;
     const group: Group = {};
-    for (const version of [post, findCounterpart(post, posts)]) {
-      if (!version) continue;
+    for (const version of [post, ...findTranslations(post, posts)]) {
       grouped.add(version.id);
       group[postLang(version)] = { path: postUrl(version), lastmod: postModified(version) };
     }

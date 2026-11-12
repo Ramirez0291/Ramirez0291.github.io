@@ -6,10 +6,13 @@ import Comments from '../../../components/Comments.astro';
 import Toc from '../../../components/Toc.astro';
 import ReadingRail from '../../../components/ReadingRail.astro';
 import {
-  findCounterpart,
+  findOriginal,
+  findTranslations,
   formatDate,
   getAllPosts,
+  HTML_LANG,
   localePath,
+  PREFERRED_LANG_JS,
   postLang,
   postMarkdownUrl,
   postModified,
@@ -27,17 +30,18 @@ export async function getStaticPaths() {
   const posts = await getAllPosts();
   return posts.map((post) => ({
     params: postParams(post),
-    props: { post, lang: postLang(post), counterpart: findCounterpart(post, posts) },
+    props: { post, lang: postLang(post), translations: findTranslations(post, posts) },
   }));
 }
 
-const { post, lang, counterpart } = Astro.props as { post: Post; lang: Lang; counterpart?: Post };
+const { post, lang, translations } = Astro.props as { post: Post; lang: Lang; translations: Post[] };
 const t = ui[lang];
 const { Content, headings, remarkPluginFrontmatter } = await render(post);
 const { title, description, date, updated, lastVerified, machineTranslated, series, category, tags } = post.data;
+const original = findOriginal(post, translations);
 
 const alternates: Partial<Record<Lang, string>> = { [lang]: postUrl(post) };
-if (counterpart) alternates[postLang(counterpart)] = postUrl(counterpart);
+for (const version of translations) alternates[postLang(version)] = postUrl(version);
 ---
 
 <BaseLayout
@@ -46,7 +50,7 @@ if (counterpart) alternates[postLang(counterpart)] = postUrl(counterpart);
   description={description}
   alternates={alternates}
   article={{ published: date, modified: postModified(post), section: t.nav[category], tags }}
-  schema={postSchema(post, counterpart)}
+  schema={postSchema(post, translations)}
   markdown={postMarkdownUrl(post)}
 >
   {remarkPluginFrontmatter.hasMath && <link slot="head" rel="stylesheet" href={katexCss} />}
@@ -80,24 +84,49 @@ if (counterpart) alternates[postLang(counterpart)] = postUrl(counterpart);
         <p class="notice">
           <span class="lvl">[INFO]</span>
           {t.machineTranslated}
-          {counterpart && (
+          {original && (
             <>
               {' '}
-              <a href={postUrl(counterpart)}>{t.readOriginal}</a>
+              <a href={postUrl(original)} hreflang={HTML_LANG[postLang(original)]} data-pick-lang={postLang(original)}>
+                {t.readOriginal}
+              </a>
             </>
           )}
         </p>
       )
     }
     {
-      !machineTranslated && counterpart && (
+      !machineTranslated && translations.length > 0 && (
         <p class="notice">
           <span class="lvl">[INFO]</span>
-          <a href={postUrl(counterpart)} hreflang="ja">
-            {t.readTranslation}
-          </a>
+          {translations.map((version, i) => (
+            <>
+              {i > 0 && ' · '}
+              <a
+                href={postUrl(version)}
+                hreflang={HTML_LANG[postLang(version)]}
+                lang={HTML_LANG[postLang(version)]}
+                data-pick-lang={postLang(version)}
+              >
+                {ui[postLang(version)].readHere}
+              </a>
+            </>
+          ))}
         </p>
       )
+    }
+    {
+      /* Readers who land on a translation in a language their browser doesn't ask for
+         (a shared link, a search result) are offered the version in their own language. */
+      machineTranslated &&
+        translations.map((version) => (
+          <p class="notice" hidden data-offer-lang={postLang(version)} lang={HTML_LANG[postLang(version)]}>
+            <span class="lvl">[INFO]</span>
+            <a href={postUrl(version)} hreflang={HTML_LANG[postLang(version)]} data-pick-lang={postLang(version)}>
+              {ui[postLang(version)].readHere}
+            </a>
+          </p>
+        ))
     }
     {
       lastVerified && (
@@ -116,6 +145,15 @@ if (counterpart) alternates[postLang(counterpart)] = postUrl(counterpart);
   </article>
   <ReadingRail lang={lang} headings={headings} />
   <Comments lang={lang} />
+  <script
+    is:inline
+    set:html={`(function () {
+  var pref = (${PREFERRED_LANG_JS})();
+  if (!pref || pref.lang === ${JSON.stringify(lang)}) return;
+  var offer = document.querySelector('[data-offer-lang="' + pref.lang + '"]');
+  if (offer) offer.hidden = false;
+})();`}
+  />
 </BaseLayout>
 
 <script>

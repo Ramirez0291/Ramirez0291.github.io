@@ -1,11 +1,12 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 
-export const LANGS = ['zh', 'ja'] as const;
+// Chinese is written by hand; English and Japanese are machine translations made by scripts/translate.mjs.
+export const LANGS = ['zh', 'en', 'ja'] as const;
 export type Lang = (typeof LANGS)[number];
 export const DEFAULT_LANG: Lang = 'zh';
 
-export const HTML_LANG: Record<Lang, string> = { zh: 'zh-CN', ja: 'ja' };
-export const OG_LOCALE: Record<Lang, string> = { zh: 'zh_CN', ja: 'ja_JP' };
+export const HTML_LANG: Record<Lang, string> = { zh: 'zh-CN', en: 'en', ja: 'ja' };
+export const OG_LOCALE: Record<Lang, string> = { zh: 'zh_CN', en: 'en_US', ja: 'ja_JP' };
 
 export const CATEGORIES = ['notes', 'analysis'] as const;
 export type Category = (typeof CATEGORIES)[number];
@@ -14,7 +15,7 @@ export type Category = (typeof CATEGORIES)[number];
 export const SECTIONS = [...CATEGORIES, 'lab', 'about'] as const;
 
 export const SERIES: Record<string, Record<Lang, string>> = {
-  'agent-course': { zh: 'Agent 落地课程', ja: 'Agent 導入コース' },
+  'agent-course': { zh: 'Agent 落地课程', en: 'Deploying AI Agents', ja: 'Agent 導入コース' },
 };
 
 export const ui = {
@@ -30,14 +31,14 @@ export const ui = {
       lab: '可以直接上手的小工具，全部纯前端运行、不收集数据。',
       about: 'Rami0291：生活在日本的 Forward Deployed Engineer，提供 AI Agent 落地培训与咨询。',
     },
-    langSwitch: '日本語',
     featured: '精选案例',
     latest: '最新文章',
     more: '更多',
     noPosts: '还没有文章。',
     machineTranslated: '本文为机器翻译。',
     readOriginal: '阅读中文原文',
-    readTranslation: '日本語で読む',
+    // Written in this language, shown on pages in other languages to send readers here.
+    readHere: '阅读中文版',
     lastVerified: '信息最后核实于',
     staleWarning: '本文信息已超过半年未核实，行业变化很快，请谨慎参考。',
     updated: '更新于',
@@ -57,14 +58,13 @@ export const ui = {
       lab: 'すぐに試せる小さなツール。すべてブラウザ内で動作し、データは収集しません。',
       about: 'Rami0291：日本在住の Forward Deployed Engineer。AI Agent 導入の研修とコンサルティングを提供。',
     },
-    langSwitch: '中文',
     featured: '注目の事例',
     latest: '最新記事',
     more: 'もっと見る',
     noPosts: '日本語の記事はまだありません。',
     machineTranslated: 'この記事は中国語原文の機械翻訳です。',
     readOriginal: '中国語の原文を読む',
-    readTranslation: '日本語で読む',
+    readHere: '日本語で読む',
     lastVerified: '情報の最終確認日',
     staleWarning: 'この記事の情報は半年以上確認されていません。参考にする際はご注意ください。',
     updated: '更新',
@@ -72,7 +72,54 @@ export const ui = {
     toc: '目次',
     footer: '[exit 0] © Rami0291 · static site on GitHub Pages',
   },
+  en: {
+    siteName: 'Rami0291',
+    tagline: 'Forward Deployed Engineer · Putting AI agents to work inside real companies',
+    whoami: [
+      'Cyber nomad living in Japan · open-source author · self-appointed analyst',
+      'Doing the unglamorous FDE work every day, convinced AGI arrives within three years.',
+    ],
+    navLabel: 'Main navigation',
+    nav: { notes: 'Field Notes', analysis: 'Analysis', lab: 'Tools', about: 'About' },
+    navDesc: {
+      notes: 'Field notes from deploying AI agents inside real companies: iterating on Skills, research methods, and the pitfalls.',
+      analysis: 'AI industry analysis without the fearmongering: what AI can really do, and where it stops.',
+      lab: 'Small tools you can try right away. Everything runs in your browser and no data is collected.',
+      about: 'Rami0291: a Forward Deployed Engineer based in Japan, offering AI agent training and consulting.',
+    },
+    featured: 'Featured',
+    latest: 'Latest posts',
+    more: 'More',
+    noPosts: 'No posts in English yet.',
+    machineTranslated: 'This article is a machine translation of the Chinese original.',
+    readOriginal: 'Read the Chinese original',
+    readHere: 'Read in English',
+    lastVerified: 'Last verified',
+    staleWarning: 'The facts in this article have not been checked for over six months. The field moves fast, so treat them with care.',
+    updated: 'Updated',
+    series: 'Series',
+    toc: 'Contents',
+    footer: '[exit 0] © Rami0291 · static site on GitHub Pages',
+  },
 } as const;
+
+/**
+ * The reader's preferred site language from their browser settings, or null when none of
+ * navigator.languages is one of ours. Kept as source text so the pages can inline it into
+ * <script is:inline> (which must not contain backslashes; see the notes in index.astro).
+ */
+export const PREFERRED_LANG_JS = `function () {
+  try {
+    var saved = localStorage.getItem('lang');
+    if (saved) return { lang: saved, saved: true };
+  } catch (e) {}
+  var list = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''];
+  for (var i = 0; i < list.length; i++) {
+    var code = String(list[i]).toLowerCase().split('-')[0];
+    if (${JSON.stringify(LANGS)}.indexOf(code) >= 0) return { lang: code, saved: false };
+  }
+  return null;
+}`;
 
 /** Prefixes a site path with the language segment; zh lives at the root. */
 export function localePath(lang: Lang, path = '/'): string {
@@ -124,9 +171,21 @@ export function getAllPosts() {
   return getCollection('posts', (p: Post) => !p.data.draft);
 }
 
-/** The same article in the other language, if it exists. */
-export function findCounterpart(post: Post, posts: Post[]): Post | undefined {
-  return posts.find((p) => postSlug(p) === postSlug(post) && postLang(p) !== postLang(post));
+/** The same article in the other languages, in LANGS order. */
+export function findTranslations(post: Post, posts: Post[]): Post[] {
+  return posts
+    .filter((p) => postSlug(p) === postSlug(post) && postLang(p) !== postLang(post))
+    .sort((a, b) => LANGS.indexOf(postLang(a)) - LANGS.indexOf(postLang(b)));
+}
+
+/** The hand-written version a machine translation was made from. */
+export function findOriginal(post: Post, translations: Post[]): Post | undefined {
+  return post.data.machineTranslated ? translations.find((p) => !p.data.machineTranslated) : undefined;
+}
+
+/** A page that exists in every language: its URL in each. */
+export function localeAlternates(path: string): Record<Lang, string> {
+  return Object.fromEntries(LANGS.map((lang) => [lang, localePath(lang, path)])) as Record<Lang, string>;
 }
 
 /** Published posts in one language, newest first. */

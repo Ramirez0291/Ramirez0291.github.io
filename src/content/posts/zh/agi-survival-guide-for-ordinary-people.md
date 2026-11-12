@@ -2,7 +2,7 @@
 title: 一个普通人的 AGI 时代求生指南
 description: 活到赛博华佗降临的那一天
 date: 2026-11-11
-category: note
+category: notes
 lastVerified: 2026-11-11
 ---
 

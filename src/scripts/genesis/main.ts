@@ -47,7 +47,7 @@ export function boot() {
   if (!root || !html.classList.contains('genesis-pending')) return;
   (window as unknown as { __genesis?: boolean }).__genesis = true;
 
-  const lang: Lang = root.dataset.lang === 'ja' ? 'ja' : 'zh';
+  const lang: Lang = root.dataset.lang === 'ja' || root.dataset.lang === 'en' ? root.dataset.lang : 'zh';
   const canvas = root.querySelector<HTMLCanvasElement>('.g-canvas')!;
   const cursorEl = root.querySelector<HTMLElement>('.g-cursor')!;
   const typeEl = root.querySelector<HTMLElement>('.g-type')!;

@@ -1,0 +1,6 @@
+- 落地 (deploying AI into a company's real work) → en: deploy / put to work; ja: 導入
+- 实战笔记 → en: field notes; ja: 実践ノート
+- 行业分析 → en: industry analysis; ja: 業界分析
+- 屎山 → en: a mountain of spaghetti code; ja: クソコードの山
+- 赛博游民 → en: cyber nomad; ja: サイバー遊牧民
+- Forward Deployed Engineer (FDE) → keep as is in both languages
