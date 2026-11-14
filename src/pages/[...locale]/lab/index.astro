@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { localeAlternates, localeParams, ui, type Lang } from '../../../i18n';
+import { localeAlternates, localeParams, localePath, ui, type Lang } from '../../../i18n';
 import { STATUS, TOOLS } from '../../../tools';
 
 export const getStaticPaths = localeParams;
@@ -23,7 +23,7 @@ const t = ui[lang];
       TOOLS.map((tool) => {
         const Tag = tool.ready ? 'a' : 'div';
         return (
-          <Tag class="box" href={tool.ready ? tool.href : undefined}>
+          <Tag class="box" href={tool.ready ? (tool.localized ? localePath(lang, tool.href) : tool.href) : undefined}>
             <span class="label">[{tool.id}]</span>
             <h3>
               {tool.name[lang]} <span class="status">{STATUS[tool.ready ? 'ready' : 'building'][lang]}</span>

@@ -1,14 +1,26 @@
 import type { Lang } from './i18n';
 
-// Each tool is its own repo published as a GitHub Pages project site,
-// which GitHub mounts under this domain at /<repo-name>/.
+// External project sites keep their paths; local explainers follow the blog locale.
 export const TOOLS: {
   id: string;
   href: string;
   ready: boolean;
+  localized?: boolean;
   name: Record<Lang, string>;
   desc: Record<Lang, string>;
 }[] = [
+  {
+    id: 'graph-workflow',
+    href: '/lab/graph-workflow/',
+    ready: true,
+    localized: true,
+    name: { zh: 'Graph Workflow', en: 'Graph Workflow', ja: 'Graph Workflow' },
+    desc: {
+      zh: '让 Agent 分工，把验收交给规则。探索多 Agent 开发工作流与交互流程图。',
+      en: 'Separate agent roles. Enforce acceptance with code. Explore the interactive workflow.',
+      ja: 'Agent の役割を分け、コードで検証する。対話型フロー図で開発の仕組みを読む。',
+    },
+  },
   {
     id: 'ainativebench',
     href: '/ainativebench/',

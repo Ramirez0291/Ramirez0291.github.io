@@ -1,0 +1,93 @@
+---
+import type { Lang } from '../i18n';
+import { repo } from '../data/graph-workflow';
+const { lang } = Astro.props as { lang: Lang };
+const t = {
+  zh: {
+    title: '让脚本调度短会话，减少重复读取历史的 token',
+    intro: '长驻的 Main 一直主持开发时，每轮都可能带上越来越长的会话历史。gw drive 把外层循环接过去：脚本检查任务状态，再为当前步骤启动一个新的 claude -p 会话。',
+    launch: '读取状态，选择当前步骤', session: '新会话，只带本步骤所需文件路径', result: '返回结构化结果与判定',
+    repeat: '解析 VERDICT → 更新状态 → 下一步 / 重试 / 停止',
+    steps: 'brief → tester → spec-check → coder → review → finish',
+    before: '长驻会话', beforeBody: '早期讨论、工具结果和多轮审查不断累积，后续调用重复读取历史；即使命中缓存，仍有缓存读取 token。',
+    after: '脚本驱动', afterBody: '每一步从新上下文开始，通过文件接续工作。调度循环本身是 Python 代码，不需要模型用对话维持进度。',
+    outcome: '省下的是重复携带的历史；需求、代码、测试和审查仍然需要模型读取与生成。',
+    note: '实际节省取决于文件大小、任务数量、重试次数和缓存计费。本页不把单次实验结果当作通用节省比例。',
+    command: '对任务 1 启动自动调度（在产品仓库内，路径按安装位置调整）',
+    finish: '通过后，gw finish 串起 review pass → holdout → merge → close；任何一步失败都会停在对应关口。',
+  },
+  en: {
+    title: 'Let scripts dispatch fresh sessions to reduce repeated history reads',
+    intro: 'A persistent Main session can carry an expanding conversation through every call. gw drive takes over the outer loop: it checks task state and launches a fresh claude -p session for the current step.',
+    launch: 'Read state and choose the current step', session: 'Fresh context, only this step’s required file paths', result: 'Return structured output and a verdict',
+    repeat: 'Parse VERDICT → update state → advance / retry / stop',
+    steps: 'brief → tester → spec-check → coder → review → finish',
+    before: 'Persistent conversation', beforeBody: 'Earlier discussion, tool output and reviews accumulate. Later calls reread that history; cache hits still consume cache-read tokens.',
+    after: 'Script-led sessions', afterBody: 'Each step starts fresh and resumes through files. The Python scheduling loop needs no model conversation to maintain progress.',
+    outcome: 'The saving is repeated history. Requirements, code, tests and reviews still need model input and output.',
+    note: 'Actual savings depend on file sizes, task count, retries and cache pricing. A single experiment is not a universal savings rate.',
+    command: 'Drive task 1 from your product repository; adjust the skill installation path',
+    finish: 'On acceptance, gw finish chains review pass → holdout → merge → close, stopping at the first failed gate.',
+  },
+  ja: {
+    title: 'スクリプトが短いセッションを起動し、履歴の再読を減らす',
+    intro: 'Main が同じ会話で開発を指揮し続けると、呼び出しのたびに長くなった履歴を持ち越します。gw drive は外側のループを引き受け、状態を確認し、現在の手順用に新しい claude -p セッションを起動します。',
+    launch: '状態を読み、実行する手順を選ぶ', session: '新しい文脈に、その手順に必要なファイルパスを渡す', result: '構造化された結果と判定を返す',
+    repeat: 'VERDICT を解析 → 状態更新 → 次へ / 再試行 / 停止',
+    steps: 'brief → tester → spec-check → coder → review → finish',
+    before: '長く続く会話', beforeBody: '過去の議論、ツールの結果、レビューが蓄積し、後の呼び出しで繰り返し読まれます。キャッシュヒットにも読み取り token が発生します。',
+    after: 'スクリプト主導', afterBody: '各手順を新しい文脈で始め、ファイルから作業を再開します。Python の調度ループは、進捗を保つためのモデルとの会話を必要としません。',
+    outcome: '減らすのは履歴の重複です。要件、コード、テスト、レビューの入出力は引き続き必要です。',
+    note: '削減量はファイルサイズ、タスク数、再試行、キャッシュ料金に依存します。単一の実験結果を一般的な削減率として扱いません。',
+    command: '製品リポジトリからタスク 1 を実行。インストール先に合わせてパスを変更',
+    finish: '合格時は gw finish が review pass → holdout → merge → close を順に実行し、失敗した関門で停止します。',
+  },
+}[lang];
+---
+<section class="drive-section" aria-labelledby="drive-title">
+  <div class="section-head"><span>03 / orchestration</span><span>fresh context per step</span></div>
+  <h2 id="drive-title">{t.title}</h2>
+  <p>{t.intro}</p>
+  <div class="drive-flow">
+    <div class="dispatch-node"><code>gw drive N</code><p>{t.launch}</p></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="dispatch-node focus"><code>claude -p</code><p>{t.session}</p><code class="flag">--output-format json</code></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="dispatch-node"><code>VERDICT</code><p>{t.result}</p></div>
+    <div class="return"><span aria-hidden="true">↶ </span>{t.repeat}</div>
+  </div>
+  <p class="steps"><code>{t.steps}</code></p>
+  <div class="comparison"><article><span>before /</span><h3>{t.before}</h3><p>{t.beforeBody}</p></article><article><span>after /</span><h3>{t.after}</h3><p>{t.afterBody}</p></article></div>
+  <p class="command-label">{t.command}</p>
+  <pre><code>python ~/.claude/skills/graph-workflow/scripts/gw.py drive 1</code></pre>
+  <p>{t.finish}</p>
+  <div class="takeaway"><span>so what /</span><p>{t.outcome}</p></div>
+  <p class="source-note">Source: <a href={`${repo}#4-script-led-orchestration-inversion-gw-drive-n`}>graph-workflow / Script-Led Orchestration</a><br />{t.note}</p>
+</section>
+<style>
+  .drive-section { margin-top: 3.5rem; }
+  .section-head { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; border-bottom: 1px dashed var(--rule); padding-bottom: .8rem; color: var(--note); font-size: .75rem; }
+  .section-head > :first-child, .takeaway > span { color: var(--amber); }
+  h2, h3, p { font-family: var(--sans); }
+  h2 { font-size: clamp(1.25rem, 2.5vw, 1.65rem); line-height: 1.5; color: var(--bright); margin: 1.1rem 0 .6rem; }
+  h3 { color: var(--bright); font-size: 1.1rem; margin: .5rem 0; }
+  p { font-size: .95rem; }
+  .drive-flow { display: grid; grid-template-columns: 1fr 2rem 1.3fr 2rem 1fr; align-items: stretch; margin-top: 1.5rem; }
+  .dispatch-node { border: 1px solid var(--rule); padding: 1rem; min-width: 0; }
+  .dispatch-node > code { font-size: 1.1rem; color: var(--bright); }
+  .dispatch-node p { margin: .6rem 0; }
+  .dispatch-node.focus { border: 2px solid var(--amber); background: var(--focus-bg); }
+  .dispatch-node .flag { font-size: .75rem; overflow-wrap: anywhere; }
+  .arrow { align-self: center; text-align: center; color: var(--fg); }
+  .return { grid-column: 1 / -1; border: 1px dashed var(--cyan); border-top: 0; color: var(--cyan); margin: 0 1rem; padding: .7rem; text-align: center; font-family: var(--sans); font-size: .85rem; }
+  .steps { color: var(--note); font-size: .8rem; overflow-wrap: anywhere; }
+  .comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.5rem; }
+  .comparison article > span { font-size: .75rem; color: var(--note); }
+  .command-label { font-size: .8rem; color: var(--note); margin-top: 1.5rem; }
+  pre { padding: 1rem; border: 1px solid var(--rule); background: var(--panel); overflow: auto; font-size: .8rem; }
+  .takeaway { border-left: 3px solid var(--amber); background: var(--focus-bg); padding: .9rem 1rem; display: flex; gap: 1.3rem; align-items: baseline; margin-top: 1rem; }
+  .takeaway > span { font-size: .75rem; white-space: nowrap; }
+  .takeaway p { margin: 0; }
+  .source-note { font-size: .75rem; color: var(--note); }
+  @media (max-width: 38rem) { .drive-flow, .comparison { grid-template-columns: 1fr; } .arrow { transform: rotate(90deg); padding: .3rem; } .takeaway { display: block; } .takeaway p { margin-top: .3rem; } .section-head > :last-child { display: none; } }
+</style>

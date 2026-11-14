@@ -1,0 +1,79 @@
+---
+import type { Lang } from '../i18n';
+import { workflowContent } from '../data/graph-workflow';
+const { lang } = Astro.props as { lang: Lang };
+const c = workflowContent(lang);
+const t = {
+  zh: { title: '独立任务并行实现，失败在任务内回流', scroll: '窄屏可左右滑动查看完整连线；点击节点查看说明。', fork: '依赖已满足 · 标记 parallel · 无 conflicts_with 冲突', lane: '独立任务', parallel: 'Coder A ∥ Coder B：独立 worktree，并发数由 parallel_max 限制', merge: '逐个合并 + main 测试 → 全部完成', join: '通过验收的任务逐个进入合并', next: '批准后 → 下一里程碑', stop: '结束 / 停止', retry: ['R1：测试方案不符 → 修订 brief，Tester 重写', 'R2：代码审查失败 → Coder 修正，再审查', 'R3：隐藏测试失败 → burn，Tester 重新出题'], key: '虚线 = 条件回流；实线 = 通过后前进；两列 = 独立任务示例。', scope: '并行发生在任务之间；每条任务内部仍遵循测试先行。Main 审查、合并及里程碑验收由主流程协调。' },
+  en: { title: 'Independent tasks run concurrently; failures loop within each task', scroll: 'On narrow screens, scroll sideways to follow every edge. Select nodes for details.', fork: 'Dependencies met · marked parallel · no conflicts_with overlap', lane: 'Independent task', parallel: 'Coder A ∥ Coder B: separate worktrees, bounded by parallel_max', merge: 'Sequential merge + main tests → all tasks done', join: 'Accepted tasks enter the merge queue', next: 'Approved → next milestone', stop: 'Finish / stop', retry: ['R1: invalid test plan → amend brief, rerun Tester', 'R2: failed code review → Coder fixes, then review again', 'R3: failed held-out tests → burn, Tester replans'], key: 'Dashed = conditional return; solid = pass forward; columns = example independent tasks.', scope: 'Concurrency is across tasks. Each task remains test-first. Main coordinates review, sequential merging and milestone acceptance.' },
+  ja: { title: '独立タスクは並行実装し、不合格はタスク内で戻す', scroll: '狭い画面では横にスクロールできます。ノードを選ぶと詳細を表示します。', fork: '依存解決済み · parallel 指定 · conflicts_with の競合なし', lane: '独立タスク', parallel: 'Coder A ∥ Coder B：別 worktree、同時実行数は parallel_max で制限', merge: '逐次マージ + main テスト → 全タスク完了', join: '合格したタスクを順にマージ', next: '承認 → 次のマイルストーン', stop: '完了 / 停止', retry: ['R1：テスト計画が不適切 → brief 修正、Tester 再実行', 'R2：コードレビュー不合格 → Coder 修正、再レビュー', 'R3：隠しテスト不合格 → burn、Tester が再設計'], key: '破線＝条件付きの戻り、実線＝合格後の前進、2 列＝独立タスクの例。', scope: '並行化はタスク間で行い、各タスクではテストを先に作ります。Main がレビュー、逐次マージ、マイルストーン検収を調整します。' },
+}[lang];
+const nodes = [
+  { i: 0, x: 295, y: 20, suffix: '' }, { i: 1, x: 295, y: 120, suffix: '' },
+  ...[0, 1].flatMap(lane => [2, 3, 4, 5].map((i, row) => ({ i, x: 145 + lane * 300, y: 280 + row * 100, suffix: i === 4 ? ` ${lane === 0 ? 'A' : 'B'}` : '' }))),
+  { i: 6, x: 295, y: 810, suffix: '' }, { i: 7, x: 295, y: 910, suffix: '' },
+];
+---
+<p class="graph-hint">{t.scroll}</p>
+<div class="graph-scroll" tabindex="0" role="region" aria-label={t.title}>
+  <svg class="workflow-graph" viewBox="0 0 760 1060" aria-labelledby="topology-title topology-desc">
+    <title id="topology-title">{t.title}</title>
+    <desc id="topology-desc">{t.scope} {t.retry.join('。')}</desc>
+    <defs>
+      <marker id="forward-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="var(--fg)" /></marker>
+      <marker id="return-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="var(--red)" /></marker>
+      <marker id="cycle-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="var(--cyan)" /></marker>
+    </defs>
+    <path class="forward" d="M380 90V120 M380 190V245H230V280 M380 245H530V280" />
+    <text x="380" y="223" class="caption" text-anchor="middle">{t.fork}</text>
+    {[0, 1].map(lane => <>
+      <rect class="zone" x={70 + lane * 300} y="260" width="290" height="425" />
+      <text x={82 + lane * 300} y="278" class="lane">{t.lane} {lane === 0 ? 'A' : 'B'}</text>
+      <path class="forward" d={`M${230 + lane * 300} 350V380 M${230 + lane * 300} 450V480 M${230 + lane * 300} 550V580 M${230 + lane * 300} 650V740H380V760`} />
+      <path class="return" d={`M${145 + lane * 300} 415H${100 + lane * 300}V315H${145 + lane * 300}`} />
+      <text x={108 + lane * 300} y="366" class="return-label">R1</text>
+      <path class="return" d={`M${145 + lane * 300} 615H${120 + lane * 300}V515H${145 + lane * 300}`} />
+      <text x={86 + lane * 300} y="568" class="return-label">R2</text>
+      <path class="return" d={`M${315 + lane * 300} 615H${345 + lane * 300}V315H${315 + lane * 300}`} />
+      <text x={321 + lane * 300} y="468" class="return-label">R3</text>
+    </>)}
+    <text x="380" y="710" class="caption" text-anchor="middle">{t.parallel}</text>
+    <rect x="190" y="760" width="380" height="36" class="merge" />
+    <text x="380" y="783" class="merge-text" text-anchor="middle">{t.merge}</text>
+    <text x="380" y="733" class="caption" text-anchor="middle">{t.join}</text>
+    <path class="forward" d="M380 796V810 M380 880V910 M380 980V1020" />
+    <path class="cycle" d="M465 945H720V155H465" />
+    <text class="cycle-label" transform="translate(738 600) rotate(-90)" text-anchor="middle">{t.next}</text>
+    <text x="380" y="1040" class="caption" text-anchor="middle">{t.stop}</text>
+    {nodes.map(({i, x, y, suffix}) => <a href={`#step-${i + 1}`} data-node={i} class:list={['graph-node', {human: c.steps[i].role === 'Human'}]} aria-label={`${String(i + 1).padStart(2, '0')} ${c.steps[i].role}${suffix} · ${c.steps[i].title}`}>
+      <rect x={x} y={y} width="170" height="70" />
+      <text x={x + 12} y={y + 23} class="node-role">{String(i + 1).padStart(2, '0')} / {c.steps[i].role}{suffix}</text>
+      <text x={x + 12} y={y + 49} class="node-name">{c.steps[i].title}</text>
+    </a>)}
+  </svg>
+</div>
+<div class="return-key">{t.retry.map(line => <p>{line}</p>)}</div>
+<p class="graph-note">{t.key}<br />{t.scope}</p>
+
+<style>
+  .graph-hint, .graph-note { font-family: var(--sans); color: var(--note); font-size: .8rem; margin: 1rem; }
+  .graph-scroll { overflow-x: auto; }
+  .workflow-graph { display: block; width: 100%; min-width: 660px; }
+  .forward, .return, .cycle { fill: none; stroke: var(--fg); stroke-width: 1.5; marker-end: url(#forward-arrow); }
+  .return { stroke: var(--red); stroke-dasharray: 5 4; marker-end: url(#return-arrow); }
+  .cycle { stroke: var(--cyan); stroke-dasharray: 6 4; marker-end: url(#cycle-arrow); }
+  .zone { fill: none; stroke: var(--rule); stroke-dasharray: 3 5; }
+  .caption, .lane, .merge-text { fill: var(--fg); font-family: var(--sans); font-size: 12px; }
+  .lane { font-size: 10px; fill: var(--note); }
+  .merge { fill: var(--bg); stroke: var(--rule); }
+  .return-label { fill: var(--red); font-size: 11px; }
+  .cycle-label { fill: var(--cyan); font-family: var(--sans); font-size: 13px; }
+  .graph-node rect { fill: var(--bg); stroke: var(--rule); }
+  .graph-node.human rect { stroke-dasharray: 5 3; }
+  .graph-node:hover rect, .graph-node:focus-visible rect { stroke: var(--amber); stroke-width: 2; }
+  .graph-node[aria-current] rect { fill: var(--focus-bg); stroke: var(--amber); stroke-width: 2; }
+  .node-role { fill: var(--fg); font-family: var(--mono); font-size: 13px; }
+  .node-name { fill: var(--bright); font-family: var(--sans); font-size: 13px; font-weight: 600; }
+  .return-key { padding: .6rem 1rem; border-top: 1px solid var(--line); }
+  .return-key p { font-family: var(--sans); font-size: .8rem; margin: .35rem 0; color: var(--red); }
+</style>

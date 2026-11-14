@@ -1,0 +1,185 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import WorkflowGraph from '../../../components/WorkflowGraph.astro';
+import WorkflowDrive from '../../../components/WorkflowDrive.astro';
+import { localeAlternates, localeParams, localePath, type Lang } from '../../../i18n';
+import { repo, workflowContent } from '../../../data/graph-workflow';
+
+export const getStaticPaths = localeParams;
+const { lang } = Astro.props as { lang: Lang };
+const c = workflowContent(lang);
+---
+
+<BaseLayout lang={lang} title="Graph Workflow" description={c.intro} alternates={localeAlternates('/lab/graph-workflow/')}>
+  <div class="project">
+    <a class="back" href={localePath(lang, '/lab/')}>← {c.back}</a>
+    <div class="project-head">
+      <div class="cmd"><b>cat</b> ./graph-workflow/readme</div>
+      <span class="release">open source / MIT</span>
+    </div>
+    <p class="project-name">graph-workflow<span class="cursor" aria-hidden="true"></span></p>
+    <h1>{c.title}</h1>
+    <p class="intro">{c.intro}</p>
+    <div class="actions">
+      <a class="primary" href={repo}>{c.source} ↗</a>
+      <a href={localePath(lang, '/notes/graph-workflow/')}>{c.read} →</a>
+    </div>
+
+    <section class="flow-section" aria-labelledby="flow-title">
+      <div class="section-head"><span>01 / execution</span><span>plan → build → accept</span></div>
+      <h2 id="flow-title">{c.explore}</h2>
+      <p class="hint">{c.hint}</p>
+      <div class="explorer" data-workflow>
+        <div class="map">
+          <div class="map-bar"><span>workflow.graph</span><span class="mode">[explore]</span></div>
+          <WorkflowGraph lang={lang} />
+          <div class="legend"><span><i class="selected-key"></i>{c.legend[0]}</span><span>→ {c.legend[1]}</span><span><i class="gate-key"></i>{c.legend[2]}</span></div>
+        </div>
+        <div class="inspector">
+          <div class="inspect-bar">readme/ <span data-position>01 / 08</span></div>
+          <div class="details" aria-live="polite" aria-atomic="true">
+            {c.steps.map((step, i) => (
+              <article id={`step-${i + 1}`} data-step={i}>
+                <div class="role-label">{String(i + 1).padStart(2, '0')} / {step.role.toLowerCase()}</div>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+                <dl><dt>{c.output}</dt><dd><code>{step.file}</code></dd><dt>{c.guard}</dt><dd>{step.guard}</dd></dl>
+              </article>
+            ))}
+          </div>
+          <div class="controls" hidden><button type="button" data-prev>← {c.previous}</button><button type="button" data-next>{c.next} →</button></div>
+        </div>
+      </div>
+      <div class="takeaway"><span>so what /</span><p>{c.summary}</p></div>
+      <p class="source-note">Source: <a href={`${repo}#architecture--team-topology`}>graph-workflow / README</a><br />{c.note}</p>
+    </section>
+
+    <section class="engine">
+      <span class="edge-label">harness /</span>
+      <div><h2>{c.engine}</h2><p>{c.engineDesc}</p></div>
+      <div class="engine-files"><code>drive.py <span>→</span> gw.py</code><code>docs/workflow/ <span>→</span> git</code></div>
+    </section>
+    <section class="principles" aria-labelledby="why-title">
+      <div class="section-head"><span>02 / boundaries</span><span>small team, explicit rules</span></div>
+      <h2 id="why-title">{c.why}</h2>
+      <div class="feature-grid">{c.features.map(([label, title, body]) => <article><span>{label}</span><h3>{title}</h3><p>{body}</p></article>)}</div>
+    </section>
+    <WorkflowDrive lang={lang} />
+    <section class="start">
+      <div class="section-head"><span>04 / quick start</span><span>local development</span></div>
+      <h2>{c.start}</h2><p>{c.startDesc}</p>
+      <a class="primary" href={`${repo}#quick-start--installation`}>{c.install} ↗</a>
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-workflow]');
+  if (root) {
+    const nodes = Array.from(root.querySelectorAll<SVGAElement>('[data-node]'));
+    const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-step]'));
+    const prev = root.querySelector<HTMLButtonElement>('[data-prev]')!;
+    const next = root.querySelector<HTMLButtonElement>('[data-next]')!;
+    let current = 0;
+    const select = (index: number, updateHash = true) => {
+      current = index;
+      if (updateHash) history.replaceState(null, '', `#step-${index + 1}`);
+      nodes.forEach((node) => {
+        if (Number(node.dataset.node) === index) node.setAttribute('aria-current', 'step');
+        else node.removeAttribute('aria-current');
+      });
+      panels.forEach((panel, i) => { panel.hidden = i !== index; });
+      root.querySelector('[data-position]')!.textContent = `${String(index + 1).padStart(2, '0')} / 08`;
+      prev.disabled = index === 0;
+      next.disabled = index === panels.length - 1;
+    };
+    nodes.forEach((node) => node.addEventListener('click', (event) => {
+      event.preventDefault();
+      select(Number(node.dataset.node));
+    }));
+    prev.addEventListener('click', () => select(current - 1));
+    next.addEventListener('click', () => select(current + 1));
+    const fromHash = () => {
+      const index = panels.findIndex((panel) => `#${panel.id}` === location.hash);
+      select(index < 0 ? 0 : index, false);
+    };
+    window.addEventListener('hashchange', fromHash);
+    fromHash();
+    root.querySelector<HTMLElement>('.controls')!.hidden = false;
+  }
+</script>
+
+<style>
+  :global(body:has(.project)) { --max: 74rem; }
+  .project { --rule: #646c65; --note: #8b938c; --focus-bg: #2a2210; }
+  @media (prefers-color-scheme: light) { .project { --rule: #7f8276; --note: #585b51; --focus-bg: #f1e3c6; } }
+  .back { font-family: var(--sans); font-size: .85rem; color: var(--note); }
+  .project-head, .section-head, .map-bar, .inspect-bar { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .project-head { align-items: baseline; margin-top: 2.8rem; }
+  .project-head .cmd { margin: 0; }
+  .release { color: var(--green); font-size: .75rem; }
+  .project-name { font-size: clamp(1.8rem, 5.7vw, 4.5rem); font-weight: 650; letter-spacing: -.065em; line-height: 1.25; margin: 1.1rem 0 1.6rem; color: var(--bright); }
+  .project-name .cursor { font-size: .7em; margin-left: .3em; }
+  h1 { font-size: clamp(1.65rem, 3.5vw, 2.6rem); }
+  h2, h3, p, dd { font-family: var(--sans); }
+  h2 { font-size: clamp(1.25rem, 2.5vw, 1.65rem); line-height: 1.5; color: var(--bright); margin: 1.1rem 0 .6rem; }
+  h3 { color: var(--bright); font-size: 1.1rem; line-height: 1.5; }
+  .intro { max-width: 46rem; font-size: 1.1rem; line-height: 1.9; margin: 1rem 0 1.5rem; }
+  .actions { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; font-family: var(--sans); }
+  .primary { display: inline-block; border: 1px solid var(--amber); padding: .65rem 1rem; color: var(--amber); font-family: var(--sans); }
+  .primary:hover { background: var(--focus-bg); text-decoration: none; }
+  .flow-section, .principles, .start { margin-top: 3.5rem; }
+  .section-head { border-bottom: 1px dashed var(--rule); padding-bottom: .8rem; color: var(--note); font-size: .75rem; }
+  .section-head > :first-child { color: var(--amber); }
+  .hint { font-size: .9rem; color: var(--note); margin: 0 0 1.3rem; }
+  .explorer { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); border: 1px solid var(--rule); }
+  .map { min-width: 0; background: var(--panel); }
+  .map-bar, .inspect-bar { padding: .8rem 1rem; font-size: .72rem; border-bottom: 1px solid var(--line); color: var(--note); }
+  .mode { color: var(--green); }
+  .legend { display: flex; flex-wrap: wrap; gap: .6rem 1.3rem; padding: .8rem 1.2rem; border-top: 1px solid var(--line); font-family: var(--sans); font-size: .75rem; }
+  .legend > span { display: flex; align-items: center; gap: .4rem; }
+  .legend i { display: inline-block; width: .7rem; height: .7rem; }
+  .selected-key { background: var(--amber); }
+  .gate-key { border: 1px dashed var(--fg); }
+  .inspector { align-self: start; position: sticky; top: 1rem; border-left: 1px solid var(--rule); display: flex; flex-direction: column; min-width: 0; }
+  .details { padding: 1.2rem; flex: 1; }
+  .details article[hidden] { display: none; }
+  .details article + article:not([hidden]) { margin-top: 1.5rem; }
+  .details:has(article[hidden]) article { margin-top: 0; }
+  .role-label { font-size: .75rem; color: var(--amber); }
+  .details h3 { margin: .5rem 0; font-size: 1.35rem; }
+  .details p, dd { font-size: .9rem; line-height: 1.75; }
+  dt { font-family: var(--sans); font-size: .75rem; color: var(--note); margin-top: 1rem; }
+  dd { margin: .3rem 0 0; }
+  dd code { font-size: .73rem; overflow-wrap: anywhere; }
+  .controls { display: flex; justify-content: space-between; gap: .5rem; border-top: 1px solid var(--line); padding: .65rem 1rem; }
+  .controls[hidden] { display: none; }
+  button { min-height: 44px; border: 1px solid var(--rule); background: var(--bg); color: var(--fg); padding: .5rem .8rem; cursor: pointer; font: inherit; font-size: .8rem; }
+  button:hover:not(:disabled) { border-color: var(--amber); color: var(--amber); }
+  button:disabled { opacity: .4; cursor: default; }
+  .takeaway { border-left: 3px solid var(--amber); background: var(--focus-bg); padding: .9rem 1rem; display: flex; gap: 1.3rem; align-items: baseline; margin-top: 1rem; }
+  .takeaway > span { color: var(--amber); font-size: .75rem; white-space: nowrap; }
+  .takeaway p { margin: 0; }
+  .source-note { font-size: .75rem; color: var(--note); line-height: 1.8; }
+  .engine { position: relative; border: 1px solid var(--rule); margin-top: 2.5rem; padding: 1.2rem 1.4rem; display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; align-items: center; }
+  .edge-label { position: absolute; left: 1rem; top: -.9em; background: var(--bg); padding: 0 .5rem; color: var(--note); font-size: .75rem; }
+  .engine h2 { font-size: 1.2rem; margin-top: .4rem; }
+  .engine p { margin-bottom: .3rem; font-size: .95rem; }
+  .engine-files { display: flex; flex-direction: column; gap: .8rem; font-size: .8rem; }
+  .engine-files span { color: var(--amber); }
+  .feature-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 2rem; }
+  .feature-grid article { border-bottom: 1px solid var(--line); padding: 1.5rem 0; }
+  .feature-grid article > span { font-family: var(--mono); font-size: .75rem; color: var(--note); }
+  .feature-grid h3 { margin: .6rem 0; }
+  .feature-grid p { font-size: .95rem; margin: 0; }
+  .start > p { max-width: 48rem; margin-bottom: 1.5rem; }
+  @media (max-width: 64rem) { .explorer { grid-template-columns: 1fr; } .inspector { align-self: start; position: sticky; top: 1rem; border-left: 0; border-top: 1px solid var(--rule); } .details { min-height: 18rem; } }
+  @media (max-width: 38rem) {
+    .project-head { margin-top: 2rem; }
+    .release { display: none; }
+    .engine, .feature-grid { grid-template-columns: 1fr; }
+    .takeaway { display: block; }
+    .takeaway p { margin-top: .3rem; }
+    .section-head > :last-child { display: none; }
+  }
+</style>

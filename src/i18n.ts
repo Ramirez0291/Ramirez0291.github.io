@@ -28,7 +28,7 @@ export const ui = {
     navDesc: {
       notes: 'AI Agent 在企业现场真实落地的实战笔记：Skill 迭代、调研方法与踩过的坑。',
       analysis: '不贩卖焦虑的 AI 行业分析：看清 AI 的真实能力与边界。',
-      lab: '可以直接上手的小工具，全部纯前端运行、不收集数据。',
+      lab: '自己做的工具与开源项目。可以动手试，也可以看看背后怎么做。',
       about: 'Rami0291：生活在日本的 Forward Deployed Engineer，提供 AI Agent 落地培训与咨询。',
     },
     featured: '精选案例',
@@ -55,7 +55,7 @@ export const ui = {
     navDesc: {
       notes: 'AI Agent を企業の現場に導入した実践ノート：Skill の改善、調査の方法、ハマりどころ。',
       analysis: '不安を煽らない AI 業界分析：AI の本当の実力と限界を見極める。',
-      lab: 'すぐに試せる小さなツール。すべてブラウザ内で動作し、データは収集しません。',
+      lab: '自作ツールとオープンソースプロジェクト。試して、仕組みを読んでみてください。',
       about: 'Rami0291：日本在住の Forward Deployed Engineer。AI Agent 導入の研修とコンサルティングを提供。',
     },
     featured: '注目の事例',
@@ -84,7 +84,7 @@ export const ui = {
     navDesc: {
       notes: 'Field notes from deploying AI agents inside real companies: iterating on Skills, research methods, and the pitfalls.',
       analysis: 'AI industry analysis without the fearmongering: what AI can really do, and where it stops.',
-      lab: 'Small tools you can try right away. Everything runs in your browser and no data is collected.',
+      lab: 'Tools and open-source projects I build. Try them out and explore how they work.',
       about: 'Rami0291: a Forward Deployed Engineer based in Japan, offering AI agent training and consulting.',
     },
     featured: 'Featured',

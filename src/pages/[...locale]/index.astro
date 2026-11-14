@@ -88,7 +88,7 @@ const series = Object.entries(SERIES).filter(([key]) => posts.some((p) => p.data
   <div class="boxes">
     {
       TOOLS.map((tool) => (
-        <a class="box" href={tool.ready ? tool.href : localePath(lang, '/lab/')}>
+        <a class="box" href={tool.ready ? (tool.localized ? localePath(lang, tool.href) : tool.href) : localePath(lang, '/lab/')}>
           <span class="label">[{tool.id}]</span>
           <h3>
             {tool.name[lang]} <span class="status">{STATUS[tool.ready ? 'ready' : 'building'][lang]}</span>
