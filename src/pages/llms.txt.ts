@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { CATEGORIES, LANGS, getPosts, localePath } from '../i18n';
 import { absoluteUrl, llmsIntro, postIndexLine } from '../seo';
 import { TOOLS } from '../tools';
+import { ODDITIES } from '../oddities';
 
 // The index for language models described at https://llmstxt.org: what the site is, then every article.
 const CATEGORY_NAMES = { notes: '实战笔记 · Field notes', analysis: '行业分析 · Industry analysis' };
@@ -25,6 +26,13 @@ export const GET: APIRoute = async () => {
       '',
       ...TOOLS.filter((tool) => tool.ready).map(
         (tool) => `- [${tool.name.zh} · ${tool.name.en}](${absoluteUrl(tool.href)}): ${tool.desc.en}`,
+      ),
+    ].join('\n'),
+    [
+      '## Oddities (fictional sites, made for fun)',
+      '',
+      ...ODDITIES.map(
+        (item) => `- [${item.name.zh} · ${item.name.en}](${absoluteUrl(item.href)}): ${item.kind.en}. ${item.desc.en}`,
       ),
     ].join('\n'),
     [

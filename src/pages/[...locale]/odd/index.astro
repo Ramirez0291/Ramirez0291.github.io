@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { localeAlternates, localeParams, ui, type Lang } from '../../../i18n';
+import { ODDITIES } from '../../../oddities';
+
+export const getStaticPaths = localeParams;
+
+const { lang } = Astro.props as { lang: Lang };
+const t = ui[lang];
+const open = { zh: '打开网站', en: 'Open the site', ja: 'サイトを開く' }[lang];
+---
+
+<BaseLayout lang={lang} title={t.nav.odd} description={t.navDesc.odd} alternates={localeAlternates('/odd/')}>
+  <div class="cmd"><b>ls -l</b> ./odd</div>
+  <h1>{t.nav.odd}</h1>
+  <p class="dim">{t.navDesc.odd}</p>
+
+  <div class="odd-list">
+    {
+      ODDITIES.map((item, i) => (
+        <a class="odd" href={item.href}>
+          <span class="label">[{item.id}]</span>
+          <img src={`/odd/${item.id}.webp`} alt="" width="1440" height="900" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+          <div class="body">
+            <p class="kind">{item.kind[lang]}</p>
+            <h2>{item.name[lang]}</h2>
+            <p class="desc">{item.desc[lang]}</p>
+            <p class="foot">
+              <span>{item.date} · lang:{item.siteLang}</span>
+              <span class="go">{open} →</span>
+            </p>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .odd-list { display: grid; gap: 2rem; margin-top: 2rem; }
+  .odd { position: relative; display: block; border: 1px solid var(--line); background: var(--panel); color: inherit; }
+  .odd:hover { border-color: var(--amber); text-decoration: none; }
+  .odd .label { position: absolute; top: -0.75em; left: 0.8rem; z-index: 1; background: var(--bg); color: var(--amber); padding: 0 0.4rem; font-size: 0.78rem; }
+  .odd img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; border-bottom: 1px solid var(--line); }
+  .body { padding: 1rem 1.1rem 0.9rem; }
+  .kind { margin: 0; color: var(--green); font-size: 0.78rem; }
+  h2 { font-family: var(--sans); color: var(--bright); font-size: 1.3rem; margin: 0.3rem 0 0.4rem; }
+  .desc { margin: 0; color: var(--muted); font-family: var(--sans); font-size: 0.92rem; line-height: 1.75; }
+  .foot { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin: 0.9rem 0 0; color: var(--muted); font-size: 0.78rem; }
+  .go { color: var(--amber); }
+</style>

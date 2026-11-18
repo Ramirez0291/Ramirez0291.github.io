@@ -1,0 +1,10 @@
+<svg style="background:#0b0a0e" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none" stroke-linecap="square" stroke-linejoin="miter" role="img">
+  <title>Element 14</title>
+  <rect x="32" y="24" width="136" height="8" fill="#FF3B14"/>
+  <rect x="32" y="24" width="136" height="136" stroke="#EAE6DF" stroke-width="2"/>
+  <path d="M44 52 L48 48 V64 M60 48 V56 H68 M68 48 V64" stroke="#EAE6DF" stroke-width="2"/>
+  <polygon points="144,64 132,52 132,48 136,44 140,44 144,48 148,44 152,44 156,48 156,52" fill="#FF3B14"/>
+  <path d="M94 80 H66 M64 82 V102 M66 104 H94 M96 106 V126 M94 128 H66 M116 104 H124 V128 M116 128 H132" stroke="#EAE6DF" stroke-width="2"/>
+  <rect x="122" y="88" width="4" height="4" fill="#EAE6DF"/>
+  <text data-slot="label" x="32" y="184" font-family="JetBrains Mono, monospace" font-size="10" fill="#FFB800">FIG.D / Si-0291</text>
+</svg>

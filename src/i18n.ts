@@ -12,7 +12,7 @@ export const CATEGORIES = ['notes', 'analysis'] as const;
 export type Category = (typeof CATEGORIES)[number];
 
 // Top-level pages that exist in every language, in nav order.
-export const SECTIONS = [...CATEGORIES, 'lab', 'about'] as const;
+export const SECTIONS = [...CATEGORIES, 'lab', 'odd', 'about'] as const;
 
 export const SERIES: Record<string, Record<Lang, string>> = {
   'agent-course': { zh: 'Agent 落地课程', en: 'Deploying AI Agents', ja: 'Agent 導入コース' },
@@ -24,11 +24,12 @@ export const ui = {
     tagline: 'Forward Deployed Engineer · 把 AI Agent 落到企业现场',
     whoami: ['生活在日本的赛博游民 · 开源软件作者 · 自封分析师', '日常干着 FDE 的脏活累活，坚信三年内 AGI 必将实现。'],
     navLabel: '主导航',
-    nav: { notes: '实战笔记', analysis: '行业分析', lab: '工具', about: '关于' },
+    nav: { notes: '实战笔记', analysis: '行业分析', lab: '工具', odd: '奇物志', about: '关于' },
     navDesc: {
       notes: 'AI Agent 在企业现场真实落地的实战笔记：Skill 迭代、调研方法与踩过的坑。',
       analysis: '不贩卖焦虑的 AI 行业分析：看清 AI 的真实能力与边界。',
       lab: '自己做的工具与开源项目。可以动手试，也可以看看背后怎么做。',
+      odd: '做着玩的奇奇怪怪的东西：虚构的品牌、虚构的组织，和它们一本正经的网站。',
       about: 'Rami0291：生活在日本的 Forward Deployed Engineer，提供 AI Agent 落地培训与咨询。',
     },
     featured: '精选案例',
@@ -51,11 +52,12 @@ export const ui = {
     tagline: 'Forward Deployed Engineer · AI Agent を企業の現場へ',
     whoami: ['日本在住のサイバー遊牧民 · OSS 作者 · 自称アナリスト', 'FDE の泥臭い仕事が日常。3 年以内に AGI は実現すると信じている。'],
     navLabel: 'メインナビゲーション',
-    nav: { notes: '実践ノート', analysis: '業界分析', lab: 'ツール', about: 'About' },
+    nav: { notes: '実践ノート', analysis: '業界分析', lab: 'ツール', odd: 'ヘンなもの', about: 'About' },
     navDesc: {
       notes: 'AI Agent を企業の現場に導入した実践ノート：Skill の改善、調査の方法、ハマりどころ。',
       analysis: '不安を煽らない AI 業界分析：AI の本当の実力と限界を見極める。',
       lab: '自作ツールとオープンソースプロジェクト。試して、仕組みを読んでみてください。',
+      odd: '遊びで作ったヘンなもの。架空のブランド、架空の組織、そして大真面目に作り込んだそのサイト。',
       about: 'Rami0291：日本在住の Forward Deployed Engineer。AI Agent 導入の研修とコンサルティングを提供。',
     },
     featured: '注目の事例',
@@ -80,11 +82,12 @@ export const ui = {
       'Doing the unglamorous FDE work every day, convinced AGI arrives within three years.',
     ],
     navLabel: 'Main navigation',
-    nav: { notes: 'Field Notes', analysis: 'Analysis', lab: 'Tools', about: 'About' },
+    nav: { notes: 'Field Notes', analysis: 'Analysis', lab: 'Tools', odd: 'Oddities', about: 'About' },
     navDesc: {
       notes: 'Field notes from deploying AI agents inside real companies: iterating on Skills, research methods, and the pitfalls.',
       analysis: 'AI industry analysis without the fearmongering: what AI can really do, and where it stops.',
       lab: 'Tools and open-source projects I build. Try them out and explore how they work.',
+      odd: 'Strange things I made for fun: fictional brands, fictional organizations, and their perfectly serious websites.',
       about: 'Rami0291: a Forward Deployed Engineer based in Japan, offering AI agent training and consulting.',
     },
     featured: 'Featured',

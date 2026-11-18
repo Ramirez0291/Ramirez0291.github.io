@@ -4,6 +4,7 @@ import PostList from '../../components/PostList.astro';
 import Genesis from '../../components/Genesis.astro';
 import { DEFAULT_LANG, PREFERRED_LANG_JS, getPosts, localeAlternates, localeParams, localePath, postUrl, SERIES, ui, type Lang } from '../../i18n';
 import { STATUS, TOOLS } from '../../tools';
+import { ODDITIES } from '../../oddities';
 
 export const getStaticPaths = localeParams;
 
@@ -94,6 +95,19 @@ const series = Object.entries(SERIES).filter(([key]) => posts.some((p) => p.data
             {tool.name[lang]} <span class="status">{STATUS[tool.ready ? 'ready' : 'building'][lang]}</span>
           </h3>
           <p>{tool.desc[lang]}</p>
+        </a>
+      ))
+    }
+  </div>
+
+  <div class="cmd"><b>ls</b> ./odd</div>
+  <div class="boxes">
+    {
+      ODDITIES.map((item) => (
+        <a class="box" href={item.href}>
+          <span class="label">[{item.id}]</span>
+          <h3>{item.name[lang]}</h3>
+          <p>{item.kind[lang]}</p>
         </a>
       ))
     }
