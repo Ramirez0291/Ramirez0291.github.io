@@ -1,0 +1,436 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { localeAlternates, localeParams, localePath, type Lang } from '../../../i18n';
+import { LEVELS, TRAP_GROUPS, X_ITEMS, Y_ITEMS, Z_QS } from '../../../data/ai-native';
+import { CONTENT } from '../../../data/ai-native-content';
+
+export const getStaticPaths = localeParams;
+const { lang } = Astro.props as { lang: Lang };
+const c = CONTENT[lang];
+// English names already say what the English subtitles say.
+const showTag = lang !== 'en';
+const code = (id: string) => id.toUpperCase();
+const items = c.items as Record<string, { name: string; focus: string; a: string[] }>;
+const traps = c.traps as Record<string, { t: string; q: string; why: string; fix: string }>;
+const zqs = c.zqs as Record<string, { t: string; q: string; why: string }>;
+const tabs = [
+  { id: 'y', label: c.tabs.y },
+  { id: 'x', label: c.tabs.x },
+  { id: 't', label: c.tabs.t },
+  { id: 'z', label: c.tabs.z },
+  { id: 'r', label: c.tabs.r },
+];
+const nextTab = (id: string) => tabs[tabs.findIndex((t) => t.id === id) + 1];
+const data = JSON.stringify({ c, showTag }).replace(/</g, '\\u003c');
+---
+
+<BaseLayout lang={lang} title={c.meta.title} description={c.meta.description} alternates={localeAlternates('/lab/ai-native/')}>
+  <div class="ain" data-ain>
+    <a class="back" href={localePath(lang, '/lab/')}>← {c.meta.back}</a>
+    <div class="project-head">
+      <div class="cmd"><b>./diagnose</b> --axes x,y --check evidence</div>
+      <span class="release">{c.meta.eyebrow}</span>
+    </div>
+    <h1>{c.meta.title}<span class="cursor" aria-hidden="true"></span></h1>
+    <p class="intro">{c.meta.lead}</p>
+    <noscript><p class="notice warn"><span class="lvl">[WARN]</span>{c.meta.noscript}</p></noscript>
+    <div class="actions">
+      <button type="button" class="primary" id="btn-copy">{c.buttons.copy}</button>
+      <button type="button" id="btn-example">{c.buttons.example}</button>
+      <button type="button" id="btn-reset">{c.buttons.reset}</button>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label={c.meta.title}>
+      {
+        tabs.map((t, i) => (
+          <button type="button" role="tab" id={`tab-${t.id}`} data-tab={t.id} aria-controls={`pane-${t.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>
+            <span class="tab-key">{String(i + 1).padStart(2, '0')}</span>{t.label}<span class="cnt" id={t.id === 'r' ? undefined : `cnt-${t.id}`}></span>
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="layout">
+      <div class="panes">
+        {
+          (['y', 'x'] as const).map((axis) => (
+            <section id={`pane-${axis}`} role="tabpanel" aria-labelledby={`tab-${axis}`} hidden={axis !== 'y'}>
+              <div class="sec-head"><h2>{c.sections[axis].h}</h2><p>{c.sections[axis].sub}</p></div>
+              <div class="items">
+                {(axis === 'y' ? Y_ITEMS : X_ITEMS).map((i) => (
+                  <article class="item" id={`card-${i.id}`}>
+                    <span class="label">[{code(i.id)}]</span>
+                    <div class="item-h">
+                      <div><h3>{items[i.id].name}</h3>{showTag && <div class="tag">{i.tag}</div>}</div>
+                      <div class="wt"><b id={`pts-${i.id}`}>0</b> / {i.w}</div>
+                    </div>
+                    <p class="focus">{items[i.id].focus}</p>
+                    <div class="scale" role="radiogroup" aria-label={items[i.id].name}>
+                      {LEVELS.map((v, k) => (
+                        <>
+                          <input type="radio" name={`s-${i.id}`} id={`s-${i.id}-${k}`} value={k} />
+                          <label for={`s-${i.id}-${k}`}><span class="p">{v * 100}%</span>{c.levelNames[k]}</label>
+                        </>
+                      ))}
+                    </div>
+                    <div class="anchors">
+                      {items[i.id].a.map((text, n) => (
+                        <div class="anchor" data-a={n}><span class="k">{c.anchorKeys[n]}</span>{text}</div>
+                      ))}
+                    </div>
+                    <div class="item-f">
+                      <label class="chk"><input type="checkbox" id={`e-${i.id}`} />{c.item.evidence}</label>
+                      <span id={`f-${i.id}`} class="flags"></span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <button type="button" class="next" data-goto={nextTab(axis).id}>{nextTab(axis).label} →</button>
+            </section>
+          ))
+        }
+
+        <section id="pane-t" role="tabpanel" aria-labelledby="tab-t" hidden>
+          <div class="sec-head"><h2>{c.sections.t.h}</h2><p>{c.sections.t.sub}</p></div>
+          {
+            TRAP_GROUPS.map((g) => (
+              <div class="trap-group">
+                <h3 class="group-title">{c.trapGroups[g.id]} <span class="dim">({g.items.length})</span></h3>
+                <div class="items">
+                  {g.items.map((t) => (
+                    <article class="trap" id={`trap-${t.id}`}>
+                      <div class="trap-top">
+                        <div class="t">
+                          {traps[t.id].t}
+                          <small>{showTag && <>{t.tag} · </>}<span class="link-chip">{c.trap.affects.replace('{id}', code(t.link)).replace('{name}', items[t.link].name)}</span></small>
+                        </div>
+                        <div class="yn" role="radiogroup" aria-label={traps[t.id].t}>
+                          <input type="radio" name={`t-${t.id}`} id={`t-${t.id}-y`} value="y" /><label class="bad" for={`t-${t.id}-y`}>{c.trap.yes}</label>
+                          <input type="radio" name={`t-${t.id}`} id={`t-${t.id}-n`} value="n" /><label class="good" for={`t-${t.id}-n`}>{c.trap.no}</label>
+                        </div>
+                      </div>
+                      <p class="q">{traps[t.id].q}</p>
+                      <details class="why">
+                        <summary>{c.trap.whyFix}</summary>
+                        <div class="body">
+                          <div><b>{c.trap.whyLabel}</b>{traps[t.id].why}</div>
+                          <div><b>{c.trap.fixLabel}</b>{traps[t.id].fix}</div>
+                        </div>
+                      </details>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+          <button type="button" class="next" data-goto="z">{c.tabs.z} →</button>
+        </section>
+
+        <section id="pane-z" role="tabpanel" aria-labelledby="tab-z" hidden>
+          <div class="sec-head"><h2>{c.sections.z.h}</h2><p>{c.sections.z.sub}</p></div>
+          <div class="items">
+            {
+              Z_QS.map((q) => (
+                <article class="trap" id={`zq-${q.id}`}>
+                  <div class="trap-top">
+                    <div class="t">{zqs[q.id].t}{showTag && <small>{q.tag}</small>}</div>
+                    <div class="yn" role="radiogroup" aria-label={zqs[q.id].t}>
+                      <input type="radio" name={`z-${q.id}`} id={`z-${q.id}-y`} value="y" /><label class="good" for={`z-${q.id}-y`}>{c.trap.yes}</label>
+                      <input type="radio" name={`z-${q.id}`} id={`z-${q.id}-n`} value="n" /><label class="bad" for={`z-${q.id}-n`}>{c.trap.no}</label>
+                    </div>
+                  </div>
+                  <p class="q">{zqs[q.id].q}</p>
+                  <details class="why">
+                    <summary>{c.trap.zWhy}</summary>
+                    <div class="body one"><div>{zqs[q.id].why}</div></div>
+                  </details>
+                </article>
+              ))
+            }
+          </div>
+          <button type="button" class="next" data-goto="r">{c.tabs.r} →</button>
+        </section>
+
+        <section id="pane-r" role="tabpanel" aria-labelledby="tab-r" hidden>
+          <div class="report" id="report" aria-live="polite"></div>
+        </section>
+      </div>
+
+      <aside class="panel" aria-label={c.gauge.label}>
+        <div class="gauge">
+          <div class="gauge-bar"><span>gauge/</span><span class="live">[live]</span></div>
+          <div class="gauge-body">
+            <div class="eyebrow">{c.gauge.label}</div>
+            <div class="score-row">
+              <div class="big" id="g-score">0<small>/100</small></div>
+              <div class="kv">
+                <div><span>{c.gauge.x}</span><b id="g-x">0</b></div>
+                <div><span>{c.gauge.y}</span><b id="g-y">0</b></div>
+                <div><span>{c.gauge.gap}</span><b id="g-gap">0</b></div>
+              </div>
+            </div>
+            <div class="meter">
+              <div class="meter-head"><span>{c.gauge.aggr}</span><span>{c.gauge.aggrHint}</span></div>
+              <div class="meter-row"><span>{c.gauge.meterX}</span><div class="track"><div class="fill x" id="m-x"></div></div><b id="m-xv">0</b></div>
+              <div class="meter-row"><span>{c.gauge.meterA}</span><div class="track"><div class="fill a" id="m-a"></div><i class="redline" id="m-line"></i></div><b id="m-av">0</b></div>
+            </div>
+            <div class="quad-name" id="g-quad">—</div>
+            <svg class="matrix" id="matrix" viewBox="0 0 400 400" role="img" aria-label={c.gauge.matrixAria}></svg>
+            <div class="legend">
+              <span><i class="k-self"></i>{c.gauge.legendSelf}</span>
+              <span><i class="k-checked"></i>{c.gauge.legendChecked}</span>
+              <span><i class="k-ref"></i>{c.gauge.legendRef}</span>
+              <span><i class="k-halo"></i>{c.gauge.legendHalo}</span>
+              <span><i class="k-over"></i>{c.gauge.legendOver}</span>
+            </div>
+            <div class="alerts" id="g-alerts" aria-live="polite"></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="method">
+      <div class="section-head"><span>method /</span><span>scoring.md</span></div>
+      <h2>{c.method.title}</h2>
+      <ol>{c.method.lines.map((l) => <li>{l}</li>)}</ol>
+      <p class="source-note">{c.meta.disclaimer}</p>
+    </section>
+  </div>
+  <script type="application/json" id="ain-data" set:html={data} />
+</BaseLayout>
+
+<script>
+  import '../../../scripts/ai-native';
+</script>
+
+<style>
+  :global(body:has(.ain)) { --max: 76rem; }
+  .ain { --rule: #646c65; --note: #8b938c; --focus-bg: #2a2210; --ok: var(--green); --warn: var(--amber); --danger: var(--red); --info: var(--cyan); }
+  @media (prefers-color-scheme: light) { .ain { --rule: #7f8276; --note: #585b51; --focus-bg: #f1e3c6; } }
+
+  .back { font-family: var(--sans); font-size: .85rem; color: var(--note); }
+  .project-head, .section-head, .gauge-bar { display: flex; justify-content: space-between; gap: .4rem 1rem; flex-wrap: wrap; }
+  .project-head { align-items: baseline; margin-top: 2.4rem; }
+  .project-head .cmd { margin: 0; }
+  .release { color: var(--green); font-size: .75rem; }
+  h1 { font-size: clamp(1.8rem, 4.6vw, 3.2rem); line-height: 1.25; margin: 1rem 0 .4rem; }
+  h1 .cursor { font-size: .6em; margin-left: .3em; }
+  h2, h3, p, li { font-family: var(--sans); }
+  .intro { max-width: 46rem; font-size: 1.1rem; line-height: 1.85; margin: .6rem 0 1.4rem; }
+  .dim { color: var(--muted); }
+  .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+  button { min-height: 44px; border: 1px solid var(--rule); background: var(--bg); color: var(--fg); padding: .5rem .9rem; cursor: pointer; font: inherit; font-size: .82rem; }
+  button:hover { border-color: var(--amber); color: var(--amber); }
+  .actions { display: flex; gap: .6rem; flex-wrap: wrap; }
+  .actions .primary { border-color: var(--amber); color: var(--amber); }
+  .actions .primary:hover { background: var(--focus-bg); }
+
+  /* tabs: a row of terminal panes */
+  .tabs { display: flex; flex-wrap: wrap; gap: 0; margin: 2.2rem 0 1.4rem; border-bottom: 1px solid var(--rule); scroll-margin-top: 1rem; }
+  .tabs [role='tab'] { border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; background: none; color: var(--muted); padding: .6rem .9rem; font-family: var(--sans); font-size: .9rem; min-height: 44px; }
+  .tabs [role='tab']:hover { color: var(--fg); }
+  .tabs [role='tab'][aria-selected='true'] { color: var(--bright); border-bottom-color: var(--amber); }
+  .tab-key { font-family: var(--mono); font-size: .72rem; color: var(--amber); margin-right: .5em; }
+  .cnt { font-family: var(--mono); font-size: .75rem; margin-left: .5em; color: var(--muted); }
+  .cnt:empty { display: none; }
+
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 24rem; gap: 1.6rem; align-items: start; }
+  .panel { position: sticky; top: 1rem; }
+  [role='tabpanel'][hidden] { display: none; }
+
+  .sec-head { margin: 0 0 1.2rem; }
+  .sec-head h2 { color: var(--bright); font-size: 1.35rem; margin: 0 0 .3rem; }
+  .sec-head p { color: var(--note); font-size: .92rem; margin: 0; max-width: 46rem; line-height: 1.75; }
+  .items { display: grid; gap: 1.3rem; }
+
+  /* item cards reuse the .box idiom: a bracketed label sitting on the border */
+  .item, .trap, .card { position: relative; border: 1px solid var(--line); background: var(--panel); padding: 1.2rem 1.1rem 1rem; }
+  .label { position: absolute; top: -.75em; left: .8rem; background: var(--bg); color: var(--amber); padding: 0 .4rem; font-size: .76rem; font-family: var(--mono); }
+  .item-h { display: flex; gap: 1rem; align-items: flex-start; justify-content: space-between; }
+  .item-h h3 { color: var(--bright); font-size: 1.08rem; margin: 0; line-height: 1.45; }
+  .tag { font-size: .72rem; color: var(--muted); margin-top: .1rem; }
+  .wt { font-size: .8rem; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .wt b { color: var(--bright); font-size: 1.15rem; font-weight: 600; }
+  .focus { margin: .5rem 0 .9rem; color: var(--note); font-size: .9rem; line-height: 1.75; }
+
+  .scale { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border: 1px solid var(--rule); }
+  .scale input, .yn input { position: absolute; opacity: 0; pointer-events: none; }
+  .scale label { display: flex; flex-direction: column; align-items: center; padding: .45rem .1rem; cursor: pointer; border-right: 1px solid var(--line); font-family: var(--sans); font-size: .78rem; color: var(--muted); text-align: center; line-height: 1.4; }
+  .scale label:last-of-type { border-right: 0; }
+  .scale label .p { font-family: var(--mono); font-size: .85rem; color: var(--fg); }
+  .scale label:hover { background: var(--bg); }
+  .scale input:checked + label { background: var(--amber); color: var(--bg); }
+  .scale input:checked + label .p { color: var(--bg); font-weight: 700; }
+  .scale input:focus-visible + label, .yn input:focus-visible + label { outline: 2px solid var(--amber); outline-offset: -3px; }
+
+  .anchors { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; margin-top: .7rem; }
+  .anchor { font-family: var(--sans); font-size: .82rem; line-height: 1.65; padding: .55rem .7rem; color: var(--muted); border: 1px dashed var(--line); }
+  .anchor .k { display: block; font-family: var(--mono); font-size: .7rem; color: var(--note); margin-bottom: .15rem; }
+  .anchor.on { border: 1px solid var(--amber); color: var(--fg); background: var(--focus-bg); }
+  .anchor.on .k { color: var(--amber); }
+  .item-f { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; margin-top: .8rem; font-family: var(--sans); font-size: .82rem; color: var(--muted); }
+  .chk { display: inline-flex; gap: .45rem; align-items: center; cursor: pointer; min-height: 32px; }
+  .chk input { accent-color: var(--amber); width: 16px; height: 16px; }
+  .flags { display: inline-flex; flex-wrap: wrap; gap: .4rem; }
+
+  :global(.ain .flag) { display: inline-block; font-family: var(--mono); font-size: .7rem; padding: 0 .45rem; border: 1px solid currentColor; line-height: 1.7; white-space: nowrap; }
+  :global(.ain .flag.ok) { color: var(--ok); }
+  :global(.ain .flag.warn) { color: var(--warn); }
+  :global(.ain .flag.danger) { color: var(--danger); }
+  :global(.ain .flag.info) { color: var(--info); }
+
+  .next { margin-top: 1.4rem; font-family: var(--sans); }
+
+  /* traps */
+  .trap-group + .trap-group { margin-top: 2rem; }
+  .group-title { font-size: .95rem; color: var(--note); font-weight: 500; margin: 0 0 1rem; }
+  .trap { border-left: 3px solid var(--line); padding-top: 1rem; }
+  .trap.hit { border-left-color: var(--danger); }
+  .trap-top { display: flex; gap: 1rem; align-items: flex-start; justify-content: space-between; }
+  .trap-top .t { font-family: var(--sans); font-weight: 600; color: var(--bright); font-size: 1rem; line-height: 1.5; }
+  .trap-top small { display: block; font-family: var(--mono); font-weight: 400; font-size: .72rem; color: var(--muted); }
+  .link-chip { color: var(--cyan); }
+  .q { margin: .5rem 0 0; font-size: .95rem; line-height: 1.75; }
+  .yn { display: flex; border: 1px solid var(--rule); flex-shrink: 0; }
+  .yn label { padding: .3rem .9rem; cursor: pointer; font-family: var(--sans); font-size: .82rem; color: var(--muted); min-width: 3rem; text-align: center; line-height: 1.9; }
+  .yn label + input + label { border-left: 1px solid var(--line); }
+  .yn input:checked + label.bad { background: var(--danger); color: var(--bg); }
+  .yn input:checked + label.good { background: var(--ok); color: var(--bg); }
+  details.why { margin-top: .6rem; font-family: var(--sans); font-size: .88rem; }
+  details.why summary { cursor: pointer; color: var(--amber); font-size: .82rem; list-style: none; }
+  details.why summary::-webkit-details-marker { display: none; }
+  details.why summary::before { content: '▸ '; }
+  details.why[open] summary::before { content: '▾ '; }
+  .body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .8rem; margin-top: .6rem; }
+  .body.one { grid-template-columns: minmax(0, 1fr); }
+  .body div { border-left: 1px solid var(--rule); padding: .1rem 0 .1rem .8rem; line-height: 1.75; }
+  .body b { display: block; font-family: var(--mono); font-size: .7rem; color: var(--note); font-weight: 400; }
+
+  /* gauge */
+  .gauge { border: 1px solid var(--rule); background: var(--panel); }
+  .gauge-bar { padding: .6rem .9rem; font-size: .72rem; color: var(--note); border-bottom: 1px solid var(--line); }
+  .live { color: var(--green); }
+  .gauge-body { padding: .9rem; }
+  .eyebrow { font-size: .72rem; color: var(--note); font-family: var(--mono); letter-spacing: .04em; }
+  .score-row { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .9rem; align-items: center; margin-top: .2rem; }
+  .big { font-family: var(--mono); font-weight: 700; font-size: 3rem; line-height: 1; color: var(--amber); letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+  .big :global(small) { font-size: .9rem; color: var(--muted); font-weight: 400; letter-spacing: 0; }
+  .kv { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .35rem; }
+  .kv div { border: 1px solid var(--line); padding: .3rem .45rem; background: var(--bg); }
+  .kv span { display: block; font-size: .66rem; color: var(--muted); }
+  .kv b { font-size: 1.05rem; color: var(--bright); font-weight: 600; font-variant-numeric: tabular-nums; }
+  #g-gap[data-tone='warn'] { color: var(--warn); }
+  #g-gap[data-tone='danger'] { color: var(--danger); }
+  .quad-name { margin: .9rem 0 .4rem; font-family: var(--sans); font-size: 1.1rem; font-weight: 700; color: var(--bright); display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
+  svg.matrix { width: 100%; height: auto; display: block; }
+  .matrix :global(.q-tl) { fill: color-mix(in srgb, var(--amber) 13%, var(--panel)); }
+  .matrix :global(.q-tr) { fill: color-mix(in srgb, var(--green) 14%, var(--panel)); }
+  .matrix :global(.q-bl) { fill: color-mix(in srgb, var(--muted) 10%, var(--panel)); }
+  .matrix :global(.q-br) { fill: color-mix(in srgb, var(--cyan) 13%, var(--panel)); }
+  .matrix :global(.mid) { stroke: var(--fg); stroke-width: 1; opacity: .45; }
+  .matrix :global(.frame) { fill: none; stroke: var(--rule); }
+  .matrix :global(.qname) { font-family: var(--sans); font-size: 11px; font-weight: 700; fill: var(--bright); }
+  .matrix :global(.self.over) { fill: var(--red); }
+  .matrix :global(.over-label) { font-family: var(--sans); font-size: 11px; font-weight: 700; fill: var(--red); paint-order: stroke; stroke: var(--panel); stroke-width: 3px; }
+  .meter { margin-top: .8rem; border: 1px solid var(--line); background: var(--bg); padding: .5rem .6rem; }
+  .meter-head { display: flex; justify-content: space-between; gap: .5rem; flex-wrap: wrap; font-size: .66rem; color: var(--muted); margin-bottom: .35rem; }
+  .meter-head > :first-child { color: var(--fg); font-family: var(--sans); font-size: .74rem; }
+  .meter-row { display: grid; grid-template-columns: 4.6rem minmax(0, 1fr) 2.4rem; gap: .5rem; align-items: center; font-family: var(--sans); font-size: .72rem; color: var(--muted); }
+  .meter-row + .meter-row { margin-top: .3rem; }
+  .meter-row b { font-family: var(--mono); font-weight: 600; color: var(--bright); text-align: right; font-variant-numeric: tabular-nums; }
+  .meter .track { position: relative; height: .55rem; background: var(--panel); border: 1px solid var(--line); }
+  .meter .fill { position: absolute; inset: 0 auto 0 0; transition: width .35s ease; }
+  .meter .fill.x { background: var(--cyan); opacity: .75; }
+  .meter .fill.a { background: var(--green); }
+  .meter .fill.a[data-tone='warn'] { background: var(--amber); }
+  .meter .fill.a[data-tone='danger'] { background: var(--red); }
+  .redline { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: var(--red); transition: left .35s ease; }
+  @media (prefers-reduced-motion: reduce) { .meter .fill, .redline { transition: none; } }
+  .matrix :global(.tick) { font-family: var(--mono); font-size: 10px; fill: var(--muted); }
+  .matrix :global(.axis) { font-family: var(--sans); font-size: 11px; fill: var(--note); }
+  .matrix :global(.ref) { fill: var(--muted); }
+  .matrix :global(.ref-label) { font-family: var(--sans); font-size: 10px; fill: var(--muted); }
+  .matrix :global(.drift) { stroke: var(--fg); stroke-dasharray: 3 3; opacity: .6; }
+  .matrix :global(.checked) { fill: var(--panel); stroke: var(--bright); stroke-width: 2; }
+  .matrix :global(.halo) { fill: var(--amber); fill-opacity: .12; stroke: var(--amber); stroke-dasharray: 3 3; stroke-opacity: .7; }
+  .matrix :global(.self) { fill: var(--amber); stroke: var(--panel); stroke-width: 2; }
+  .legend, .bar-legend { display: flex; flex-wrap: wrap; gap: .3rem .9rem; font-family: var(--sans); font-size: .72rem; color: var(--muted); margin-top: .5rem; }
+  .legend i, .bar-legend i { display: inline-block; width: .65rem; height: .65rem; margin-right: .35rem; vertical-align: -.05rem; }
+  .k-self { background: var(--amber); border-radius: 50%; }
+  .k-checked { border: 2px solid var(--bright); border-radius: 50%; }
+  .k-ref { background: var(--muted); border-radius: 50%; }
+  .k-over { background: var(--red); border-radius: 50%; }
+  .k-halo { border: 1px dashed var(--amber); border-radius: 50%; background: color-mix(in srgb, var(--amber) 14%, transparent); }
+  .alerts { display: grid; gap: .45rem; margin-top: .8rem; }
+  :global(.ain .alert) { font-family: var(--sans); font-size: .8rem; line-height: 1.6; padding: .45rem .7rem; background: var(--bg); border-left: 2px solid var(--rule); }
+  :global(.ain .alert b) { font-weight: 600; margin-right: .3em; }
+  :global(.ain .alert.ok) { border-left-color: var(--ok); }
+  :global(.ain .alert.ok b) { color: var(--ok); }
+  :global(.ain .alert.warn) { border-left-color: var(--warn); }
+  :global(.ain .alert.warn b) { color: var(--warn); }
+  :global(.ain .alert.danger) { border-left-color: var(--danger); }
+  :global(.ain .alert.danger b) { color: var(--danger); }
+  .gauge :global(#copy-fallback) { width: 100%; height: 10rem; margin-top: .8rem; font-family: var(--mono); font-size: .75rem; background: var(--bg); color: var(--fg); border: 1px solid var(--rule); }
+
+  /* report */
+  .report { display: grid; gap: 1.4rem; }
+  /* Report markup is injected by the script, so it can't carry Astro's scoping attributes. */
+  .report :global(.card) { position: relative; border: 1px solid var(--line); background: var(--panel); padding: 1.3rem 1.1rem 1rem; }
+  .report :global(.label) { position: absolute; top: -.75em; left: .8rem; background: var(--bg); color: var(--amber); padding: 0 .4rem; font-size: .76rem; font-family: var(--mono); }
+  .report :global(.eyebrow) { font-size: .72rem; color: var(--note); font-family: var(--mono); }
+  .report :global(p), .report :global(li), .report :global(h3), .report :global(.bar-legend) { font-family: var(--sans); }
+  .report :global(.dim) { color: var(--muted); }
+  .report :global(.override) { border-left: 2px solid var(--red); padding-left: .7rem; color: var(--fg); }
+  .report :global(.mono) { font-family: var(--mono); font-size: .9rem; font-weight: 400; }
+  .report :global(.link-chip) { color: var(--cyan); font-family: var(--mono); font-size: .75rem; }
+  .report :global(.card h3) { color: var(--bright); font-size: 1.1rem; margin: .1rem 0 .6rem; display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
+  .report :global(.card p) { margin: 0 0 .6rem; font-size: .95rem; line-height: 1.8; }
+  .report :global(.card ol), .report :global(.card ul) { margin: 0; padding-left: 1.3rem; display: grid; gap: .4rem; font-size: .92rem; line-height: 1.75; }
+  .report :global(.card li::marker) { color: var(--amber); }
+  .report :global(.card b) { color: var(--bright); }
+  .report :global(.two) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.4rem; }
+  .report :global(.bars) { display: grid; gap: .55rem; }
+  .report :global(.bar) { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr) 3.6rem; gap: .6rem; align-items: center; font-family: var(--sans); font-size: .8rem; }
+  .report :global(.track) { height: .6rem; background: var(--bg); position: relative; overflow: hidden; border: 1px solid var(--line); }
+  .report :global(.track .fill) { position: absolute; inset: 0 auto 0 0; background: var(--amber); opacity: .45; }
+  .report :global(.track .cons) { position: absolute; inset: 0 auto 0 0; background: var(--amber); }
+  .report :global(.bar .v) { font-family: var(--mono); text-align: right; color: var(--fg); }
+  .report :global(.bar-legend) { display: flex; flex-wrap: wrap; gap: .3rem .9rem; font-size: .72rem; color: var(--muted); margin: -.6rem 0 0; }
+  .report :global(.bar-legend i) { display: inline-block; width: .65rem; height: .65rem; margin-right: .35rem; vertical-align: -.05rem; }
+  .report :global(.k-self) { background: var(--amber); opacity: .45; border-radius: 0; }
+  .report :global(.k-cons) { background: var(--amber); }
+
+  .method { margin-top: 3.5rem; }
+  .section-head { border-bottom: 1px dashed var(--rule); padding-bottom: .8rem; color: var(--note); font-size: .75rem; }
+  .section-head > :first-child { color: var(--amber); }
+  .method h2 { color: var(--bright); font-size: 1.3rem; margin: 1.1rem 0 .6rem; }
+  .method ol { padding-left: 1.3rem; max-width: 50rem; line-height: 1.85; }
+  .method li::marker { color: var(--amber); font-family: var(--mono); }
+  .source-note { font-size: .78rem; color: var(--note); line-height: 1.8; margin-top: 1.2rem; }
+
+  :global(.ain-toast) { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--bright); color: var(--bg); padding: .5rem 1rem; font-size: .85rem; z-index: 10; }
+
+  @media (prefers-reduced-motion: no-preference) { .matrix :global(.pt) { transition: cx .35s ease, cy .35s ease, r .35s ease; } }
+
+  @media (max-width: 64rem) {
+    .layout { grid-template-columns: minmax(0, 1fr); }
+    .panel { position: static; order: -1; }
+    .gauge-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 1.2rem; }
+    .gauge-body > .eyebrow, .gauge-body > .score-row, .gauge-body > .quad-name { grid-column: 1 / -1; }
+    .gauge-body > .alerts { margin-top: 0; }
+  }
+  @media (max-width: 40rem) {
+    .panel { order: 0; }
+    .gauge-body { display: block; }
+    .gauge-body > .alerts { margin-top: .8rem; }
+    .anchors, .body, .report :global(.two) { grid-template-columns: minmax(0, 1fr); }
+    .trap-top { flex-direction: column; gap: .6rem; }
+    .scale label { font-size: .7rem; }
+    .report :global(.bar) { grid-template-columns: minmax(0, 1fr) 3.6rem; }
+    .report :global(.bar .track) { grid-column: 1 / -1; grid-row: 2; }
+    .release { display: none; }
+    .tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .tabs [role='tab'] { padding: .5rem .6rem; font-size: .82rem; white-space: nowrap; flex-shrink: 0; }
+  }
+</style>

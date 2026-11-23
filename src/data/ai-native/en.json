@@ -1,0 +1,452 @@
+{
+  "meta": {
+    "title": "AI-Native Two-Axis Diagnosis",
+    "description": "A two-axis self-assessment of digital maturity against AI adoption. Scores are checked against evidence and anti-patterns, and you get a diagnosis report you can take straight into a meeting.",
+    "eyebrow": "Deploying AI Agents · Self-assessment",
+    "lead": "Put a number on how AI-native your organization really is.",
+    "back": "Back to tools and projects",
+    "noscript": "This diagnosis needs JavaScript to calculate your scores.",
+    "disclaimer": "For internal self-checks only. Not a formal audit opinion."
+  },
+  "buttons": {
+    "example": "Load example",
+    "reset": "Start over",
+    "copy": "Copy summary"
+  },
+  "tabs": {
+    "y": "Y axis · AI adoption",
+    "x": "X axis · Digital maturity",
+    "t": "Anti-patterns",
+    "z": "Stability",
+    "r": "Report"
+  },
+  "sections": {
+    "y": {
+      "h": "AI adoption and integration",
+      "sub": "6 items, 100 points in total. Pick the level closest to where you are today; if you sit between two, choose 25% or 75%. Tick \"evidence\" only if you can actually produce it: a policy document, an admin-console screenshot, real numbers."
+    },
+    "x": {
+      "h": "Digital maturity",
+      "sub": "The four pillars of digital: connected, programmable, autonomous, empowered, 25 points each. These four decide whether AI, once it arrives, has reliable data for eyes and usable systems for hands."
+    },
+    "t": {
+      "h": "Anti-pattern check",
+      "sub": "Go through them one by one and answer yes or no. Every pit you answer \"yes\" to lands on the fix list in your report."
+    },
+    "z": {
+      "h": "Organizational stability",
+      "sub": "6 questions about facts, not attitudes. The result shows up as the halo around your point on the matrix: the bigger the halo, the more your score rests on someone's personal enthusiasm, and the faster it can collapse when the boss changes their mind."
+    }
+  },
+  "levelNames": [
+    "None",
+    "Seed",
+    "Trial",
+    "Scaling",
+    "Native"
+  ],
+  "anchorKeys": [
+    "0",
+    "50%",
+    "100%"
+  ],
+  "item": {
+    "evidence": "We can show evidence",
+    "flagCapped": "Capped: guardrails too weak",
+    "flagHits": "{n} anti-pattern(s) hit",
+    "flagNoEvidence": "Evidence needed"
+  },
+  "trap": {
+    "yes": "Yes",
+    "no": "No",
+    "affects": "Affects {id} {name}",
+    "whyFix": "Why it hurts · How to fix",
+    "whyLabel": "Why it hurts",
+    "fixLabel": "How to fix",
+    "zWhy": "What this question checks",
+    "tabCount": "{hit} hit / {ans} answered"
+  },
+  "gauge": {
+    "label": "AI-native score",
+    "x": "X axis",
+    "y": "Y axis",
+    "gap": "A − X",
+    "matrixAria": "Four-quadrant diagnosis matrix",
+    "legendSelf": "Self-rated",
+    "legendChecked": "After evidence check",
+    "legendRef": "Reference (illustrative)",
+    "legendHalo": "Halo = stability (bigger is more fragile)",
+    "axisX": "X Digital maturity →",
+    "axisY": "Y AI adoption →",
+    "refSuffix": " (illustrative)",
+    "aggr": "AI aggressiveness A",
+    "aggrHint": "Y3 + Y4 on a 100 scale; red line = X + 20",
+    "meterX": "X base",
+    "meterA": "A aggr.",
+    "legendOver": "Red dot = over the line"
+  },
+  "alerts": {
+    "penTitle": "Foundation failing",
+    "pen": "AI is moving faster than your digital foundation can carry. The overall score has been discounted.",
+    "warnTitle": "Warning zone",
+    "warn": "AI is starting to outrun your digital foundation. If the gap widens, the overall score gets discounted.",
+    "okTitle": "Axes in balance",
+    "ok": "Steady pace: AI is advancing within what your digital foundation can support.",
+    "dropTitle": "Self-rating may be optimistic",
+    "drop": "Some high scores have no evidence or hit an anti-pattern. There's likely some air in the numbers, so check them item by item.",
+    "stabTitle": "Stability: {name}",
+    "stab": "{yes}/6 organizational facts in place{unfinished}. The bigger the halo, the more your score swings with the boss's mood.",
+    "unfinished": " (not finished)"
+  },
+  "consistency": {
+    "capTitle": "Guardrails lag",
+    "cap": "AI is already on the production floor, but compliance guardrails haven't caught up. Fix the guardrails first; only then does production depth count.",
+    "y3x2Title": "Contradiction: Y3 × X2",
+    "y3x2": "You say AI is silently embedded in your workflows, yet your systems can barely be called by code. So how do AI's results get back into the system? Nine times out of ten, people paste them in by hand.",
+    "y2x1Title": "Contradiction: Y2 × X1",
+    "y2x1": "You rated your unified knowledge source highly, but your core systems aren't connected. Where does the knowledge base get its data, and who keeps it in sync? Surely not someone copying it over by hand?",
+    "y4x3Title": "Contradiction: Y4 × X3",
+    "y4x3": "You let AI act directly on core production, but there's no deterministic automation or rollback underneath. That's tightrope walking blindfolded.",
+    "y4y1Title": "Naked on the line",
+    "y4y1": "No enterprise accounts, permissions or audit trail, and AI is already in production. That's running naked."
+  },
+  "stabNames": {
+    "ok": "Solid",
+    "warn": "Wobbly",
+    "danger": "Fragile"
+  },
+  "stabText": {
+    "ok": "Your score is backed by a dedicated budget, a named owner and written policy. Even if the boss's attention moves on, most of what you've built will hold.",
+    "warn": "Some policy backs it, but key pieces still hang on the enthusiasm of one or two people. If they leave or lose steam, the score could swing hard within six months.",
+    "danger": "Right now the score is held up almost entirely by enthusiasm. The moment the boss looks elsewhere, the Y axis can snap back to where it started. Filling any one of the gaps below is worth more than buying another AI tool."
+  },
+  "report": {
+    "quadEyebrow": "Quadrant",
+    "stabEyebrow": "Organizational stability",
+    "unanswered": " (not answered)",
+    "gapsTitle": "Three gaps to close first",
+    "gapLine": "{loss} points short. Next level: {next}",
+    "allFull": "Full marks on all ten? Put the evidence on the table and go through it again. In our experience, a perfect score usually means a generous grader.",
+    "yDetail": "Y axis breakdown",
+    "xDetail": "X axis breakdown",
+    "barLegendSelf": "Self-rated",
+    "barLegendChecked": "After check",
+    "consTitle": "Consistency check",
+    "trapsTitle": "Anti-pattern fix list ({n})",
+    "noTraps": "No anti-patterns hit yet. If you haven't finished the anti-pattern tab, answer it first and come back.",
+    "overrideNote": "By position you'd be in \"{zone}\", but your AI aggressiveness runs {o} points ahead of your digital foundation, past the 20-point red line. So you're diagnosed as High-Risk Mirage."
+  },
+  "summary": {
+    "title": "[AI-Native Two-Axis Diagnosis]",
+    "scoreLine": "Score {t} | X digital {x} | Y AI {y} | A−X {gap}",
+    "quad": "Quadrant: {name}",
+    "pen": "Warning: foundation failing",
+    "stab": "Organizational stability: {name} ({yes}/6)",
+    "items": "Item scores:",
+    "noEvidence": " (no evidence)",
+    "traps": "Anti-patterns hit:",
+    "rx": "Prescription:"
+  },
+  "toast": {
+    "copied": "Summary copied",
+    "manual": "Summary selected. Copy it manually.",
+    "example": "Example loaded",
+    "reset": "Cleared. Start your self-assessment."
+  },
+  "method": {
+    "title": "How the score works",
+    "lines": [
+      "Each item has five levels: 0 / 25% / 50% / 75% / 100%, multiplied by the item's weight. The Y and X axes are each out of 100.",
+      "AI aggressiveness A = the scores of Y3 (workflow acceleration) and Y4 (production depth), rescaled to 100. Overall score = 0.5X + 0.5Y − discount. Once A − X > 20 (aggressiveness far ahead of the foundation), discount = 0.6 × (A − X − 20). A uses your raw self-ratings, before the cap and the checks. The overall score never goes below 0.",
+      "Only Y3 and Y4 can trigger the discount. Improving compliance, knowledge, infrastructure and measurement (Y1, Y2, Y5, Y6) only ever adds points; it can never pull the overall score down.",
+      "Checked score: no evidence (\"evidence\" unticked) drops an item one level; hitting a linked anti-pattern drops it one more, however many of them you hit.",
+      "If Y5 compliance guardrails are self-rated below 50%, Y4 production depth counts for at most 50% (not enough guardrails, so depth is capped). The cap applies first, then the checks.",
+      "Quadrants follow position (split at 60). But whenever A − X > 20, the diagnosis is High-Risk Mirage, whichever quadrant you land in."
+    ]
+  },
+  "quads": {
+    "tr": {
+      "name": "AI-Native Frontier",
+      "desc": "Your system APIs are native interfaces for agents, the knowledge base refreshes with the business every day, and AI is the default foundation the company runs on.",
+      "rx": [
+        "Manage agents like real staff: keep a roster, assign permissions, review performance (run eval sets), and retire the ones that don't work.",
+        "Put rework rate and cost per unit of work into your monthly business metrics. Watch the books, or you'll only notice costs spiraling after you've scaled.",
+        "From here the bottleneck is usually the organization, not the technology: it's time to redesign roles and reshape the team."
+      ]
+    },
+    "br": {
+      "name": "Digital Powerhouse",
+      "desc": "Clean data, complete APIs, rigorous processes. Regulation or a cautious culture has kept AI from rolling out widely so far. The strongest foundation, and the safest bet.",
+      "rx": [
+        "Stand up AI compliance guardrails (Y5) first. That gives teams the confidence to start experimenting.",
+        "Put enterprise accounts and security infrastructure (Y1) in place to remove the fear of data leaks.",
+        "Wrap your existing APIs as tools agents can call (MCP). Get one high-frequency process working end to end, then copy it across departments."
+      ]
+    },
+    "tl": {
+      "name": "AI Running Ahead",
+      "desc": "Your AI policy, knowledge base and habits have run ahead of your digital foundation, but you haven't forced AI onto the production floor. It's safe for now; push further and you'll hit the digital ceiling head-on.",
+      "rx": [
+        "Fix connectivity (X1) and API readiness (X2) first, or AI stays stuck in an assisting role.",
+        "Don't push production depth (Y4) any further yet. Grant more autonomy once the foundation catches up.",
+        "List every system where AI gets stuck today, and use that list to set priorities for your digital work."
+      ]
+    },
+    "bl": {
+      "name": "Legacy Laggards",
+      "desc": "Processes run on shouting, numbers run on guesswork, and AI might as well not exist.",
+      "rx": [
+        "Don't rush to pay for large models. First move offline work online and get the basics digitized.",
+        "Get the know-how out of your veterans' heads and into documents people can read. That's what you'll feed AI later (Y2).",
+        "Pick one small process that everyone hates and fix it as a showcase, so the team gets a first taste of what digital can do and builds confidence."
+      ]
+    },
+    "mirage": {
+      "name": "High-Risk Mirage",
+      "desc": "The digital foundation can't carry it yet, but AI is already pushed into workflows and onto the production floor: master data isn't aligned, systems are still islands, and AI aggressiveness runs far ahead of the foundation. A textbook blindfolded sprint.",
+      "rx": [
+        "Ease off now: pull AI out of core production and back into an assisting role.",
+        "Move the budget back and do the homework: connect your systems (X1) and make them API-ready (X2).",
+        "Watch for three mines that can go off any time: garbage in, garbage out at light speed; staff reduced to human APIs shuttling data; and shadow AI everywhere, bringing leaks and a vacuum of accountability."
+      ]
+    }
+  },
+  "items": {
+    "y1": {
+      "name": "Access policy and enterprise infrastructure",
+      "focus": "The first line between a pickup team and a professional outfit: ① central accounts and billing　② contract terms that keep your data out of training　③ SSO with admin-controlled permissions and feature switches　④ audit logs　⑤ controllable data retention. 1 of these is about 25%, 2–3 about 50%, 4 about 75%, and only all 5 make 100%.",
+      "a": [
+        "Either AI is banned across the board, or staff run company data through personal free accounts, completely exposed.",
+        "A team plan: central billing and no training on your data, but no SSO, audit logs or other controls (2–3 of ①–⑤).",
+        "A proper enterprise plan: all of ①–⑤, everyone covered, accounts created and removed automatically by the identity system as people join and leave."
+      ]
+    },
+    "y2": {
+      "name": "Enterprise knowledge base",
+      "focus": "How much AI can do for you isn't capped by the model's intelligence. It's capped by how clean the company context you feed it is.",
+      "a": [
+        "Know-how lives in veterans' heads, or is scattered across personal chat histories and files on local machines.",
+        "Departments have their own document stores, but nobody updates them and old and new information contradict each other.",
+        "One dynamic knowledge source for the whole company (RAG, LLM Wiki or long context all count). Every document has an owner and a version, and AI can pull exactly what it needs."
+      ]
+    },
+    "y3": {
+      "name": "How workflows are accelerated",
+      "focus": "Truly AI-native work usually has no chat box in sight. Nobody chats with a bot; the business just quietly speeds up in the background.",
+      "a": [
+        "Not used at all, or stuck at opening a web chat and asking one question at a time.",
+        "Some roles keep a set of prompt templates to half-automate copy, translation or code snippets.",
+        "Embedded AI: AI hangs off business triggers and back-end processes and runs on its own. People no longer act as messengers between systems and a chat box."
+      ]
+    },
+    "y4": {
+      "name": "Depth in core production",
+      "focus": "Whether you dare to put AI on the front line is the real test of technical confidence and engineering safety nets. Full marks require hard limits first, autonomy second.",
+      "a": [
+        "Banned from core production. Used only for weekly reports and polishing emails.",
+        "Working in non-core areas: first-pass résumé screening, marketing drafts, assisted code review.",
+        "Proven in shadow mode first, then working directly on core production within hard limits (amount caps, action allowlists, rollback): merging code automatically, adjusting prices and stock dynamically, agents closing tickets on their own."
+      ]
+    },
+    "y5": {
+      "name": "AI compliance and governance guardrails",
+      "focus": "Compliance isn't there to slam the brakes on the business. It's the brake pads that let the business step on the gas with confidence.",
+      "a": [
+        "No rules or policy at all. Nobody is in charge, and when something goes wrong, everyone points fingers.",
+        "A published Employee AI Use Policy. The rules are written down, but compliance depends on people's good behavior.",
+        "Technical defenses and policy together: a data-masking gateway, output audit logs, hallucination filters, eval regression sets, plus a clear human-in-the-loop (HITL) responsibility matrix."
+      ]
+    },
+    "y6": {
+      "name": "Measuring outcomes and avoiding the \"AI tax\"",
+      "focus": "Cut through the feel-good numbers and work out whether the tokens you burn actually come back as business ROI.",
+      "a": [
+        "No tracking at all, or only vanity metrics like account activation and logins.",
+        "Call volume is tracked, but never tied back to business output.",
+        "End-to-end throughput, rework rate and cost per unit of work are monitored closely, to avoid \"saving 30% of generation time, then spending 40% cleaning up the mess\"."
+      ]
+    },
+    "x1": {
+      "name": "Connected",
+      "focus": "AI's senses and bloodstream: if ERP, CRM and supply-chain data each go their own way with conflicting definitions, AI gets incomplete or even contradictory context.",
+      "a": [
+        "Systems are reconciled by hand, with exports pasted together in Excel.",
+        "Core systems are partly connected and sync T+1, the next day.",
+        "Real-time data flows end to end on a single source of truth (SSOT), with one master record for everything."
+      ]
+    },
+    "x2": {
+      "name": "Programmable",
+      "focus": "AI's hands (tool use / MCP): if your business systems can't be programmed, even the smartest agent can only talk big in a chat window.",
+      "a": [
+        "Closed, black-box legacy software that no outside program can touch.",
+        "The main systems have APIs, but the docs are incomplete and calling them is painful.",
+        "The core business is thoroughly API-driven, with tiered auth, sandboxes and idempotency, so agents can plug in and go."
+      ]
+    },
+    "x3": {
+      "name": "Autonomous",
+      "focus": "AI's exoskeleton: only once deterministic code has locked down the limits and rollback can you put a probabilistic LLM in the middle of a business process.",
+      "a": [
+        "Processes move on manual approvals and word of mouth.",
+        "Core processes run inside systems with basic rule-based automation.",
+        "Highly automated closed loops that detect and stop anomalies, and can even heal themselves."
+      ]
+    },
+    "x4": {
+      "name": "Empowered",
+      "focus": "AI's capillaries: if the front line has to wait two weeks in IT's queue just to pull a report, even the best AI tool won't take root.",
+      "a": [
+        "Strictly centralized IT, painful internal tools, and a ticket queue for everything.",
+        "Standard BI dashboards and self-service collaboration tools are available to the business.",
+        "Front-line staff serve themselves with data and build small apps with low-code tools to solve their own problems."
+      ]
+    }
+  },
+  "trapGroups": {
+    "ai": "AI anti-patterns",
+    "digital": "Digital anti-patterns"
+  },
+  "traps": {
+    "a1": {
+      "t": "Prompt bloat and fuzzy negatives",
+      "q": "Have you stuffed a giant global compliance prompt into your enterprise setup, or listed dozens of vague \"don't…\" rules?",
+      "why": "Long instructions dilute attention, clauses fight each other, and the model wobbles between \"follow the rules\" and \"be useful\". Worse, negative rules can't be tested, so when something breaks you can't tell which one failed. And every call pays a toll for all that extra context.",
+      "fix": "Push compliance down into deterministic code: enforce it with a DLP gateway, tool permissions and output validation. Keep only the role and a few positive, verifiable rules in the prompt, each with its own eval case."
+    },
+    "a2": {
+      "t": "Digital landfill RAG",
+      "q": "When you built your knowledge base, did you dump ten years of shared drives, old emails and outdated document versions straight into RAG?",
+      "why": "Retrieval returns what looks most similar, not what's newest or correct. When old and new policies sit side by side, AI will confidently answer from the one that was scrapped years ago.",
+      "fix": "Less but right: start with a small, accurate golden set. Every document gets an owner, a version and an expiry date, and is pulled automatically when it expires. Check documents on the same topic for conflicts before they go in."
+    },
+    "a3": {
+      "t": "Human copy-paste glue",
+      "q": "Have you built a pile of AI assistant bots, only for staff to paste data in from a template every day and then paste the answers back into your business systems by hand?",
+      "why": "Staff become human APIs running errands for the system. Whatever AI saves gets eaten by the manual shuffling, and one wrong paste is a production incident. The more bots like this you build, the slower the team gets.",
+      "fix": "Trigger AI from business events instead (a new order, a new ticket, a new email) and read and write systems directly through APIs or MCP. People only step in at key approval points."
+    },
+    "a4": {
+      "t": "Day-one autonomy without hard limits",
+      "q": "Did your AI support bot or agent get permission to issue refunds, change prices or delete data on launch day, without hard limits (amount caps, action allowlists, rollback)?",
+      "why": "One prompt injection or hallucination and you're paying out real money. If the action can't be rolled back, nobody can own the fallout. Remember: \"don't exceed 5,000 yen\" written in a prompt is only a suggestion to the model.",
+      "fix": "Run shadow mode first (suggest, don't execute) and build accuracy on real traffic. Then grant autonomy by amount and risk (small amounts automatic, large ones to a human). Hard limits belong in code and permissions, never only in the prompt. Every action must be auditable and reversible."
+    },
+    "a5": {
+      "t": "Flagship for everything",
+      "q": "Does every call go to the most expensive flagship model, no matter how easy the task?",
+      "why": "Classification, extraction and format conversion are grunt work a small model handles fine, often at a tenth of the cost or less. Use a sledgehammer on every nut and the budget burns out before the business results show up, and finance pulls the plug.",
+      "fix": "Route and tier your models: hard jobs to the flagship, grunt work to small models. Use prompt caching and batching. Track cost per completed unit of work, not just the monthly bill."
+    },
+    "a6": {
+      "t": "Vanity metrics",
+      "q": "When you report on AI, do you lead with output numbers like \"coding speed +60%\" or \"500 pieces of copy a day\"?",
+      "why": "Output isn't delivered value. More AI code means more time reviewing it and fixing defects; more assembly-line copy can push conversion down and dilute the brand.",
+      "fix": "Track end-to-end business outcomes: lead time to delivery, defect escape rate, rework rate, actual conversion. If you can, compare against a control group."
+    },
+    "a7": {
+      "t": "Shadow AI",
+      "q": "You've bought the enterprise plan, yet staff still handle company data through personal accounts or unapproved plugins?",
+      "why": "The vendor's enterprise data agreement only covers enterprise accounts. When staff push company data through personal ones, the leak happens outside management's view, and afterwards there aren't even logs to check.",
+      "fix": "Blocking alone won't work. Make the enterprise plan better than the personal one (preloaded company knowledge, business connectors), and detect unapproved AI services at the network level. Close the side doors and offer a good alternative, not just a ban."
+    },
+    "a8": {
+      "t": "Pilot purgatory",
+      "q": "Lots of AI pilots in the past year, but not one made it into real production with someone responsible for running it?",
+      "why": "Pilots ignore cost, don't touch real systems and have no launch criteria, so in the slides they always \"look promising\" and in production they never go live.",
+      "fix": "On day one, write down the launch criteria, the business owner and the exit conditions. Don't spread yourself thin: take one high-frequency process all the way to the end."
+    },
+    "a9": {
+      "t": "Vibe-based evaluation",
+      "q": "When you change a prompt or swap models, do you ship because \"a few tries looked fine\"?",
+      "why": "A prompt tweak often fixes one thing and breaks three, and eyeballing a few samples won't catch it. When a model upgrade shifts behavior, you have no baseline to compare against.",
+      "fix": "Build a business eval set from real past cases with reference answers. Run regression tests on every change, and spot-check live output on a schedule."
+    },
+    "a10": {
+      "t": "Agent sprawl",
+      "q": "Every department builds its own bots and agents, with no central registry, owners or retirement process?",
+      "why": "Ask five departments' bots the same question and get five answers. Scarier still, the person who built an agent has left, and the agent is still running in the background with system tokens.",
+      "fix": "Keep one registry for every agent in the company: purpose, owner, permissions, data scope, eval results. Review it regularly and retire anything unowned or underperforming."
+    },
+    "a11": {
+      "t": "Over-privileged tools",
+      "q": "Do the MCP servers or APIs your agents connect to run on an admin token, or on someone's all-powerful personal account, because it was easier?",
+      "why": "The web pages, emails and attachments an agent reads can hide injected instructions. The more power you give it, the bigger the blast radius when it gets hijacked.",
+      "fix": "Give every tool its own service account, read-only first, with the least privilege each task needs. Require a second confirmation for sensitive actions, and log every tool call."
+    },
+    "d1": {
+      "t": "RPA screen-clicking passed off as APIs",
+      "q": "Your cross-system automation is mostly RPA clicking through screens, yet it's reported upstairs as \"API-enabled\"?",
+      "why": "One UI redesign and the scripts all break. RPA has no transactions, no rollback and no idempotency. Having an agent call it is building a house on quicksand.",
+      "fix": "Treat RPA as a temporary bandage and keep a replacement list. Give high-frequency core actions real APIs first, or expose services through a controlled database or middleware layer."
+    },
+    "d2": {
+      "t": "T+7 manual warehouse and zombie data lake",
+      "q": "Your data warehouse is really someone exporting data by hand every week; or the data lake has gone unmaintained since it was built, and nobody can explain how core metrics are defined?",
+      "why": "With data refreshed weekly, AI always sees the world as it was a week ago. And a data lake with no lineage and no agreed definitions is more dangerous than no data at all.",
+      "fix": "Pick the 3 core data flows where freshness matters most and connect them properly. Build one dictionary of definitions for your core metrics, and give it an owner."
+    },
+    "d3": {
+      "t": "Master data chaos",
+      "q": "The same product or customer has different codes or names in your ERP, e-commerce platform and CRM, and people keep the mapping in their heads?",
+      "why": "AI can't tell whether \"A123\" and \"A-123 Black\" are the same product. Every cross-system analysis goes wrong from that very first step.",
+      "fix": "Settle two master tables first, products and customers, each with one company-wide code. Then talk about AI."
+    },
+    "d4": {
+      "t": "Paving the cow path",
+      "q": "Did \"moving processes online\" just mean putting paper approval forms into your workflow system as they were, with every approval layer still in place?",
+      "why": "No automation happened; the queue just moved from the office to the screen. As long as the approval rules live in people's heads, a machine can't run them.",
+      "fix": "Turn those rules into explicit conditions (amount, category, list of exceptions). Let the system approve routine cases instantly, and have people spend their attention only on the exceptions."
+    },
+    "d5": {
+      "t": "Agent-hostile APIs",
+      "q": "Your systems have APIs, but no fine-grained auth, no test sandbox, no idempotency and no readable error messages?",
+      "why": "Agents retry and make mistakes by nature. If an endpoint isn't idempotent, one network hiccup and one retry means a duplicate order. Without a sandbox, where do agents practice, in production?",
+      "fix": "Give every action you open to agents the basics: its own service account with scoped permissions, a test sandbox, idempotency keys, structured errors, and OpenAPI docs that can be turned straight into MCP."
+    },
+    "d6": {
+      "t": "Low-code jungle",
+      "q": "Did \"empowering\" the business leave you with hundreds of unmaintained spreadsheet apps and automations, whose creators vanish the moment they leave?",
+      "why": "Empowerment without rules creates a whole new crop of data silos. Worse, some critical business flows hang off one employee's personal account.",
+      "fix": "Let people build freely while they experiment, but anything entering real production must register an owner and data sources, and be backed up. Sweep out zombie apps on a schedule."
+    },
+    "d7": {
+      "t": "Report factory",
+      "q": "Everyone in the business has a BI account, yet they still ask IT or the data team to \"pull the numbers for me\"?",
+      "why": "Handing out tools isn't the same as building skills. If front-line staff can't ask the data a question themselves, they won't ask AI a good one either.",
+      "fix": "Build a semantic layer the business can understand and one set of metric definitions, then train people on their real business questions. Getting this layer right is also the hard prerequisite for ever \"asking your data in plain language\"."
+    }
+  },
+  "zqs": {
+    "z1": {
+      "t": "Dedicated budget",
+      "q": "Does AI have its own line in the annual budget, instead of borrowing from other cost centers every time money is needed?",
+      "why": "Without its own budget, things stall halfway in turf wars: \"Why should my budget pay for this?\""
+    },
+    "z2": {
+      "t": "Named owner",
+      "q": "Is there a named owner for AI adoption, and is it actually written into that person's KPIs?",
+      "why": "When everyone is responsible, nobody is."
+    },
+    "z3": {
+      "t": "The boss uses it",
+      "q": "Has the boss personally used AI every week for the past month, for real, and could they open it right now and show everyone?",
+      "why": "If the boss doesn't use it and their view of AI comes from headlines, the company's enthusiasm will run hot and cold with the headlines too."
+    },
+    "z4": {
+      "t": "Roles rewritten",
+      "q": "In the past year, has at least one job description been formally rewritten because of AI?",
+      "why": "If job descriptions don't change a word, AI stays an optional add-on forever."
+    },
+    "z5": {
+      "t": "Safe to fail",
+      "q": "Has the company had a pilot that failed, without the person who led it being punished for it?",
+      "why": "Never failing usually means never really trying. If failure means blame, nobody will volunteer to lead the next one, however loudly you ask."
+    },
+    "z6": {
+      "t": "Written roadmap",
+      "q": "Is there an AI roadmap on paper, so the project keeps hitting its milestones even if the boss is away for three months?",
+      "why": "If the roadmap only exists in the boss's head, the project's progress equals the boss's attention that week."
+    }
+  }
+}

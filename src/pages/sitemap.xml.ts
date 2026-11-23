@@ -36,7 +36,8 @@ export const GET: APIRoute = async () => {
     if (Object.keys(group).length > 0) groups.push(group);
   };
   listing('/', () => true);
-  groups.push(Object.fromEntries(LANGS.map((lang) => [lang, { path: localePath(lang, '/lab/graph-workflow/') }])));
+  for (const page of ['/lab/graph-workflow/', '/lab/ai-native/'])
+    groups.push(Object.fromEntries(LANGS.map((lang) => [lang, { path: localePath(lang, page) }])));
   for (const section of SECTIONS) listing(`/${section}/`, (p) => p.data.category === section);
   // Empty series pages are noindex, so they stay out of the sitemap as well.
   for (const series of Object.keys(SERIES)) listing(`/series/${series}/`, (p) => p.data.series === series, false);

@@ -22,6 +22,18 @@ export const TOOLS: {
     },
   },
   {
+    id: 'ai-native',
+    href: '/lab/ai-native/',
+    ready: true,
+    localized: true,
+    name: { zh: 'AI 原生双轴诊断', en: 'AI-Native Two-Axis Diagnosis', ja: 'AI ネイティブ二軸診断' },
+    desc: {
+      zh: '正式版自评工具：数字化 × AI 两轴打分，按证据和反模式复核，出一份能拿去开会的诊断报告。',
+      en: 'The full self-assessment: score digital maturity against AI adoption, check it against evidence and anti-patterns, and get a report you can take to a meeting.',
+      ja: '本格版の自己診断。デジタル成熟度 × AI 活用の二軸で採点し、根拠とアンチパターンで補正、会議に持ち込めるレポートを出力。',
+    },
+  },
+  {
     id: 'ainativebench',
     href: '/ainativebench/',
     ready: true,
