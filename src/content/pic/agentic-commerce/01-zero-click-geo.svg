@@ -1,0 +1,208 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 820" width="920" height="820" role="img" aria-labelledby="t1 d1">
+  <title id="t1">零点击搜索成为默认现实，AI代理将商品决策空间压缩近九成</title>
+  <desc id="d1">2026年初美国Google搜索零点击率演进、AI概览CTR跌幅、Amazon首屏决策空间压缩率与KDD 2024 GEO策略增益对比</desc>
+  <style>
+    :root {
+      --bg: #0c0e0d;
+      --panel: #131614;
+      --panel2: #181c19;
+      --fg: #d6dbd4;
+      --bright: #f3f5f1;
+      --muted: #8a928b;
+      --line: #282e29;
+      --grid: #1e231f;
+      --amber: #f2b33d;
+      --green: #7bd88f;
+      --red: #ff7a70;
+      --cyan: #6cc4d9;
+      --bar-hist: #4b544d;
+      --sans: system-ui, -apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f4f1e8;
+        --panel: #ebe7da;
+        --panel2: #e4dfd0;
+        --fg: #2a2d27;
+        --bright: #11130f;
+        --muted: #606459;
+        --line: #cfc8b5;
+        --grid: #dcd6c6;
+        --amber: #9a5800;
+        --green: #226a31;
+        --red: #b42318;
+        --cyan: #11697f;
+        --bar-hist: #9a988b;
+      }
+    }
+    text { font-family: var(--sans); fill: var(--fg); }
+    .mono { font-family: var(--mono); }
+    .title { font-size: 21px; font-weight: 700; fill: var(--bright); }
+    .sub { font-size: 13px; fill: var(--muted); }
+    .sec { font-size: 15px; font-weight: 700; fill: var(--bright); }
+    .kpi-lbl { font-size: 12.5px; fill: var(--muted); }
+    .kpi-val { font-family: var(--mono); font-size: 32px; font-weight: 700; }
+    .kpi-note { font-size: 11.5px; fill: var(--muted); }
+    .lbl { font-size: 13.5px; fill: var(--fg); }
+    .lbl-b { font-size: 13.5px; font-weight: 700; fill: var(--bright); }
+    .val { font-family: var(--mono); font-size: 13.5px; font-weight: 700; }
+    .axis { font-family: var(--mono); font-size: 11.5px; fill: var(--muted); }
+    .foot { font-size: 11.5px; fill: var(--muted); }
+    .c-cyan { fill: var(--cyan); }
+    .c-red { fill: var(--red); }
+    .c-amber { fill: var(--amber); }
+    .c-green { fill: var(--green); }
+    .c-muted { fill: var(--muted); }
+    .c-fg { fill: var(--fg); }
+  </style>
+
+  <rect width="920" height="820" rx="8" fill="var(--bg)" stroke="var(--line)" stroke-width="1"/>
+
+  <!-- Header -->
+  <text x="32" y="42" class="title">零点击搜索成为默认现实，AI 代理将商品决策空间压缩近九成</text>
+  <text x="32" y="64" class="sub">美国搜索零点击演进、AI 引流转化反转，以及生成式引擎内容策略（KDD 2024 GEO-Bench）可见度影响</text>
+  <line x1="32" y1="80" x2="888" y2="80" stroke="var(--line)" stroke-dasharray="4 4"/>
+
+  <!-- 4 KPI Cards -->
+  <g transform="translate(32, 98)">
+    <!-- Card 1 -->
+    <rect x="0" y="0" width="202" height="112" rx="6" fill="var(--panel)" stroke="var(--line)"/>
+    <rect x="0" y="0" width="202" height="3" rx="1.5" fill="var(--cyan)"/>
+    <text x="16" y="28" class="kpi-lbl">2026 年初美国零点击占比</text>
+    <text x="16" y="72" class="kpi-val c-cyan">68%</text>
+    <text x="16" y="96" class="kpi-note">超三分之二搜索无外部点击</text>
+
+    <!-- Card 2 -->
+    <rect x="218" y="0" width="202" height="112" rx="6" fill="var(--panel)" stroke="var(--line)"/>
+    <rect x="218" y="0" width="202" height="3" rx="1.5" fill="var(--red)"/>
+    <text x="234" y="28" class="kpi-lbl">AI 概览下自然第 1 位 CTR</text>
+    <text x="234" y="72" class="kpi-val c-red">-58%</text>
+    <text x="234" y="96" class="kpi-note">较 8 个月前 (-34.5%) 显著恶化</text>
+
+    <!-- Card 3 -->
+    <rect x="436" y="0" width="202" height="112" rx="6" fill="var(--panel)" stroke="var(--line)"/>
+    <rect x="436" y="0" width="202" height="3" rx="1.5" fill="var(--amber)"/>
+    <text x="452" y="28" class="kpi-lbl">Amazon 首屏决策空间压缩</text>
+    <text x="452" y="72" class="kpi-val c-amber">89.6%</text>
+    <text x="452" y="96" class="kpi-note">传统约 48 位缩减至 AI 推荐 5 位</text>
+
+    <!-- Card 4 -->
+    <rect x="654" y="0" width="202" height="112" rx="6" fill="var(--panel)" stroke="var(--line)"/>
+    <rect x="654" y="0" width="202" height="3" rx="1.5" fill="var(--green)"/>
+    <text x="670" y="28" class="kpi-lbl">AI 引流访客转化率优势</text>
+    <text x="670" y="72" class="kpi-val c-green">+42%</text>
+    <text x="670" y="96" class="kpi-note">2026 年 3 月对比其他渠道流量</text>
+  </g>
+
+  <!-- Section 1: Zero-click bar chart -->
+  <g transform="translate(32, 240)">
+    <text x="0" y="16" class="sec">美国 Google 搜索零点击率演进与 AI 界面放大效应（%）</text>
+    <!-- Legend -->
+    <rect x="620" y="5" width="11" height="11" rx="2" fill="var(--bar-hist)"/>
+    <text x="636" y="15" class="kpi-note">历史基准</text>
+    <rect x="706" y="5" width="11" height="11" rx="2" fill="var(--cyan)"/>
+    <text x="722" y="15" class="kpi-note">2026 现状</text>
+    <rect x="794" y="5" width="11" height="11" rx="2" fill="var(--amber)"/>
+    <text x="810" y="15" class="kpi-note">AI 界面放大</text>
+
+    <!-- Grid: chart x from 240 to 820 (width=580 -> 100%) -->
+    <g transform="translate(0, 36)">
+      <line x1="240" y1="0" x2="240" y2="190" stroke="var(--line)"/>
+      <line x1="356" y1="0" x2="356" y2="190" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="472" y1="0" x2="472" y2="190" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="588" y1="0" x2="588" y2="190" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="704" y1="0" x2="704" y2="190" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="820" y1="0" x2="820" y2="190" stroke="var(--grid)" stroke-dasharray="3 3"/>
+
+      <!-- Row 1: 45% -> 261 -->
+      <text x="228" y="22" text-anchor="end" class="lbl">约十年前（传统网页搜索）</text>
+      <rect x="240" y="6" width="261" height="22" rx="3" fill="var(--bar-hist)"/>
+      <text x="510" y="22" class="val c-muted">45%</text>
+
+      <!-- Row 2: 60% -> 348 -->
+      <text x="228" y="60" text-anchor="end" class="lbl">2024 年全量搜索</text>
+      <rect x="240" y="44" width="348" height="22" rx="3" fill="var(--bar-hist)"/>
+      <text x="597" y="60" class="val c-muted">60%</text>
+
+      <!-- Row 3: 68% -> 394.4 -->
+      <text x="228" y="98" text-anchor="end" class="lbl-b">2026 年初全量搜索</text>
+      <rect x="240" y="82" width="394" height="22" rx="3" fill="var(--cyan)"/>
+      <text x="643" y="98" class="val c-cyan">68%</text>
+
+      <!-- Row 4: 83% -> 481.4 -->
+      <text x="228" y="136" text-anchor="end" class="lbl">触发 AI 概览（AI Overviews）</text>
+      <rect x="240" y="120" width="481" height="22" rx="3" fill="var(--amber)" opacity="0.82"/>
+      <text x="730" y="136" class="val c-amber">83%</text>
+
+      <!-- Row 5: 93% -> 539.4 -->
+      <text x="228" y="174" text-anchor="end" class="lbl-b">Google AI Mode 对话搜索</text>
+      <rect x="240" y="158" width="539" height="22" rx="3" fill="var(--amber)"/>
+      <text x="788" y="174" class="val c-amber">93%</text>
+
+      <!-- X-axis labels -->
+      <text x="240" y="208" text-anchor="middle" class="axis">0%</text>
+      <text x="356" y="208" text-anchor="middle" class="axis">20%</text>
+      <text x="472" y="208" text-anchor="middle" class="axis">40%</text>
+      <text x="588" y="208" text-anchor="middle" class="axis">60%</text>
+      <text x="704" y="208" text-anchor="middle" class="axis">80%</text>
+      <text x="820" y="208" text-anchor="middle" class="axis">100%</text>
+    </g>
+  </g>
+
+  <line x1="32" y1="504" x2="888" y2="504" stroke="var(--line)" stroke-dasharray="4 4"/>
+
+  <!-- Section 2: Diverging bar chart KDD 2024 GEO -->
+  <g transform="translate(32, 524)">
+    <text x="0" y="16" class="sec">生成式引擎内容策略对 AI 答案可见度的影响（KDD 2024 GEO-Bench 基准上限，%）</text>
+    <rect x="658" y="5" width="11" height="11" rx="2" fill="var(--green)"/>
+    <text x="674" y="15" class="kpi-note">证据型策略增益</text>
+    <rect x="774" y="5" width="11" height="11" rx="2" fill="var(--red)"/>
+    <text x="790" y="15" class="kpi-note">堆砌惩罚</text>
+
+    <!-- Range -15% to +50% => 65 units across 580px (240..820) => 8.923 px/unit; 0% at x = 240 + 15*8.923 = 374 -->
+    <g transform="translate(0, 36)">
+      <line x1="240" y1="0" x2="240" y2="148" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="374" y1="0" x2="374" y2="148" stroke="var(--muted)" stroke-width="1.2"/>
+      <line x1="463" y1="0" x2="463" y2="148" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="552" y1="0" x2="552" y2="148" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="642" y1="0" x2="642" y2="148" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="731" y1="0" x2="731" y2="148" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="820" y1="0" x2="820" y2="148" stroke="var(--grid)" stroke-dasharray="3 3"/>
+
+      <!-- +41% => 366px -->
+      <text x="228" y="21" text-anchor="end" class="lbl">加入专家 / 用户引用语录</text>
+      <rect x="374" y="5" width="366" height="22" rx="3" fill="var(--green)"/>
+      <text x="749" y="21" class="val c-green">+41%</text>
+
+      <!-- +31% => 277px -->
+      <text x="228" y="57" text-anchor="end" class="lbl">加入具体统计与量化数据</text>
+      <rect x="374" y="41" width="277" height="22" rx="3" fill="var(--green)" opacity="0.88"/>
+      <text x="660" y="57" class="val c-green">+31%</text>
+
+      <!-- +28% => 250px -->
+      <text x="228" y="93" text-anchor="end" class="lbl">引用权威第三方来源</text>
+      <rect x="374" y="77" width="250" height="22" rx="3" fill="var(--green)" opacity="0.76"/>
+      <text x="633" y="93" class="val c-green">+28%</text>
+
+      <!-- -8% => 71px left of 374 => x=303 -->
+      <text x="228" y="129" text-anchor="end" class="lbl-b c-red">传统 SEO 关键词堆砌</text>
+      <rect x="303" y="113" width="71" height="22" rx="3" fill="var(--red)"/>
+      <text x="294" y="129" text-anchor="end" class="val c-red">-8%</text>
+
+      <!-- X-axis -->
+      <text x="240" y="166" text-anchor="middle" class="axis">-15%</text>
+      <text x="374" y="166" text-anchor="middle" class="axis">0%</text>
+      <text x="463" y="166" text-anchor="middle" class="axis">+10%</text>
+      <text x="552" y="166" text-anchor="middle" class="axis">+20%</text>
+      <text x="642" y="166" text-anchor="middle" class="axis">+30%</text>
+      <text x="731" y="166" text-anchor="middle" class="axis">+40%</text>
+      <text x="820" y="166" text-anchor="middle" class="axis">+50%</text>
+    </g>
+  </g>
+
+  <!-- Footer Box -->
+  <rect x="32" y="736" width="856" height="62" rx="6" fill="var(--panel)" stroke="var(--line)"/>
+  <text x="48" y="758" class="foot" fill="var(--fg)">核心结论：零点击与决策压缩大幅削减泛流量，但穿透对话框的留存访客转化率反超 42%；量化数据与权威引用显著提升 AI 可见度，关键词堆砌反遭惩罚。</text>
+  <text x="48" y="780" class="foot">数据来源：Brainvire (2026) · Ahrefs · Pew Research · Adobe Analytics · Aggarwal et al. (ACM KDD 2024, 10,000 条查询基准) · Workflow Labs</text>
+</svg>

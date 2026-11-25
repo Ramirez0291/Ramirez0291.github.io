@@ -96,6 +96,56 @@ function frontmatter(sourceEntries, title, description, sourceHash) {
 
 // ---------- Markdown chunks ----------
 
+/** Splits a long Markdown block on a heading pattern or line boundaries (outside fences/tables) to stay within CHUNK_CHARS. */
+function splitOversized(block) {
+  if (block.length <= CHUNK_CHARS) return [block];
+
+  const byPattern = (text, re) => {
+    const parts = [];
+    let cur = [];
+    let fence = false;
+    for (const line of text.split('\n')) {
+      if (/^\s*(```|~~~)/.test(line)) fence = !fence;
+      if (!fence && re.test(line) && cur.length > 0) {
+        parts.push(cur.join('\n'));
+        cur = [];
+      }
+      cur.push(line);
+    }
+    if (cur.length > 0) parts.push(cur.join('\n'));
+    return parts;
+  };
+
+  // First try splitting at ### headings; if any piece is still too large, split at blank lines or list items outside tables/fences.
+  const sub = byPattern(block, /^### /);
+  const refined = [];
+  for (const part of sub) {
+    if (part.length <= CHUNK_CHARS) {
+      refined.push(part);
+      continue;
+    }
+    let cur = [];
+    let curLen = 0;
+    let fence = false;
+    const lines = part.split('\n');
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      if (/^\s*(```|~~~)/.test(line)) fence = !fence;
+      const inTable = /^\s*\|/.test(line);
+      const canBreak = !fence && !inTable && (line.trim() === '' || /^\d+\.\s/.test(line) || /^#### /.test(line));
+      if (canBreak && curLen >= CHUNK_CHARS * 0.75 && cur.length > 0) {
+        refined.push(cur.join('\n'));
+        cur = [];
+        curLen = 0;
+      }
+      cur.push(line);
+      curLen += line.length + 1;
+    }
+    if (cur.length > 0) refined.push(cur.join('\n'));
+  }
+  return refined;
+}
+
 /** Cuts the body at "## " headings outside code fences, packing sections into chunks of about CHUNK_CHARS. */
 function chunks(body) {
   const sections = [];
@@ -111,11 +161,12 @@ function chunks(body) {
   }
   sections.push(current.join('\n'));
 
+  const pieces = sections.flatMap(splitOversized);
   const out = [];
-  for (const section of sections) {
+  for (const piece of pieces) {
     const last = out[out.length - 1];
-    if (last !== undefined && last.length + section.length + 1 <= CHUNK_CHARS) out[out.length - 1] = last + '\n' + section;
-    else out.push(section);
+    if (last !== undefined && last.length + piece.length + 1 <= CHUNK_CHARS) out[out.length - 1] = last + '\n' + piece;
+    else out.push(piece);
   }
   return out;
 }
@@ -282,10 +333,15 @@ async function translateMeta(lang, title, description) {
   throw new Error('could not get the title and description back as JSON');
 }
 
+const REFS_HEADING = { en: '## References', ja: '## 参考文献' };
+
 async function translateBody(lang, title, body) {
-  const parts = chunks(body);
+  const refMatch = body.match(/\n## 引用文献\n/);
+  const mainBody = refMatch ? body.slice(0, refMatch.index) : body;
+  const refsTail = refMatch ? `\n${REFS_HEADING[lang] ?? '## References'}\n` + body.slice(refMatch.index + refMatch[0].length) : '';
+  const parts = chunks(mainBody);
   const done = await Promise.all(parts.map((part, i) => translateChunk(lang, title, part, i, parts.length)));
-  return done.join('\n');
+  return done.join('\n') + refsTail;
 }
 
 // ---------- jobs ----------

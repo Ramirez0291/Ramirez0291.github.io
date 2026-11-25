@@ -1,0 +1,223 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 620" width="920" height="620" role="img" aria-labelledby="t2 d2">
+  <title id="t2">中美代理商业底层架构对比：美国双轨架构 vs 中国三轨架构</title>
+  <desc id="d2">左侧展示美国亚马逊垂直闭环与OpenAI/Google开放协议栈的双轨博弈；右侧展示中国字节生态闭环、阿里双端打通与手机终端OS级A2A协作的三轨格局</desc>
+  <style>
+    :root {
+      --bg: #0c0e0d;
+      --panel: #131614;
+      --panel2: #191d1a;
+      --fg: #d6dbd4;
+      --bright: #f3f5f1;
+      --muted: #8a928b;
+      --line: #282e29;
+      --amber: #f2b33d;
+      --green: #7bd88f;
+      --red: #ff7a70;
+      --cyan: #6cc4d9;
+      --sans: system-ui, -apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f4f1e8;
+        --panel: #ebe7da;
+        --panel2: #e2dccb;
+        --fg: #2a2d27;
+        --bright: #11130f;
+        --muted: #5d6156;
+        --line: #cfc8b5;
+        --amber: #9a5800;
+        --green: #226a31;
+        --red: #b42318;
+        --cyan: #11697f;
+      }
+    }
+    text { font-family: var(--sans); fill: var(--fg); }
+    .mono { font-family: var(--mono); }
+    .title { font-size: 20px; font-weight: 700; fill: var(--bright); }
+    .sub { font-size: 13px; fill: var(--muted); }
+    .col-h { font-size: 16px; font-weight: 700; fill: var(--bright); }
+    .track-h { font-size: 13.5px; font-weight: 700; }
+    .node-t { font-size: 13px; font-weight: 700; fill: var(--bright); }
+    .node-s { font-size: 11.5px; fill: var(--muted); }
+    .badge { font-family: var(--mono); font-size: 11px; font-weight: 700; }
+    .foot { font-size: 11.5px; fill: var(--muted); }
+    .c-amber { fill: var(--amber); }
+    .c-cyan { fill: var(--cyan); }
+    .c-green { fill: var(--green); }
+    .c-red { fill: var(--red); }
+  </style>
+
+  <defs>
+    <marker id="arr-cyan" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 1 1 L 9 5 L 1 9 z" fill="var(--cyan)"/>
+    </marker>
+    <marker id="arr-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 1 1 L 9 5 L 1 9 z" fill="var(--amber)"/>
+    </marker>
+    <marker id="arr-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 1 1 L 9 5 L 1 9 z" fill="var(--green)"/>
+    </marker>
+    <marker id="arr-muted" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 1 1 L 9 5 L 1 9 z" fill="var(--muted)"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="620" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+
+  <!-- Header -->
+  <text x="32" y="40" class="title">中美代理商业底层架构对比：开放协议围攻围城 vs 超级 App 三轨竞合</text>
+  <text x="32" y="62" class="sub">2026 年 11 月实景：美国沿开放 Web 与卡组网络分层标准化；中国围绕超级 App 流量主权分化出闭环与 OS 级 A2A 授权</text>
+  <line x1="32" y1="76" x2="888" y2="76" stroke="var(--line)" stroke-dasharray="4 4"/>
+
+  <!-- ================= LEFT HALF: US DUAL-TRACK ================= -->
+  <rect x="28" y="94" width="414" height="456" rx="8" fill="var(--panel)" stroke="var(--line)"/>
+  <text x="48" y="122" class="col-h">美国双轨架构（US Dual-Track）</text>
+  <text x="48" y="140" class="node-s">封闭垂直数据堡垒 vs. 开放三层协议栈</text>
+
+  <!-- Track US-1: Amazon Walled Garden -->
+  <rect x="44" y="156" width="182" height="330" rx="6" fill="var(--bg)" stroke="var(--amber)" stroke-width="1.5"/>
+  <rect x="44" y="156" width="182" height="28" rx="6" fill="var(--amber)" opacity="0.16"/>
+  <text x="135" y="175" text-anchor="middle" class="track-h c-amber">亚马逊垂直闭环</text>
+
+  <!-- US-1 Nodes -->
+  <rect x="56" y="198" width="158" height="58" rx="5" fill="var(--panel2)" stroke="var(--line)"/>
+  <text x="135" y="220" text-anchor="middle" class="node-t">Alexa for Shopping</text>
+  <text x="135" y="240" text-anchor="middle" class="node-s">4 亿+用户 · 对话主入口</text>
+
+  <line x1="135" y1="256" x2="135" y2="282" stroke="var(--amber)" stroke-width="1.6" marker-end="url(#arr-amber)"/>
+
+  <rect x="56" y="286" width="158" height="58" rx="5" fill="var(--panel2)" stroke="var(--line)"/>
+  <text x="135" y="308" text-anchor="middle" class="node-t">COSMO 意图图谱</text>
+  <text x="135" y="328" text-anchor="middle" class="node-s">630 万节点 · 15 类意图</text>
+
+  <line x1="135" y1="344" x2="135" y2="370" stroke="var(--amber)" stroke-width="1.6" marker-end="url(#arr-amber)"/>
+
+  <rect x="56" y="374" width="158" height="58" rx="5" fill="var(--panel2)" stroke="var(--line)"/>
+  <text x="135" y="396" text-anchor="middle" class="node-t">站内履约 / Buy for Me</text>
+  <text x="135" y="416" text-anchor="middle" class="node-s">FBA · 广告体系 · 筹建 WPG</text>
+
+  <!-- Blocked badge under US-1 -->
+  <rect x="52" y="446" width="166" height="28" rx="4" fill="var(--red)" opacity="0.16" stroke="var(--red)" stroke-width="1"/>
+  <text x="135" y="464" text-anchor="middle" class="badge c-red">封锁 47–99 款外部代理</text>
+
+  <!-- Track US-2: Open Protocol Stack -->
+  <rect x="244" y="156" width="182" height="330" rx="6" fill="var(--bg)" stroke="var(--cyan)" stroke-width="1.5"/>
+  <rect x="244" y="156" width="182" height="28" rx="6" fill="var(--cyan)" opacity="0.16"/>
+  <text x="335" y="175" text-anchor="middle" class="track-h c-cyan">开放协议三层栈</text>
+
+  <rect x="256" y="198" width="158" height="54" rx="5" fill="var(--panel2)" stroke="var(--line)"/>
+  <text x="335" y="219" text-anchor="middle" class="node-t">ChatGPT / Gemini</text>
+  <text x="335" y="238" text-anchor="middle" class="node-s">AI Mode · dots 购物代理</text>
+
+  <line x1="335" y1="252" x2="335" y2="274" stroke="var(--cyan)" stroke-width="1.6" marker-end="url(#arr-cyan)"/>
+
+  <rect x="256" y="278" width="158" height="54" rx="5" fill="var(--panel2)" stroke="var(--line)"/>
+  <text x="335" y="299" text-anchor="middle" class="node-t">ACP / UCP 发现结账层</text>
+  <text x="335" y="318" text-anchor="middle" class="node-s">Apache 2.0 · 通用购物车</text>
+
+  <line x1="335" y1="332" x2="335" y2="354" stroke="var(--cyan)" stroke-width="1.6" marker-end="url(#arr-cyan)"/>
+
+  <rect x="256" y="358" width="158" height="52" rx="5" fill="var(--panel2)" stroke="var(--line)"/>
+  <text x="335" y="379" text-anchor="middle" class="node-t">Google AI 代打电话</text>
+  <text x="335" y="397" text-anchor="middle" class="node-s">查线下库存 · 自动预约</text>
+
+  <line x1="335" y1="410" x2="335" y2="430" stroke="var(--cyan)" stroke-width="1.6" marker-end="url(#arr-cyan)"/>
+
+  <rect x="256" y="434" width="158" height="42" rx="5" fill="var(--panel2)" stroke="var(--cyan)" stroke-dasharray="3 2"/>
+  <text x="335" y="452" text-anchor="middle" class="node-t">AP2 / 卡组单次令牌</text>
+  <text x="335" y="468" text-anchor="middle" class="node-s">Stripe SPT · Visa/MC · Face ID</text>
+
+  <!-- Bottom note US -->
+  <text x="48" y="514" class="node-s">核心张力：亚马逊捍卫 686 亿美元广告帝国，封锁 Perplexity/Meta；</text>
+  <text x="48" y="532" class="node-s">OpenAI + Google + 卡组织以 Web Bot Auth 与令牌协议重构跨站底座。</text>
+
+  <!-- ================= RIGHT HALF: CHINA TRI-TRACK ================= -->
+  <rect x="462" y="94" width="430" height="456" rx="8" fill="var(--panel)" stroke="var(--line)"/>
+  <text x="482" y="122" class="col-h">中国三轨架构（China Tri-Track）</text>
+  <text x="482" y="140" class="node-s">超级 App 闭环变现 + 原生语音代打电话 + 硬件 OS 级 A2A</text>
+
+  <!-- Track CN-1: ByteDance -->
+  <rect x="476" y="156" width="128" height="330" rx="6" fill="var(--bg)" stroke="var(--amber)" stroke-width="1.4"/>
+  <rect x="476" y="156" width="128" height="28" rx="6" fill="var(--amber)" opacity="0.16"/>
+  <text x="540" y="175" text-anchor="middle" class="track-h c-amber">字节生态闭环</text>
+
+  <rect x="485" y="198" width="110" height="58" rx="5" fill="var(--panel2)" stroke="var(--line)"/>
+  <text x="540" y="220" text-anchor="middle" class="node-t">豆包 / 小豆</text>
+  <text x="540" y="239" text-anchor="middle" class="node-s">3.45 亿月活</text>
+
+  <line x1="540" y1="256" x2="540" y2="284" stroke="var(--amber)" stroke-width="1.5" marker-end="url(#arr-amber)" marker-start="url(#arr-amber)"/>
+
+  <rect x="485" y="288" width="110" height="62" rx="5" fill="var(--panel2)" stroke="var(--amber)" stroke-dasharray="3 2"/>
+  <text x="540" y="311" text-anchor="middle" class="node-t">全双工代打电话</text>
+  <text x="540" y="330" text-anchor="middle" class="node-s">Seeduplex &lt;1s</text>
+  <text x="540" y="344" text-anchor="middle" class="node-s">主动盯价补货</text>
+
+  <line x1="540" y1="350" x2="540" y2="378" stroke="var(--amber)" stroke-width="1.5" marker-end="url(#arr-amber)"/>
+
+  <rect x="485" y="382" width="110" height="64" rx="5" fill="var(--panel2)" stroke="var(--line)"/>
+  <text x="540" y="404" text-anchor="middle" class="node-t">抖音商城闭环</text>
+  <text x="540" y="422" text-anchor="middle" class="node-s">特定渠道 ~10%</text>
+  <text x="540" y="437" text-anchor="middle" class="node-s">直播间承接</text>
+
+  <text x="540" y="472" text-anchor="middle" class="badge c-amber">代理人模式</text>
+
+  <!-- Track CN-2: Alibaba -->
+  <rect x="613" y="156" width="128" height="330" rx="6" fill="var(--bg)" stroke="var(--cyan)" stroke-width="1.4"/>
+  <rect x="613" y="156" width="128" height="28" rx="6" fill="var(--cyan)" opacity="0.16"/>
+  <text x="677" y="175" text-anchor="middle" class="track-h c-cyan">阿里双端打通</text>
+
+  <rect x="622" y="198" width="110" height="58" rx="5" fill="var(--panel2)" stroke="var(--line)"/>
+  <text x="677" y="220" text-anchor="middle" class="node-t">通义千问</text>
+  <text x="677" y="239" text-anchor="middle" class="node-s">1.66 亿月活</text>
+
+  <line x1="677" y1="256" x2="677" y2="284" stroke="var(--cyan)" stroke-width="1.5" marker-end="url(#arr-cyan)" marker-start="url(#arr-cyan)"/>
+
+  <rect x="622" y="288" width="110" height="62" rx="5" fill="var(--panel2)" stroke="var(--cyan)" stroke-dasharray="3 2"/>
+  <text x="677" y="311" text-anchor="middle" class="node-t">支付宝 ACT</text>
+  <text x="677" y="330" text-anchor="middle" class="node-s">放开风控路线</text>
+  <text x="677" y="344" text-anchor="middle" class="node-s">规则内连主账户</text>
+
+  <line x1="677" y1="350" x2="677" y2="378" stroke="var(--cyan)" stroke-width="1.5" marker-end="url(#arr-cyan)"/>
+
+  <rect x="622" y="382" width="110" height="64" rx="5" fill="var(--panel2)" stroke="var(--line)"/>
+  <text x="677" y="404" text-anchor="middle" class="node-t">淘宝 / 天猫</text>
+  <text x="677" y="422" text-anchor="middle" class="node-s">40 亿商品库</text>
+  <text x="677" y="437" text-anchor="middle" class="node-s">多品对比清单</text>
+
+  <text x="677" y="472" text-anchor="middle" class="badge c-cyan">透明导购模式</text>
+
+  <!-- Track CN-3: OS A2A -->
+  <rect x="750" y="156" width="128" height="330" rx="6" fill="var(--bg)" stroke="var(--green)" stroke-width="1.4"/>
+  <rect x="750" y="156" width="128" height="28" rx="6" fill="var(--green)" opacity="0.16"/>
+  <text x="814" y="175" text-anchor="middle" class="track-h c-green">终端 OS 协作</text>
+
+  <rect x="759" y="198" width="110" height="58" rx="5" fill="var(--panel2)" stroke="var(--line)"/>
+  <text x="814" y="219" text-anchor="middle" class="node-t">小艺 / YOYO</text>
+  <text x="814" y="238" text-anchor="middle" class="node-s">超级小爱 · 端侧</text>
+
+  <line x1="814" y1="256" x2="814" y2="284" stroke="var(--green)" stroke-width="1.5" marker-end="url(#arr-green)" marker-start="url(#arr-green)"/>
+
+  <rect x="759" y="288" width="110" height="62" rx="5" fill="var(--panel2)" stroke="var(--green)" stroke-dasharray="3 2"/>
+  <text x="814" y="311" text-anchor="middle" class="node-t">A2A 双重授权</text>
+  <text x="814" y="330" text-anchor="middle" class="node-s">用户 + 应用授权</text>
+  <text x="814" y="344" text-anchor="middle" class="node-s">呼叫原生小程序</text>
+
+  <line x1="814" y1="350" x2="814" y2="378" stroke="var(--green)" stroke-width="1.5" marker-end="url(#arr-green)"/>
+
+  <rect x="759" y="382" width="110" height="52" rx="5" fill="var(--panel2)" stroke="var(--line)"/>
+  <text x="814" y="403" text-anchor="middle" class="node-t">微信 / 专属卡</text>
+  <text x="814" y="421" text-anchor="middle" class="node-s">预充限额隔离</text>
+
+  <!-- Blocked GUI badge -->
+  <rect x="758" y="446" width="112" height="28" rx="4" fill="var(--red)" opacity="0.16" stroke="var(--red)" stroke-width="1"/>
+  <text x="814" y="464" text-anchor="middle" class="badge c-red">155 App 拒 GUI</text>
+
+  <!-- Bottom note CN -->
+  <text x="482" y="514" class="node-s">核心张力：豆包手机 GUI 模拟点击遭 155 款主流 App 联合拦截；</text>
+  <text x="482" y="532" class="node-s">超级 App 转向手机 OS 级 A2A 授权，京东/美团以供应链与结盟固防。</text>
+
+  <!-- Footer -->
+  <text x="32" y="578" class="foot">注：京东（东东 / JoyInside / 狼族机器人）与美团（小美接入腾讯元宝）在自有履约壁垒上走“双轮驱动”路线。</text>
+  <text x="32" y="598" class="foot">信源综合：Amazon · OpenAI · Google UCP/AP2 · 36氪 · 亿邦动力 · 观察者网 · 钛媒体（截至 2026 年 11 月 25 日）</text>
+</svg>

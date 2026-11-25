@@ -1,0 +1,198 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 820" width="920" height="820" role="img" aria-labelledby="t4 d4">
+  <title id="t4">消费者乐于让AI比价却拒绝交出钱包：近半数测试失误中超半数仍强行错买</title>
+  <desc id="d4">美国消费者AI购物环节渗透率断崖、Visa 2026年11月22款模型基准测试结果分布，以及单次失误弃用率调研</desc>
+  <style>
+    :root {
+      --bg: #0c0e0d;
+      --panel: #131614;
+      --panel2: #181c19;
+      --fg: #d6dbd4;
+      --bright: #f3f5f1;
+      --muted: #8a928b;
+      --line: #282e29;
+      --grid: #1e231f;
+      --amber: #f2b33d;
+      --green: #7bd88f;
+      --red: #ff7a70;
+      --cyan: #6cc4d9;
+      --gray-bar: #5b635d;
+      --on-bar: #0c0e0d;
+      --sans: system-ui, -apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f4f1e8;
+        --panel: #ebe7da;
+        --panel2: #e4dfd0;
+        --fg: #2a2d27;
+        --bright: #11130f;
+        --muted: #5d6156;
+        --line: #cfc8b5;
+        --grid: #dcd6c6;
+        --amber: #9a5800;
+        --green: #226a31;
+        --red: #b42318;
+        --cyan: #11697f;
+        --gray-bar: #8c8a7e;
+        --on-bar: #ffffff;
+      }
+    }
+    :where(text) { font-family: var(--sans); fill: var(--fg); }
+    .mono { font-family: var(--mono); }
+    .title { font-size: 20px; font-weight: 700; fill: var(--bright); }
+    .sub { font-size: 13px; fill: var(--muted); }
+    .sec { font-size: 15px; font-weight: 700; fill: var(--bright); }
+    .lbl { font-size: 13.5px; fill: var(--fg); }
+    .val { font-family: var(--mono); font-size: 13.5px; font-weight: 700; }
+    .axis { font-family: var(--mono); font-size: 11.5px; fill: var(--muted); }
+    .kpi-val { font-family: var(--mono); font-size: 30px; font-weight: 700; fill: var(--red); }
+    .kpi-lbl { font-size: 13px; font-weight: 700; fill: var(--bright); }
+    .kpi-note { font-size: 11.5px; fill: var(--muted); }
+    .foot { font-size: 11.5px; fill: var(--muted); }
+    .pill { font-size: 12px; font-weight: 700; fill: var(--amber); }
+    .c-cyan { fill: var(--cyan); }
+    .c-amber { fill: var(--amber); }
+    .c-green { fill: var(--green); }
+    .c-red { fill: var(--red); }
+    .c-blue { fill: var(--blue); }
+    .c-bright { fill: var(--bright); }
+    .c-muted { fill: var(--muted); }
+    .c-fg { fill: var(--fg); }
+    .c-onbar { fill: var(--on-bar, #0c0e0d); }
+  </style>
+
+  <rect width="920" height="820" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+
+  <!-- Header -->
+  <text x="32" y="42" class="title">消费者乐于让 AI 比价却拒绝交出钱包：近半数测试失误中超半数仍强行错买</text>
+  <text x="32" y="64" class="sub">美国网购行为渗透率断崖（2026 实测）与 Visa 代理商业基准测试（2026 年 11 月，22 款 AI 模型 × 15 项任务）</text>
+  <line x1="32" y1="80" x2="888" y2="80" stroke="var(--line)" stroke-dasharray="4 4"/>
+
+  <!-- Section 1: Consumer Funnel Cliff -->
+  <g transform="translate(32, 102)">
+    <text x="0" y="16" class="sec">美国消费者 AI 购物环节渗透率断崖（2026 实测，%）</text>
+    <rect x="572" y="5" width="11" height="11" rx="2" fill="var(--cyan)"/>
+    <text x="588" y="15" class="kpi-note">调研与加购</text>
+    <rect x="682" y="5" width="11" height="11" rx="2" fill="var(--amber)"/>
+    <text x="698" y="15" class="kpi-note">结账与自动购买</text>
+
+    <!-- Chart x: 245 to 805 (width=560 -> 50% scale => 11.2 px/%) -->
+    <g transform="translate(0, 36)">
+      <line x1="245" y1="0" x2="245" y2="254" stroke="var(--line)"/>
+      <line x1="357" y1="0" x2="357" y2="254" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="469" y1="0" x2="469" y2="254" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="581" y1="0" x2="581" y2="254" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="693" y1="0" x2="693" y2="254" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="805" y1="0" x2="805" y2="254" stroke="var(--grid)" stroke-dasharray="3 3"/>
+
+      <!-- 48.7% -> 545.4 -->
+      <text x="232" y="21" text-anchor="end" class="lbl">跨零售商比价与功能对比</text>
+      <rect x="245" y="5" width="545" height="22" rx="3" fill="var(--cyan)"/>
+      <text x="798" y="21" class="val c-cyan">48.7%</text>
+
+      <!-- 39.2% -> 439 -->
+      <text x="232" y="57" text-anchor="end" class="lbl">AI 压缩汇总商品评论</text>
+      <rect x="245" y="41" width="439" height="22" rx="3" fill="var(--cyan)" opacity="0.86"/>
+      <text x="692" y="57" class="val c-cyan">39.2%</text>
+
+      <!-- 14.6% -> 163.5 -->
+      <text x="232" y="93" text-anchor="end" class="lbl">AI 代理选品并装配购物车</text>
+      <rect x="245" y="77" width="164" height="22" rx="3" fill="var(--cyan)" opacity="0.68"/>
+      <text x="418" y="93" class="val c-cyan">14.6%</text>
+
+      <!-- Approval Cliff Divider -->
+      <line x1="16" y1="122" x2="848" y2="122" stroke="var(--amber)" stroke-width="1.3" stroke-dasharray="6 4"/>
+      <rect x="255" y="109" width="380" height="26" rx="4" fill="var(--bg)" stroke="var(--amber)" stroke-width="1"/>
+      <text x="445" y="126" text-anchor="middle" class="pill">审批断崖：选品加购 14.6% → 审批结账 6.8%（支付信任鸿沟）</text>
+
+      <!-- 6.8% -> 76 -->
+      <text x="232" y="165" text-anchor="end" class="lbl">经消费者审批的代理结账</text>
+      <rect x="245" y="149" width="76" height="22" rx="3" fill="var(--amber)"/>
+      <text x="330" y="165" class="val c-amber">6.8%</text>
+
+      <!-- 3.4% -> 38 -->
+      <text x="232" y="201" text-anchor="end" class="lbl">定时或降价触发自动复购</text>
+      <rect x="245" y="185" width="38" height="22" rx="3" fill="var(--amber)" opacity="0.84"/>
+      <text x="292" y="201" class="val c-amber">3.4%</text>
+
+      <!-- 1.3% -> 15 -->
+      <text x="232" y="237" text-anchor="end" class="lbl">无审批环节的全自动购买</text>
+      <rect x="245" y="221" width="15" height="22" rx="3" fill="var(--red)"/>
+      <text x="269" y="237" class="val c-red">1.3%</text>
+
+      <!-- X Axis -->
+      <text x="245" y="272" text-anchor="middle" class="axis">0%</text>
+      <text x="357" y="272" text-anchor="middle" class="axis">10%</text>
+      <text x="469" y="272" text-anchor="middle" class="axis">20%</text>
+      <text x="581" y="272" text-anchor="middle" class="axis">30%</text>
+      <text x="693" y="272" text-anchor="middle" class="axis">40%</text>
+      <text x="805" y="272" text-anchor="middle" class="axis">50%</text>
+    </g>
+  </g>
+
+  <line x1="32" y1="426" x2="888" y2="426" stroke="var(--line)" stroke-dasharray="4 4"/>
+
+  <!-- Section 2: Visa Benchmark 100% Stacked Bar -->
+  <g transform="translate(32, 448)">
+    <text x="0" y="16" class="sec">Visa 2026 年 11 月代理商业基准测试结果分布（22 款 AI 模型 × 15 项购物任务，%）</text>
+
+    <!-- Bracket annotations above bar (width=856) -->
+    <!-- 57.2% = 489.6px; 19.7% = 168.6px; 23.1% = 197.7px -->
+    <text x="0" y="44" class="kpi-note c-cyan">买对商品（57.2%）</text>
+    <text x="673" y="42" text-anchor="middle" class="kpi-note c-red" font-weight="700">总失误率 42.8%（其中 54% 仍强行错买）</text>
+    <polyline points="492,50 492,46 856,46 856,50" fill="none" stroke="var(--red)" stroke-width="1.2"/>
+
+    <!-- Stacked bar -->
+    <rect x="0" y="54" width="488" height="44" rx="4" fill="var(--cyan)"/>
+    <text x="244" y="81" text-anchor="middle" class="val c-onbar">57.2%</text>
+
+    <rect x="492" y="54" width="166" height="44" rx="4" fill="var(--gray-bar)"/>
+    <text x="575" y="81" text-anchor="middle" class="val" fill="#ffffff">19.7%</text>
+
+    <rect x="662" y="54" width="194" height="44" rx="4" fill="var(--red)"/>
+    <text x="759" y="81" text-anchor="middle" class="val c-onbar">23.1%</text>
+
+    <!-- Legend row -->
+    <rect x="0" y="112" width="11" height="11" rx="2" fill="var(--cyan)"/>
+    <text x="17" y="122" class="kpi-note">测试通过（买对商品） 57.2%</text>
+
+    <rect x="218" y="112" width="11" height="11" rx="2" fill="var(--gray-bar)"/>
+    <text x="235" y="122" class="kpi-note">失误但未下单（中止/未扣款） 19.7%</text>
+
+    <rect x="488" y="112" width="11" height="11" rx="2" fill="var(--red)"/>
+    <text x="505" y="122" class="kpi-note c-red">失误且强行买错商品（42.8% × 54%） 23.1%</text>
+
+    <!-- Reliability strip -->
+    <rect x="0" y="138" width="856" height="32" rx="5" fill="var(--panel)" stroke="var(--line)"/>
+    <text x="14" y="158" class="kpi-note">可靠性补充：连续三次尝试全部稳定通过率仅 <tspan class="mono c-bright" font-weight="700">34.2%</tspan>；最高分模型 <tspan class="mono c-green" font-weight="700">82.2%</tspan>（Meta Muse Wonder），最低分 <tspan class="mono c-red" font-weight="700">28.9%</tspan>（本次测试未含真实支付与清算环节）。</text>
+  </g>
+
+  <!-- Section 3: 3 Abandonment Cards -->
+  <g transform="translate(32, 636)">
+    <!-- Card 1 -->
+    <rect x="0" y="0" width="274" height="96" rx="6" fill="var(--panel)" stroke="var(--red)" stroke-width="1"/>
+    <rect x="0" y="0" width="4" height="96" rx="2" fill="var(--red)"/>
+    <text x="18" y="38" class="kpi-val">60%</text>
+    <text x="18" y="62" class="kpi-lbl">英国单次失误即弃用 AI 代理</text>
+    <text x="18" y="82" class="kpi-note">ACI 英国消费者调研</text>
+
+    <!-- Card 2 -->
+    <rect x="291" y="0" width="274" height="96" rx="6" fill="var(--panel)" stroke="var(--red)" stroke-width="1"/>
+    <rect x="291" y="0" width="4" height="96" rx="2" fill="var(--red)"/>
+    <text x="309" y="38" class="kpi-val">74%</text>
+    <text x="309" y="62" class="kpi-lbl">美国买错商品即停用 AI 购物</text>
+    <text x="309" y="82" class="kpi-note">Synchrony 2026 年 5 月调研</text>
+
+    <!-- Card 3 -->
+    <rect x="582" y="0" width="274" height="96" rx="6" fill="var(--panel)" stroke="var(--red)" stroke-width="1"/>
+    <rect x="582" y="0" width="4" height="96" rx="2" fill="var(--red)"/>
+    <text x="600" y="38" class="kpi-val">44%</text>
+    <text x="600" y="62" class="kpi-lbl">AI 出错后连带抛弃该零售商</text>
+    <text x="600" y="82" class="kpi-note">ClickPost 电商基准汇总</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="32" y="766" class="foot">实证解读：2026 Q3 AI 代理仅完成美国电商总订单的 0.68%。在错买率高达 23.1% 的现实下，AI 极速组单 + 人类生物识别审批（HITL）才是近期最优路径。</text>
+  <text x="32" y="788" class="foot">数据来源：First Page Sage (2026.10) · Synchrony (2026.05) · Visa Agentic Commerce Benchmark (2026.11) · BeaconSpec · ACI · ClickPost</text>
+</svg>

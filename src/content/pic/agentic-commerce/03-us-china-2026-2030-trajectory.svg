@@ -1,0 +1,263 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 670" width="920" height="670" role="img" aria-labelledby="t3 d3">
+  <title id="t3">2026–2030年中美电商AI参与率、HITL代理结账与标品自动补货演进曲线对比</title>
+  <desc id="d3">对比2026实测基线、2028拐点推演与2030成熟期推演下，中美L1–L2 AI深度参与GMV、L3人类确认代理结账与标品耗材自动补货的区间演进，并对比两国自动补货商业物种差异</desc>
+  <style>
+    :root {
+      --bg: #0c0e0d;
+      --panel: #131614;
+      --panel2: #181c19;
+      --fg: #d6dbd4;
+      --bright: #f3f5f1;
+      --muted: #8a928b;
+      --line: #282e29;
+      --grid: #1e231f;
+      --amber: #f2b33d;
+      --green: #7bd88f;
+      --red: #ff7a70;
+      --cyan: #6cc4d9;
+      --sans: system-ui, -apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f4f1e8;
+        --panel: #ebe7da;
+        --panel2: #e4dfd0;
+        --fg: #2a2d27;
+        --bright: #11130f;
+        --muted: #5d6156;
+        --line: #cfc8b5;
+        --grid: #dcd6c6;
+        --amber: #9a5800;
+        --green: #226a31;
+        --red: #b42318;
+        --cyan: #11697f;
+      }
+    }
+    :where(text) { font-family: var(--sans); fill: var(--fg); }
+    .mono { font-family: var(--mono); }
+    .title { font-size: 20px; font-weight: 700; fill: var(--bright); }
+    .sub { font-size: 13px; fill: var(--muted); }
+    .p-title { font-size: 14px; font-weight: 700; fill: var(--bright); }
+    .p-sub { font-size: 11.5px; fill: var(--muted); }
+    .axis { font-family: var(--mono); font-size: 11px; fill: var(--muted); }
+    .val { font-family: var(--mono); font-size: 11.5px; font-weight: 700; }
+    .card-h { font-size: 14px; font-weight: 700; }
+    .card-p { font-size: 12px; fill: var(--fg); }
+    .foot { font-size: 11.5px; fill: var(--muted); }
+    .c-cyan { fill: var(--cyan); }
+    .c-amber { fill: var(--amber); }
+    .c-green { fill: var(--green); }
+    .c-red { fill: var(--red); }
+    .c-blue { fill: var(--blue); }
+    .c-bright { fill: var(--bright); }
+    .c-muted { fill: var(--muted); }
+    .c-fg { fill: var(--fg); }
+    .c-onbar { fill: var(--on-bar, #0c0e0d); }
+  </style>
+
+  <rect width="920" height="670" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+
+  <!-- Header -->
+  <text x="32" y="40" class="title">2026–2030 中美电商三层 AI 渗透率演进推演与“自动补货双物种”</text>
+  <text x="32" y="62" class="sub">折线标示推演区间中值，阴影带表示上下界（% 占各国电商大盘或细分品类）；2026 为实测基线，2028/2030 为综合推演</text>
+
+  <!-- Legend -->
+  <g transform="translate(32, 82)">
+    <line x1="0" y1="6" x2="24" y2="6" stroke="var(--cyan)" stroke-width="3"/>
+    <circle cx="12" cy="6" r="4" fill="var(--cyan)"/>
+    <text x="32" y="10" class="p-sub c-bright">美国（US）</text>
+
+    <line x1="130" y1="6" x2="154" y2="6" stroke="var(--amber)" stroke-width="3"/>
+    <circle cx="142" cy="6" r="4" fill="var(--amber)"/>
+    <text x="162" y="10" class="p-sub c-bright">中国（China）</text>
+
+    <line x1="278" y1="6" x2="302" y2="6" stroke="var(--green)" stroke-width="2" stroke-dasharray="5 3"/>
+    <text x="310" y="10" class="p-sub c-green">2B 参照线：领先企业间采无接触下单率 45–60% → 75–85%+</text>
+  </g>
+
+  <!-- 3 Small-Multiple Panels: each width=272, height=310, y=108 -->
+  <!-- Panel 1: L1-L2 AI Influenced GMV (Y scale 0..80% -> y=268..78, height=190 => 2.375 px/%) -->
+  <g transform="translate(32, 108)">
+    <rect width="274" height="316" rx="6" fill="var(--panel)" stroke="var(--line)"/>
+    <text x="16" y="26" class="p-title">L1–L2：AI 深度参与 / 影响 GMV</text>
+    <text x="16" y="44" class="p-sub">中国借超级 App 原生内嵌保持领先</text>
+
+    <!-- Grid lines: 0%, 20%, 40%, 60%, 80% -->
+    <g>
+      <!-- y(v) = 266 - v * 2.35 -->
+      <line x1="42" y1="266" x2="254" y2="266" stroke="var(--line)"/>
+      <line x1="42" y1="219" x2="254" y2="219" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="42" y1="172" x2="254" y2="172" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="42" y1="125" x2="254" y2="125" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="42" y1="78" x2="254" y2="78" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <text x="36" y="270" text-anchor="end" class="axis">0%</text>
+      <text x="36" y="223" text-anchor="end" class="axis">20%</text>
+      <text x="36" y="176" text-anchor="end" class="axis">40%</text>
+      <text x="36" y="129" text-anchor="end" class="axis">60%</text>
+      <text x="36" y="82" text-anchor="end" class="axis">80%</text>
+    </g>
+
+    <!-- X points: 2026=62, 2028=152, 2030=242 -->
+    <!-- CN band: 2026(15-22), 2028(35-48), 2030(55-68) -> top: 214.3, 153.2, 106.2; bot: 230.8, 183.8, 136.8 -->
+    <polygon points="62,214 152,153 242,106 242,137 152,184 62,231" fill="var(--amber)" opacity="0.16"/>
+    <!-- US band: 2026(12-18), 2028(28-38), 2030(45-55) -> top: 223.7, 176.7, 136.8; bot: 237.8, 200.2, 160.3 -->
+    <polygon points="62,224 152,177 242,137 242,160 152,200 62,238" fill="var(--cyan)" opacity="0.16"/>
+
+    <!-- CN mid: 18.5->223, 41.5->168, 61.5->121 -->
+    <polyline points="62,223 152,168 242,121" fill="none" stroke="var(--amber)" stroke-width="2.6"/>
+    <circle cx="62" cy="223" r="4" fill="var(--amber)"/>
+    <circle cx="152" cy="168" r="4" fill="var(--amber)"/>
+    <circle cx="242" cy="121" r="4.5" fill="var(--amber)"/>
+
+    <!-- US mid: 15->231, 33->188, 50->149 -->
+    <polyline points="62,231 152,188 242,149" fill="none" stroke="var(--cyan)" stroke-width="2.6"/>
+    <circle cx="62" cy="231" r="4" fill="var(--cyan)"/>
+    <circle cx="152" cy="188" r="4" fill="var(--cyan)"/>
+    <circle cx="242" cy="149" r="4.5" fill="var(--cyan)"/>
+
+    <!-- Labels -->
+    <text x="72" y="207" text-anchor="middle" class="val c-amber">15–22%</text>
+    <text x="148" y="147" text-anchor="middle" class="val c-amber">35–48%</text>
+    <text x="234" y="100" text-anchor="middle" class="val c-amber">55–68%</text>
+
+    <text x="72" y="253" text-anchor="middle" class="val c-cyan">12–18%</text>
+    <text x="158" y="213" text-anchor="middle" class="val c-cyan">28–38%</text>
+    <text x="234" y="175" text-anchor="middle" class="val c-cyan">45–55%</text>
+
+    <!-- X axis -->
+    <text x="62" y="286" text-anchor="middle" class="axis">2026</text>
+    <text x="152" y="286" text-anchor="middle" class="axis">2028</text>
+    <text x="242" y="286" text-anchor="middle" class="axis">2030</text>
+    <text x="137" y="304" text-anchor="middle" class="p-sub">调研比价 + 评论汇总 + 对话种草</text>
+  </g>
+
+  <!-- Panel 2: L3 HITL Agent Checkout (Y scale 0..30% -> y=266..78, height=188 => 6.267 px/%) -->
+  <g transform="translate(323, 108)">
+    <rect width="274" height="316" rx="6" fill="var(--panel)" stroke="var(--line)"/>
+    <text x="16" y="26" class="p-title">L3：Agent 组单 + 人类确认结账</text>
+    <text x="16" y="44" class="p-sub">HITL 主流成交层（另：L4 全自动 &lt;12%）</text>
+
+    <!-- Grid lines: 0%, 10%, 20%, 30% -->
+    <g>
+      <!-- y(v) = 266 - v * 6.25 -->
+      <line x1="42" y1="266" x2="254" y2="266" stroke="var(--line)"/>
+      <line x1="42" y1="203.5" x2="254" y2="203.5" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="42" y1="141" x2="254" y2="141" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="42" y1="78.5" x2="254" y2="78.5" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <text x="36" y="270" text-anchor="end" class="axis">0%</text>
+      <text x="36" y="207" text-anchor="end" class="axis">10%</text>
+      <text x="36" y="145" text-anchor="end" class="axis">20%</text>
+      <text x="36" y="82" text-anchor="end" class="axis">30%</text>
+    </g>
+
+    <!-- CN L3 band: 2026(0.5-1.2), 2028(6-11), 2030(15-22) -> top: 258.5, 197.3, 128.5; bot: 262.9, 228.5, 172.3 -->
+    <polygon points="62,258 152,197 242,128 242,172 152,229 62,263" fill="var(--amber)" opacity="0.16"/>
+    <!-- US L3 band: 2026(0.7-1.5), 2028(5-9), 2030(12-20) -> top: 256.6, 209.8, 141; bot: 261.6, 234.8, 191 -->
+    <polygon points="62,257 152,210 242,141 242,191 152,235 62,262" fill="var(--cyan)" opacity="0.16"/>
+
+    <!-- CN mid: 0.85->261, 8.5->213, 18.5->150 -->
+    <polyline points="62,261 152,213 242,150" fill="none" stroke="var(--amber)" stroke-width="2.6"/>
+    <circle cx="62" cy="261" r="4" fill="var(--amber)"/>
+    <circle cx="152" cy="213" r="4" fill="var(--amber)"/>
+    <circle cx="242" cy="150" r="4.5" fill="var(--amber)"/>
+
+    <!-- US mid: 1.1->259, 7->222, 16->166 -->
+    <polyline points="62,259 152,222 242,166" fill="none" stroke="var(--cyan)" stroke-width="2.6"/>
+    <circle cx="62" cy="259" r="4" fill="var(--cyan)"/>
+    <circle cx="152" cy="222" r="4" fill="var(--cyan)"/>
+    <circle cx="242" cy="166" r="4.5" fill="var(--cyan)"/>
+
+    <!-- Labels -->
+    <text x="78" y="246" text-anchor="middle" class="val c-muted">~1%</text>
+    <text x="144" y="191" text-anchor="middle" class="val c-amber">6–11%</text>
+    <text x="234" y="121" text-anchor="middle" class="val c-amber">15–22%</text>
+
+    <text x="160" y="249" text-anchor="middle" class="val c-cyan">5–9%</text>
+    <text x="234" y="206" text-anchor="middle" class="val c-cyan">12–20%</text>
+
+    <!-- X axis -->
+    <text x="62" y="286" text-anchor="middle" class="axis">2026</text>
+    <text x="152" y="286" text-anchor="middle" class="axis">2028</text>
+    <text x="242" y="286" text-anchor="middle" class="axis">2030</text>
+    <text x="137" y="304" text-anchor="middle" class="p-sub">L4 全自动 2030 仅 美 6–12% / 中 4–9%</text>
+  </g>
+
+  <!-- Panel 3: Consumables Agent Replenishment (Y scale 0..60% -> y=266..78, height=188 => 3.133 px/%) -->
+  <g transform="translate(614, 108)">
+    <rect width="274" height="316" rx="6" fill="var(--panel)" stroke="var(--line)"/>
+    <text x="16" y="26" class="p-title">核心细分：标品耗材自动补货</text>
+    <text x="16" y="44" class="p-sub">最早跑通 L4 级复购的黄金切口</text>
+
+    <!-- Grid lines: 0%, 20%, 40%, 60% -->
+    <g>
+      <!-- y(v) = 266 - v * 3.133 -->
+      <line x1="42" y1="266" x2="254" y2="266" stroke="var(--line)"/>
+      <line x1="42" y1="203" x2="254" y2="203" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="42" y1="141" x2="254" y2="141" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <line x1="42" y1="78" x2="254" y2="78" stroke="var(--grid)" stroke-dasharray="3 3"/>
+      <text x="36" y="270" text-anchor="end" class="axis">0%</text>
+      <text x="36" y="207" text-anchor="end" class="axis">20%</text>
+      <text x="36" y="145" text-anchor="end" class="axis">40%</text>
+      <text x="36" y="82" text-anchor="end" class="axis">60%</text>
+    </g>
+
+    <!-- US band: 2026(3-5), 2028(15-22), 2030(30-45) -> top: 250, 197, 125; bot: 257, 219, 172 -->
+    <polygon points="62,250 152,197 242,125 242,172 152,219 62,257" fill="var(--cyan)" opacity="0.18"/>
+    <!-- CN band: 2026(1-3), 2028(10-18), 2030(20-35) -> top: 257, 210, 156; bot: 263, 235, 203 -->
+    <polygon points="62,257 152,210 242,156 242,203 152,235 62,263" fill="var(--amber)" opacity="0.16"/>
+
+    <!-- US mid: 4->253, 18.5->208, 37.5->149 -->
+    <polyline points="62,253 152,208 242,149" fill="none" stroke="var(--cyan)" stroke-width="2.6"/>
+    <circle cx="62" cy="253" r="4" fill="var(--cyan)"/>
+    <circle cx="152" cy="208" r="4" fill="var(--cyan)"/>
+    <circle cx="242" cy="149" r="4.5" fill="var(--cyan)"/>
+
+    <!-- CN mid: 2->260, 14->222, 27.5->180 -->
+    <polyline points="62,260 152,222 242,180" fill="none" stroke="var(--amber)" stroke-width="2.6"/>
+    <circle cx="62" cy="260" r="4" fill="var(--amber)"/>
+    <circle cx="152" cy="222" r="4" fill="var(--amber)"/>
+    <circle cx="242" cy="180" r="4.5" fill="var(--amber)"/>
+
+    <!-- Labels -->
+    <text x="70" y="242" text-anchor="middle" class="val c-cyan">3–5%</text>
+    <text x="148" y="190" text-anchor="middle" class="val c-cyan">15–22%</text>
+    <text x="234" y="118" text-anchor="middle" class="val c-cyan">30–45%</text>
+
+    <text x="158" y="250" text-anchor="middle" class="val c-amber">10–18%</text>
+    <text x="234" y="218" text-anchor="middle" class="val c-amber">20–35%</text>
+
+    <!-- X axis -->
+    <text x="62" y="286" text-anchor="middle" class="axis">2026</text>
+    <text x="152" y="286" text-anchor="middle" class="axis">2028</text>
+    <text x="242" y="286" text-anchor="middle" class="axis">2030</text>
+    <text x="137" y="304" text-anchor="middle" class="p-sub">美国由 Subscribe &amp; Save 平滑升维</text>
+  </g>
+
+  <!-- Bottom Two-Species Comparison Cards -->
+  <g transform="translate(32, 444)">
+    <!-- US Species -->
+    <rect x="0" y="0" width="420" height="162" rx="6" fill="var(--panel)" stroke="var(--cyan)" stroke-width="1.2"/>
+    <rect x="0" y="0" width="4" height="162" rx="2" fill="var(--cyan)"/>
+    <text x="18" y="28" class="card-h c-cyan">美国物种：计划经济升级版（Subscribe &amp; Save 2.0）</text>
+    <text x="18" y="54" class="card-p">• 土壤：家庭仓储充裕 + 传统定期购已占头部快消营收 20%–35%+</text>
+    <text x="18" y="78" class="card-p">• 痛点：消除静态日历订阅带来的“囤爆或断货”摩擦</text>
+    <text x="18" y="102" class="card-p">• 触发链：消耗周期估算 → IoT 耗材遥测 → AQI 等外部事件 API</text>
+    <text x="18" y="126" class="card-p">• 形态：搭配降价条件自动下单，将货架复购变为静默管道水流</text>
+    <text x="18" y="148" class="p-sub">代表：Amazon Alexa 条件补货 · 博世/滤芯 IoT 联动</text>
+
+    <!-- CN Species -->
+    <rect x="436" y="0" width="420" height="162" rx="6" fill="var(--panel)" stroke="var(--amber)" stroke-width="1.2"/>
+    <rect x="436" y="0" width="4" height="162" rx="2" fill="var(--amber)"/>
+    <text x="454" y="28" class="card-h c-amber">中国物种：即时零售 × 算优惠券机器</text>
+    <text x="454" y="54" class="card-p">• 土壤：城市居住紧凑 + 30 分钟小时达高度发达 + 讨厌买贵</text>
+    <text x="454" y="78" class="card-p">• 痛点：厌烦跨店满减、百亿补贴与直播间机制的复杂算术</text>
+    <text x="454" y="102" class="card-p">• 触发链：余量倒推 → 算尽全网隐蔽补贴最优解 → 触发小时达</text>
+    <text x="454" y="126" class="card-p">• 形态：配合 AI 专属卡/ACT 授权，高频、小额、即时、极度比价</text>
+    <text x="454" y="148" class="p-sub">代表：字节小豆猫粮余量提醒 · 淘宝千问 AI 算优惠 + 闪购</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="32" y="634" class="foot">数据基线与推演依据：First Page Sage (2026 Q3) · eMarketer · Forrester · Morgan Stanley · Bain · McKinsey · 国家统计局 · Amazon Seller Central · Gartner</text>
+  <text x="32" y="652" class="foot">注：本图 2028 与 2030 年数值为基于截至 2026 年 11 月协议进度与品类结构的区间推演，非确定性预测。</text>
+</svg>

@@ -1,0 +1,195 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 560" width="920" height="560" role="img" aria-labelledby="t6 d6">
+  <title id="t6">2026年Amazon四类交互表面与三层排序栈耦合架构</title>
+  <desc id="d6">左侧为READ结构化读取、WATCH视觉多模态、TRAIN转化训练与VERIFY事实校验四类交互表面；右侧为Alexa推荐天花板、COSMO意图图谱与A10词法底板三层排序栈</desc>
+  <style>
+    :root {
+      --bg: #0c0e0d;
+      --panel: #131614;
+      --panel2: #191e1b;
+      --fg: #d6dbd4;
+      --bright: #f3f5f1;
+      --muted: #8a928b;
+      --line: #282e29;
+      --amber: #f2b33d;
+      --green: #7bd88f;
+      --red: #ff7a70;
+      --cyan: #6cc4d9;
+      --blue: #7aa2f7;
+      --sans: system-ui, -apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f4f1e8;
+        --panel: #ebe7da;
+        --panel2: #e2dccb;
+        --fg: #2a2d27;
+        --bright: #11130f;
+        --muted: #5d6156;
+        --line: #cfc8b5;
+        --amber: #9a5800;
+        --green: #226a31;
+        --red: #b42318;
+        --cyan: #11697f;
+        --blue: #2753b8;
+      }
+    }
+    :where(text) { font-family: var(--sans); fill: var(--fg); }
+    .mono { font-family: var(--mono); }
+    .title { font-size: 20px; font-weight: 700; fill: var(--bright); }
+    .sub { font-size: 13px; fill: var(--muted); }
+    .col-h { font-family: var(--mono); font-size: 12px; font-weight: 700; fill: var(--muted); letter-spacing: 0.06em; }
+    .card-k { font-family: var(--mono); font-size: 14px; font-weight: 700; }
+    .card-t { font-size: 14px; font-weight: 700; fill: var(--bright); }
+    .chip { font-size: 12px; fill: var(--fg); }
+    .stack-t { font-size: 16px; font-weight: 700; fill: var(--bright); }
+    .stack-s { font-size: 12.5px; fill: var(--muted); }
+    .tag { font-family: var(--mono); font-size: 11px; font-weight: 700; }
+    .foot { font-size: 11.5px; fill: var(--muted); }
+    .c-cyan { fill: var(--cyan); }
+    .c-amber { fill: var(--amber); }
+    .c-green { fill: var(--green); }
+    .c-red { fill: var(--red); }
+    .c-blue { fill: var(--blue); }
+    .c-bright { fill: var(--bright); }
+    .c-muted { fill: var(--muted); }
+    .c-fg { fill: var(--fg); }
+    .c-onbar { fill: var(--on-bar, #0c0e0d); }
+  </style>
+
+  <defs>
+    <marker id="a-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 1 1 L 9 5 L 1 9 z" fill="var(--blue)"/>
+    </marker>
+    <marker id="a-cyan" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 1 1 L 9 5 L 1 9 z" fill="var(--cyan)"/>
+    </marker>
+    <marker id="a-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 1 1 L 9 5 L 1 9 z" fill="var(--amber)"/>
+    </marker>
+    <marker id="a-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 1 1 L 9 5 L 1 9 z" fill="var(--green)"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="560" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+
+  <!-- Header -->
+  <text x="32" y="40" class="title">2026 年 Amazon 四类交互表面 × 三层排序栈耦合架构</text>
+  <text x="32" y="62" class="sub">Listing 不再是单一文本广告牌，而是分别向 A10 底板、COSMO 常识图谱与 Alexa 推荐天花板喂送信号的工程系统</text>
+  <line x1="32" y1="76" x2="888" y2="76" stroke="var(--line)" stroke-dasharray="4 4"/>
+
+  <!-- Column Headers -->
+  <text x="36" y="102" class="col-h">FOUR INTERACTION SURFACES / 四类商品交互表面</text>
+  <text x="614" y="102" class="col-h">THREE-LAYER RANKING STACK / 三层排序栈</text>
+
+  <!-- ================= LEFT: 4 SURFACES ================= -->
+  <!-- Surface 1: READ -->
+  <g transform="translate(32, 116)">
+    <rect width="340" height="84" rx="6" fill="var(--panel)" stroke="var(--blue)" stroke-width="1.4"/>
+    <rect x="0" y="0" width="5" height="84" rx="2" fill="var(--blue)"/>
+    <text x="18" y="26"><tspan class="card-k c-blue">READ</tspan><tspan dx="8" class="card-t">结构化读取表面</tspan></text>
+    <rect x="18" y="40" width="144" height="30" rx="4" fill="var(--panel2)" stroke="var(--line)"/>
+    <text x="90" y="59" text-anchor="middle" class="chip">75 字符标题 + 125 亮点</text>
+    <rect x="172" y="40" width="152" height="30" rx="4" fill="var(--panel2)" stroke="var(--line)"/>
+    <text x="248" y="59" text-anchor="middle" class="chip">后台属性 ≥90% + 纯文本</text>
+  </g>
+
+  <!-- Surface 2: WATCH -->
+  <g transform="translate(32, 214)">
+    <rect width="340" height="84" rx="6" fill="var(--panel)" stroke="var(--cyan)" stroke-width="1.4"/>
+    <rect x="0" y="0" width="5" height="84" rx="2" fill="var(--cyan)"/>
+    <text x="18" y="26"><tspan class="card-k c-cyan">WATCH</tspan><tspan dx="8" class="card-t">视觉多模态表面</tspan></text>
+    <rect x="18" y="40" width="144" height="30" rx="4" fill="var(--panel2)" stroke="var(--line)"/>
+    <text x="90" y="59" text-anchor="middle" class="chip">高对比度 OCR 参数图</text>
+    <rect x="172" y="40" width="152" height="30" rx="4" fill="var(--panel2)" stroke="var(--line)"/>
+    <text x="248" y="59" text-anchor="middle" class="chip">VLM 使用场景与尺度实拍</text>
+  </g>
+
+  <!-- Surface 3: TRAIN -->
+  <g transform="translate(32, 312)">
+    <rect width="340" height="84" rx="6" fill="var(--panel)" stroke="var(--amber)" stroke-width="1.4"/>
+    <rect x="0" y="0" width="5" height="84" rx="2" fill="var(--amber)"/>
+    <text x="18" y="26"><tspan class="card-k c-amber">TRAIN</tspan><tspan dx="8" class="card-t">转化训练表面</tspan></text>
+    <rect x="18" y="40" width="144" height="30" rx="4" fill="var(--panel2)" stroke="var(--line)"/>
+    <text x="90" y="59" text-anchor="middle" class="chip">Premium A+ 图文矩阵</text>
+    <rect x="172" y="40" width="152" height="30" rx="4" fill="var(--panel2)" stroke="var(--line)"/>
+    <text x="248" y="59" text-anchor="middle" class="chip">原生文本 A+ Q&amp;A 模块</text>
+  </g>
+
+  <!-- Surface 4: VERIFY -->
+  <g transform="translate(32, 410)">
+    <rect width="340" height="84" rx="6" fill="var(--panel)" stroke="var(--green)" stroke-width="1.4"/>
+    <rect x="0" y="0" width="5" height="84" rx="2" fill="var(--green)"/>
+    <text x="18" y="26"><tspan class="card-k c-green">VERIFY</tspan><tspan dx="8" class="card-t">事实校验表面（Ground Truth）</tspan></text>
+    <rect x="18" y="40" width="144" height="30" rx="4" fill="var(--panel2)" stroke="var(--line)"/>
+    <text x="90" y="59" text-anchor="middle" class="chip">≥4.0★ 近期评论语义情绪</text>
+    <rect x="172" y="40" width="152" height="30" rx="4" fill="var(--panel2)" stroke="var(--line)"/>
+    <text x="248" y="59" text-anchor="middle" class="chip">365 天价格 + 官网一致</text>
+  </g>
+
+  <!-- ================= RIGHT: 3-LAYER STACK ================= -->
+  <!-- Layer 3 (Top): Alexa for Shopping Ceiling -->
+  <g transform="translate(610, 120)">
+    <rect width="276" height="106" rx="6" fill="var(--panel)" stroke="var(--cyan)" stroke-width="1.6"/>
+    <rect x="0" y="0" width="276" height="26" rx="6" fill="var(--cyan)" opacity="0.16"/>
+    <text x="14" y="18" class="tag c-cyan">LAYER 3 · 对话推荐天花板</text>
+    <text x="14" y="52" class="stack-t">Alexa for Shopping（原 Rufus）</text>
+    <text x="14" y="74" class="stack-s">将候选压至 3–5 席（收缩 89.6%）</text>
+    <text x="14" y="94" class="stack-s">中位数 4.5★ · 2,991 评 · 94.2% FBA</text>
+  </g>
+
+  <!-- Layer 2 (Mid): COSMO Intent Graph -->
+  <g transform="translate(610, 248)">
+    <rect width="276" height="106" rx="6" fill="var(--panel)" stroke="var(--amber)" stroke-width="1.6"/>
+    <rect x="0" y="0" width="276" height="26" rx="6" fill="var(--amber)" opacity="0.16"/>
+    <text x="14" y="18" class="tag c-amber">LAYER 2 · 语义常识图谱</text>
+    <text x="14" y="52" class="stack-t">COSMO 意图知识图谱</text>
+    <text x="14" y="74" class="stack-s">630 万节点 · 2,900 万关系边 · 15 类意图</text>
+    <text x="14" y="94" class="stack-s">由 search-buy / co-buy 转化行为驱动</text>
+  </g>
+
+  <!-- Layer 1 (Floor): A10 Lexical Floor -->
+  <g transform="translate(610, 376)">
+    <rect width="276" height="106" rx="6" fill="var(--panel)" stroke="var(--blue)" stroke-width="1.6"/>
+    <rect x="0" y="0" width="276" height="26" rx="6" fill="var(--blue)" opacity="0.16"/>
+    <text x="14" y="18" class="tag c-blue">LAYER 1 · 词法索引底板</text>
+    <text x="14" y="52" class="stack-t">A10 词法检索底板</text>
+    <text x="14" y="74" class="stack-s">249B 后台搜索词 · 标题/五点索引准入</text>
+    <text x="14" y="94" class="stack-s">决定能否进入候选池（曝光零即底板失效）</text>
+  </g>
+
+  <!-- Stack vertical upward progression arrows -->
+  <line x1="748" y1="376" x2="748" y2="358" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#a-amber)"/>
+  <line x1="748" y1="248" x2="748" y2="230" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#a-cyan)"/>
+
+  <!-- ================= CONNECTORS (MIDDLE ZONE x=372..610) ================= -->
+  <!-- 1. READ -> all 3 layers (blue) -->
+  <path d="M 372 152 L 604 152" fill="none" stroke="var(--blue)" stroke-width="2" marker-end="url(#a-blue)"/>
+  <path d="M 520 152 L 520 278 L 604 278" fill="none" stroke="var(--blue)" stroke-width="1.8" marker-end="url(#a-blue)"/>
+  <path d="M 520 278 L 520 426 L 604 426" fill="none" stroke="var(--blue)" stroke-width="1.8" marker-end="url(#a-blue)"/>
+  <rect x="394" y="139" width="108" height="22" rx="4" fill="var(--panel)" stroke="var(--blue)"/>
+  <text x="448" y="154" text-anchor="middle" class="tag c-blue">全栈直读输入</text>
+
+  <!-- 2. WATCH -> VLM/OCR -> Alexa & COSMO (cyan) -->
+  <path d="M 372 254 L 494 254 L 494 182 L 604 182" fill="none" stroke="var(--cyan)" stroke-width="2" marker-end="url(#a-cyan)"/>
+  <path d="M 494 254 L 494 300 L 604 300" fill="none" stroke="var(--cyan)" stroke-width="2" marker-end="url(#a-cyan)"/>
+  <rect x="390" y="241" width="96" height="22" rx="4" fill="var(--panel)" stroke="var(--cyan)"/>
+  <text x="438" y="256" text-anchor="middle" class="tag c-cyan">VLM / OCR</text>
+
+  <!-- 3. TRAIN -> Conversion Feedback Loop -> COSMO & A10 (amber) -->
+  <path d="M 372 354 L 548 354 L 548 322 L 604 322" fill="none" stroke="var(--amber)" stroke-width="2" marker-end="url(#a-amber)"/>
+  <path d="M 548 354 L 548 448 L 604 448" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-dasharray="4 3" marker-end="url(#a-amber)"/>
+  <rect x="386" y="341" width="144" height="22" rx="4" fill="var(--panel)" stroke="var(--amber)"/>
+  <text x="458" y="356" text-anchor="middle" class="tag c-amber">转化写入行为正边</text>
+
+  <!-- 4. VERIFY -> Cross-verify -> Alexa & COSMO (green) -->
+  <path d="M 372 456 L 574 456 L 574 206 L 604 206" fill="none" stroke="var(--green)" stroke-width="2" marker-end="url(#a-green)"/>
+  <path d="M 574 342 L 604 342" fill="none" stroke="var(--green)" stroke-width="1.8" marker-end="url(#a-green)"/>
+  <rect x="396" y="443" width="150" height="22" rx="4" fill="var(--panel)" stroke="var(--green)"/>
+  <text x="471" y="458" text-anchor="middle" class="tag c-green">真相源交叉核验</text>
+
+  <!-- Footer -->
+  <text x="32" y="528" class="foot">工程铁律：A+ 正文不直接提 A10 排名，而是靠精准转化训练 COSMO 行为边；手写 A+ Alt Text 正退出历史，图片本身即 OCR/VLM 数据表面。</text>
+  <text x="32" y="546" class="foot">依据：Amazon SIGMOD 2024 COSMO Paper · SellerForge (2026) · Amalytix (1,300+ Rufus 推荐样本实证) · Rewarx · NovaData</text>
+</svg>
